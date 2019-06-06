@@ -26,8 +26,6 @@
 
 #define SPI_TIMEOUT   1000
 
-SPI_HandleTypeDef *pSpi = 0;
-
 /* USER CODE END 0 */
 
 SPI_HandleTypeDef hspi2;
@@ -125,16 +123,6 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
 /* USER CODE BEGIN 1 */
 
 /**
-  * @brief  This function initalize the SPI handle.
-	* @param	hspi : already initalized handle to SPI HW
-  * @retval none :
-  */
-void SpiInit(SPI_HandleTypeDef *hspi)
-{
-    pSpi = hspi;
-}
-
-/**
   * @brief  This function Transmit and Reveice data via SPI
 	* @param	txData : pointer to data that shall be transmitted
 	* @param	rxData : pointer to data holding the buffer where received data shall be copied to.
@@ -144,15 +132,12 @@ void SpiInit(SPI_HandleTypeDef *hspi)
   */
 uint8_t SpiTxRx(const uint8_t *txData, uint8_t *rxData, uint8_t length)
 {
-  if(pSpi == 0)
-    return ERR_INVALID_HANDLE;
-
   uint8_t   tx[256];
   uint8_t   rx[256];
   if(txData != NULL){
     ST_MEMCPY(tx, txData, length);
   }
-  return HAL_SPI_TransmitReceive(pSpi, tx, (rxData != NULL) ? rxData : rx, length, SPI_TIMEOUT);
+  return HAL_SPI_TransmitReceive(&hspi2, tx, (rxData != NULL) ? rxData : rx, length, SPI_TIMEOUT);
 }
 
 /* USER CODE END 1 */

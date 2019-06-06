@@ -42,7 +42,6 @@ extern SPI_HandleTypeDef hspi2;
 void MX_SPI2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-void SpiInit(SPI_HandleTypeDef *hspi);
 uint8_t SpiTxRx(const uint8_t *txData, uint8_t *rxData, uint8_t length);
 
 /* USER CODE END Prototypes */

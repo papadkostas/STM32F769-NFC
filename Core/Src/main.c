@@ -95,7 +95,6 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
-  SpiInit (&hspi2);
   /* Initialize RFAL */
   rfalAnalogConfigInitialize ();
   rfalInitialize();
