@@ -1,6 +1,6 @@
 
 /******************************************************************************
-  * @attention
+  * \attention
   *
   * <h2><center>&copy; COPYRIGHT 2016 STMicroelectronics</center></h2>
   *
@@ -8,7 +8,7 @@
   * You may not use this file except in compliance with the License.
   * You may obtain a copy of the License at:
   *
-  *        http://www.st.com/myliberty
+  *        www.st.com/myliberty
   *
   * Unless required by applicable law or agreed to in writing, software 
   * distributed under the License is distributed on an "AS IS" BASIS, 
@@ -57,7 +57,7 @@
  */
 
 #ifndef RFAL_FEATURE_NFC_DEP
-    #error " RFAL: Module configuration missing. Please enable/disable NFC-DEP module by setting: RFAL_FEATURE_NFC_DEP "
+    #define RFAL_FEATURE_NFC_DEP   false    /* NFC-DEP module configuration missing. Disabled by default */
 #endif
 
 #if RFAL_FEATURE_NFC_DEP
@@ -67,82 +67,81 @@
  * DEFINES
  ******************************************************************************
  */
+#define NFCIP_ATR_RETRY_MAX             2U                              /*!< Max consecutive retrys of an ATR REQ with transm error*/
 
-#define NFCIP_LOOP_MAX                  0x0005FFFF                     /*!< Max blocking reRuns                                   */
-#define NFCIP_ATR_RETRY_MAX             2                              /*!< Max consecutive retrys of an ATR REQ with transm error*/
-
-#define NFCIP_PSLPAY_LEN                (2)                            /*!< PSL Payload length (BRS + FSL)                        */
-#define NFCIP_PSLREQ_LEN                (3 + RFAL_NFCDEP_LEN_LEN)      /*!< PSL REQ length (incl LEN)                             */
-#define NFCIP_PSLRES_LEN                (3 + RFAL_NFCDEP_LEN_LEN)      /*!< PSL RES length (incl LEN)                             */
+#define NFCIP_PSLPAY_LEN                (2U)                            /*!< PSL Payload length (BRS + FSL)                        */
+#define NFCIP_PSLREQ_LEN                (3U + RFAL_NFCDEP_LEN_LEN)      /*!< PSL REQ length (incl LEN)                             */
+#define NFCIP_PSLRES_LEN                (3U + RFAL_NFCDEP_LEN_LEN)      /*!< PSL RES length (incl LEN)                             */
 
 #define NFCIP_ATRREQ_BUF_LEN            (RFAL_NFCDEP_ATRREQ_MAX_LEN + RFAL_NFCDEP_LEN_LEN) /*!< ATR REQ max length (incl LEN)     */
 #define NFCIP_ATRRES_BUF_LEN            (RFAL_NFCDEP_ATRRES_MAX_LEN + RFAL_NFCDEP_LEN_LEN) /*!< ATR RES max length (incl LEN)     */
 
-#define NFCIP_RLSREQ_LEN                (3 + RFAL_NFCDEP_LEN_LEN)      /*!< RLS REQ length (incl LEN)                             */
-#define NFCIP_RLSRES_LEN                (3 + RFAL_NFCDEP_LEN_LEN)      /*!< RSL RES length (incl LEN)                             */
-#define NFCIP_RLSRES_MIN                (2 + RFAL_NFCDEP_LEN_LEN)      /*!< Minimum length for a RLS RES (incl LEN)               */
+#define NFCIP_RLSREQ_LEN                (3U + RFAL_NFCDEP_LEN_LEN)      /*!< RLS REQ length (incl LEN)                             */
+#define NFCIP_RLSRES_LEN                (3U + RFAL_NFCDEP_LEN_LEN)      /*!< RSL RES length (incl LEN)                             */
+#define NFCIP_RLSRES_MIN                (2U + RFAL_NFCDEP_LEN_LEN)      /*!< Minimum length for a RLS RES (incl LEN)               */
 
-#define NFCIP_DSLREQ_LEN                (3 + RFAL_NFCDEP_LEN_LEN)      /*!< DSL REQ length (incl LEN)                             */
-#define NFCIP_DSLRES_LEN                (3 + RFAL_NFCDEP_LEN_LEN)      /*!< DSL RES length (incl LEN)                             */
-#define NFCIP_DSLRES_MIN                (2 + RFAL_NFCDEP_LEN_LEN)      /*!< Minimum length for a DSL RES (incl LEN)               */
+#define NFCIP_DSLREQ_LEN                (3U + RFAL_NFCDEP_LEN_LEN)      /*!< DSL REQ length (incl LEN)                             */
+#define NFCIP_DSLRES_LEN                (3U + RFAL_NFCDEP_LEN_LEN)      /*!< DSL RES length (incl LEN)                             */
+#define NFCIP_DSLRES_MIN                (2U + RFAL_NFCDEP_LEN_LEN)      /*!< Minimum length for a DSL RES (incl LEN)               */
 
-#define NFCIP_DSLRES_MAX_LEN            (3 + RFAL_NFCDEP_LEN_LEN)      /*!< Maximum length for a DSL RES (incl LEN)               */
-#define NFCIP_RLSRES_MAX_LEN            (3 + RFAL_NFCDEP_LEN_LEN)      /*!< Minimum length for a RLS RES (incl LEN)               */
-#define NFCIP_TARGET_RES_MAX            ( MAX( NFCIP_RLSRES_MAX_LEN, NFCIP_DSLRES_MAX_LEN) ) /*!< Max target control res length   */
+#define NFCIP_DSLRES_MAX_LEN            (3U + RFAL_NFCDEP_LEN_LEN)      /*!< Maximum length for a DSL RES (incl LEN)               */
+#define NFCIP_RLSRES_MAX_LEN            (3U + RFAL_NFCDEP_LEN_LEN)      /*!< Minimum length for a RLS RES (incl LEN)               */
+#define NFCIP_TARGET_RES_MAX            ( MAX( NFCIP_RLSRES_MAX_LEN, NFCIP_DSLRES_MAX_LEN) ) /*!< Max target control res length    */
 
 
 
-#define NFCIP_NO_FWT                    RFAL_FWT_NONE                  /*!< No FWT value - Target Mode                            */
-#define NFCIP_INIT_MIN_RTOX             1                              /*!< Minimum RTOX value  Digital 1.0  14.8.4.1             */
-#define NFCIP_INIT_MAX_RTOX             59                             /*!< Maximum RTOX value  Digital 1.0  14.8.4.1             */
+#define NFCIP_NO_FWT                    RFAL_FWT_NONE                   /*!< No FWT value - Target Mode                            */
+#define NFCIP_INIT_MIN_RTOX             1U                              /*!< Minimum RTOX value  Digital 1.0  14.8.4.1             */
+#define NFCIP_INIT_MAX_RTOX             59U                             /*!< Maximum RTOX value  Digital 1.0  14.8.4.1             */
 
-#define NFCIP_TARG_MIN_RTOX             1                              /*!< Minimum target RTOX value  Digital 1.0  14.8.4.1      */
-#define NFCIP_TARG_MAX_RTOX             59                             /*!< Maximum target RTOX value  Digital 1.0  14.8.4.1      */
+#define NFCIP_TARG_MIN_RTOX             1U                              /*!< Minimum target RTOX value  Digital 1.0  14.8.4.1      */
+#define NFCIP_TARG_MAX_RTOX             59U                             /*!< Maximum target RTOX value  Digital 1.0  14.8.4.1      */
 
-#define NFCIP_TRECOV                    (1280 / 64)                    /*!< Digital 1.0  A.10  Trecov                             */
-
-#define NFCIP_TIMEOUT_ADJUSTMENT        8                              /*!< Timeout Adjustment to compensate timing from end of Tx to end of frame: (512/64)/fc */
-#define NFCIP_RWT_ACTIVATION            (0x40001 + NFCIP_TIMEOUT_ADJUSTMENT) /*!< Digital 1.0  A.10  RWT ACTIVATION   2^24/64[64/fc] + RWT Delta + Adjustment   */
+#define NFCIP_TRECOV                    1280U                           /*!< Digital 1.0  A.10  Trecov                             */
+ 
+#define NFCIP_TIMEOUT_ADJUSTMENT        512U                            /*!< Timeout Adjustment to compensate timing from end of Tx to end of frame  */
+#define NFCIP_RWT_ACTIVATION            (0x1000001U + NFCIP_TIMEOUT_ADJUSTMENT) /*!< Digital 2.0  B.10  RWT ACTIVATION  2^24 + RWT Delta + Adjustment*/
+#define NFCIP_RWT_ACM_ACTIVATION        (0x200001U + NFCIP_TIMEOUT_ADJUSTMENT)  /*!< Digital 2.0  B.10  RWT ACTIVATION  2^21 + RWT Delta + Adjustment*/
 
 #define RFAL_NFCDEP_HEADER_PAD          (RFAL_NFCDEP_DEPREQ_HEADER_LEN - RFAL_NFCDEP_LEN_MIN) /*!< Difference between expected rcvd header len and max foreseen */
 
 
-#define NFCIP_MAX_TX_RETRYS             3               /*!< Number of retransmit retyrs                           */
-#define NFCIP_MAX_TO_RETRYS             3               /*!< Number of retrys for Timeout                          */
-#define NFCIP_MAX_RTOX_RETRYS           3               /*!< Number of retrys for RTOX                             */
-#define NFCIP_MAX_NACK_RETRYS           3               /*!< Number of retrys for NACK                             */
-#define NFCIP_MAX_ATN_RETRYS            3               /*!< Number of retrys for ATN                              */
+#define NFCIP_MAX_TX_RETRYS             (uint8_t)3U      /*!< Number of retransmit retyrs                           */
+#define NFCIP_MAX_TO_RETRYS             (uint8_t)3U      /*!< Number of retrys for Timeout                          */
+#define NFCIP_MAX_RTOX_RETRYS           (uint8_t)3U      /*!< Number of retrys for RTOX                             */
+#define NFCIP_MAX_NACK_RETRYS           (uint8_t)3U      /*!< Number of retrys for NACK                             */
+#define NFCIP_MAX_ATN_RETRYS            (uint8_t)3U      /*!< Number of retrys for ATN                              */
 
-#define NFCIP_MIN_TXERROR_LEN           4               /*!< Minimum frame length with error to be ignored  Digital 1.0 14.12.5.4 */
+#define NFCIP_MIN_TXERROR_LEN           4U               /*!< Minimum frame length with error to be ignored  Digital 1.0 14.12.5.4 */
 
-#define NFCIP_REQ                       0xD4            /*!<NFCIP REQuest code                                     */
-#define NFCIP_RES                       0xD5            /*!<NFCIP RESponce code                                    */
+#define NFCIP_REQ                       (uint8_t)0xD4U   /*!<NFCIP REQuest code                                     */
+#define NFCIP_RES                       (uint8_t)0xD5U   /*!<NFCIP RESponce code                                    */
 
-#define NFCIP_BS_MASK                   0x0F            /*!< Bit mask for BS value on a ATR REQ/RES                */
-#define NFCIP_BR_MASK                   NFCIP_BS_MASK   /*!< Bit mask for BR value on a ATR REQ/RES                */
+#define NFCIP_BS_MASK                   0x0FU            /*!< Bit mask for BS value on a ATR REQ/RES                */
+#define NFCIP_BR_MASK                   NFCIP_BS_MASK    /*!< Bit mask for BR value on a ATR REQ/RES                */
 
-#define NFCIP_PP_GB_MASK                0x02            /*!< Bit mask for GB value in PP byte on a ATR REQ/RES     */
-#define NFCIP_PP_NAD_MASK               0x01            /*!< Bit mask for NAD value in PP byte on a ATR REQ/RES    */
+#define NFCIP_PP_GB_MASK                0x02U            /*!< Bit mask for GB value in PP byte on a ATR REQ/RES     */
+#define NFCIP_PP_NAD_MASK               0x01U            /*!< Bit mask for NAD value in PP byte on a ATR REQ/RES    */
 
-#define NFCIP_PFB_xPDU_MASK             0xE0            /*!< Bit mask for PDU type                                 */
-#define NFCIP_PFB_IPDU                  0x00            /*!< Bit mask indicating a Information PDU                 */
-#define NFCIP_PFB_RPDU                  0x40            /*!< Bit mask indicating a Response PDU                    */
-#define NFCIP_PFB_SPDU                  0x80            /*!< Bit mask indicating a Supervisory PDU                 */
+#define NFCIP_PFB_xPDU_MASK             0xE0U            /*!< Bit mask for PDU type                                 */
+#define NFCIP_PFB_IPDU                  0x00U            /*!< Bit mask indicating a Information PDU                 */
+#define NFCIP_PFB_RPDU                  0x40U            /*!< Bit mask indicating a Response PDU                    */
+#define NFCIP_PFB_SPDU                  0x80U            /*!< Bit mask indicating a Supervisory PDU                 */
 
-#define NFCIP_PFB_MI_BIT                0x10            /*!< Bit mask for the chaining bit (MI) of PFB             */
-#define NFCIP_PFB_DID_BIT               0x04            /*!< Bit mask for the DID presence bit of PFB              */
-#define NFCIP_PFB_NAD_BIT               0x08            /*!< Bit mask for the NAD presence bit of PFB              */
-#define NFCIP_PFB_PNI_MASK              0x03            /*!< Bit mask for the Packet Number Information            */
+#define NFCIP_PFB_MI_BIT                0x10U            /*!< Bit mask for the chaining bit (MI) of PFB             */
+#define NFCIP_PFB_DID_BIT               0x04U            /*!< Bit mask for the DID presence bit of PFB              */
+#define NFCIP_PFB_NAD_BIT               0x08U            /*!< Bit mask for the NAD presence bit of PFB              */
+#define NFCIP_PFB_PNI_MASK              0x03U            /*!< Bit mask for the Packet Number Information            */
 
-#define NFCIP_PFB_Rx_MASK               0x10            /*!< Bit mask for the R-PDU type                           */
-#define NFCIP_PFB_ACK                   0x00            /*!< Bit mask for R-PDU indicating ACK                     */
-#define NFCIP_PFB_NACK                  0x10            /*!< Bit mask for R-PDU indicating NAK                     */
+#define NFCIP_PFB_Rx_MASK               0x10U            /*!< Bit mask for the R-PDU type                           */
+#define NFCIP_PFB_ACK                   0x00U            /*!< Bit mask for R-PDU indicating ACK                     */
+#define NFCIP_PFB_NACK                  0x10U            /*!< Bit mask for R-PDU indicating NAK                     */
 
-#define NFCIP_PFB_Sx_MASK               0x10            /*!< Bit mask for the R-PDU type                           */
-#define NFCIP_PFB_ATN                   0x00            /*!< Bit mask for R-PDU indicating ACK                     */
-#define NFCIP_PFB_TO                    0x10            /*!< Bit mask for R-PDU indicating NAK                     */
+#define NFCIP_PFB_Sx_MASK               0x10U            /*!< Bit mask for the R-PDU type                           */
+#define NFCIP_PFB_ATN                   0x00U            /*!< Bit mask for R-PDU indicating ACK                     */
+#define NFCIP_PFB_TO                    0x10U            /*!< Bit mask for R-PDU indicating NAK                     */
 
-#define NFCIP_PFB_INVALID               0xFF            /*!< Invalid PFB value                                     */
+#define NFCIP_PFB_INVALID               0xFFU            /*!< Invalid PFB value                                     */
 
 /*
  ******************************************************************************
@@ -150,83 +149,86 @@
  ******************************************************************************
  */
 
-#define nfcipIsTransmissionError(e)    ( (ERR_NO_MASK(e) == ERR_CRC) || (ERR_NO_MASK(e) == ERR_FRAMING) || (ERR_NO_MASK(e) == ERR_PAR) ) /*!< Checks if is a Trasmission error */
+#define nfcipIsTransmissionError(e)    ( ((e) == ERR_CRC) || ((e) == ERR_FRAMING) || ((e) == ERR_PAR) ) /*!< Checks if is a Trasmission error */
 
 
-#define nfcipConv1FcToMs( v )          (((v * 64) / 13560) + 1)                                       /*!< Converts value v 1fc into milliseconds (fc=13.56)     */
+#define nfcipConv1FcToMs( v )          (rfalConv1fcToMs((v)) + 1U)                                     /*!< Converts value v 1fc into milliseconds (fc=13.56)     */
 
-#define nfcipCmdIsReq( cmd )           ((cmd % 2) == 0)                                               /*!< Checks if the nfcip cmd is a REQ                      */
+#define nfcipCmdIsReq( cmd )           (((uint8_t)(cmd) % 2U) == 0U)                                    /*!< Checks if the nfcip cmd is a REQ                      */
 
-#define nfcip_PFBhasDID( pfb )         ( (pfb & NFCIP_PFB_DID_BIT) == NFCIP_PFB_DID_BIT)              /*!< Checks if pfb is signalling DID                       */
-#define nfcip_PFBhasNAD( pfb )         ( (pfb & NFCIP_PFB_NAD_BIT) == NFCIP_PFB_NAD_BIT)              /*!< Checks if pfb is signalling NAD                       */
+#define nfcip_PFBhasDID( pfb )         ( ((pfb) & NFCIP_PFB_DID_BIT) == NFCIP_PFB_DID_BIT)              /*!< Checks if pfb is signalling DID                       */
+#define nfcip_PFBhasNAD( pfb )         ( ((pfb) & NFCIP_PFB_NAD_BIT) == NFCIP_PFB_NAD_BIT)              /*!< Checks if pfb is signalling NAD                       */
 
-#define nfcip_PFBisIPDU( pfb )         ( (pfb & NFCIP_PFB_xPDU_MASK) == NFCIP_PFB_IPDU)               /*!< Checks if pfb is a Information PDU                    */
-#define nfcip_PFBisRPDU( pfb )         ( (pfb & NFCIP_PFB_xPDU_MASK) == NFCIP_PFB_RPDU)               /*!< Checks if pfb is Response PDU                         */
-#define nfcip_PFBisSPDU( pfb )         ( (pfb & NFCIP_PFB_xPDU_MASK) == NFCIP_PFB_SPDU)               /*!< Checks if pfb is a Supervisory PDU                    */
+#define nfcip_PFBisIPDU( pfb )         ( ((pfb) & NFCIP_PFB_xPDU_MASK) == NFCIP_PFB_IPDU)               /*!< Checks if pfb is a Information PDU                    */
+#define nfcip_PFBisRPDU( pfb )         ( ((pfb) & NFCIP_PFB_xPDU_MASK) == NFCIP_PFB_RPDU)               /*!< Checks if pfb is Response PDU                         */
+#define nfcip_PFBisSPDU( pfb )         ( ((pfb) & NFCIP_PFB_xPDU_MASK) == NFCIP_PFB_SPDU)               /*!< Checks if pfb is a Supervisory PDU                    */
 
-#define nfcip_PFBisIMI( pfb )          ( nfcip_PFBisIPDU( pfb ) && (pfb & NFCIP_PFB_MI_BIT) == NFCIP_PFB_MI_BIT)  /*!< Checks if pfb is a Information PDU indicating MI chaining */
+#define nfcip_PFBisIMI( pfb )          ( nfcip_PFBisIPDU( pfb ) && (((pfb) & NFCIP_PFB_MI_BIT) == NFCIP_PFB_MI_BIT))  /*!< Checks if pfb is a Information PDU indicating MI chaining */
 
-#define nfcip_PFBisRNACK( pfb )        ( nfcip_PFBisRPDU( pfb ) && ((pfb & NFCIP_PFB_Rx_MASK) == NFCIP_PFB_NACK)) /*!< Checks if pfb is a R-PDU indicating NACK  */
-#define nfcip_PFBisRACK( pfb )         ( nfcip_PFBisRPDU( pfb ) && ((pfb & NFCIP_PFB_Rx_MASK) == NFCIP_PFB_ACK )) /*!< Checks if pfb is a R-PDU indicating ACK   */
+#define nfcip_PFBisRNACK( pfb )        ( nfcip_PFBisRPDU( pfb ) && (((pfb) & NFCIP_PFB_Rx_MASK) == NFCIP_PFB_NACK)) /*!< Checks if pfb is a R-PDU indicating NACK  */
+#define nfcip_PFBisRACK( pfb )         ( nfcip_PFBisRPDU( pfb ) && (((pfb) & NFCIP_PFB_Rx_MASK) == NFCIP_PFB_ACK )) /*!< Checks if pfb is a R-PDU indicating ACK   */
 
-#define nfcip_PFBisSATN( pfb )         ( nfcip_PFBisSPDU( pfb ) && ((pfb & NFCIP_PFB_Sx_MASK) == NFCIP_PFB_ATN))  /*!< Checks if pfb is a R-PDU indicating ATN   */
-#define nfcip_PFBisSTO( pfb )          ( nfcip_PFBisSPDU( pfb ) && ((pfb & NFCIP_PFB_Sx_MASK) == NFCIP_PFB_TO) )  /*!< Checks if pfb is a R-PDU indicating TO    */
-
-
-#define nfcip_PFBIPDU( pni )           ( (uint8_t)( 0x00 | NFCIP_PFB_IPDU | (pni & NFCIP_PFB_PNI_MASK) ))/*!< Returns a PFB I-PDU with the given packet number (pni)                   */
-#define nfcip_PFBIPDU_MI( pni )        ( (uint8_t)(isoDep_PCBIBlock(pni) | NFCIP_PFB_MI_BIT))            /*!< Returns a PFB I-PDU with the given packet number (pni) indicating chaing */
-
-#define nfcip_PFBRPDU( pni )           ( (uint8_t)( 0x00 | NFCIP_PFB_RPDU | (pni & NFCIP_PFB_PNI_MASK) ))/*!< Returns a PFB R-PDU with the given packet number (pni)                   */
-#define nfcip_PFBRPDU_NACK( pni )      ( (uint8_t)(nfcip_PFBRPDU(pni) | NFCIP_PFB_NACK))                 /*!< Returns a PFB R-PDU with the given packet number (pni) indicating NACK   */
-#define nfcip_PFBRPDU_ACK( pni )       ( (uint8_t)(nfcip_PFBRPDU(pni) | NFCIP_PFB_ACK))                  /*!< Returns a PFB R-PDU with the given packet number (pni) indicating ACK    */
-
-#define nfcip_PFBSPDU()                ( (uint8_t)( 0x00 | NFCIP_PFB_SPDU ))                          /*!< Returns a PFB S-PDU                               */
-#define nfcip_PFBSPDU_ATN()            ( (uint8_t)(nfcip_PFBSPDU() | NFCIP_PFB_ATN))                  /*!< Returns a PFB S-PDU indicating ATN                */
-#define nfcip_PFBSPDU_TO()             ( (uint8_t)(nfcip_PFBSPDU() | NFCIP_PFB_TO))                   /*!< Returns a PFB S-PDU indicating TO                 */
+#define nfcip_PFBisSATN( pfb )         ( nfcip_PFBisSPDU( pfb ) && (((pfb) & NFCIP_PFB_Sx_MASK) == NFCIP_PFB_ATN))  /*!< Checks if pfb is a R-PDU indicating ATN   */
+#define nfcip_PFBisSTO( pfb )          ( nfcip_PFBisSPDU( pfb ) && (((pfb) & NFCIP_PFB_Sx_MASK) == NFCIP_PFB_TO) )  /*!< Checks if pfb is a R-PDU indicating TO    */
 
 
-#define nfcip_PNIInc( pni )            ( (uint8_t) ((pni+1) & NFCIP_PFB_PNI_MASK) )                   /*!< Returns a incremented PNI from the given (pni)    */
-#define nfcip_PNIDec( pni )            ( (uint8_t) ((pni-1) & NFCIP_PFB_PNI_MASK) )                   /*!< Returns a decremented PNI from the given (pni)    */
+#define nfcip_PFBIPDU( pni )           ( (uint8_t)( 0x00U | NFCIP_PFB_IPDU | ((pni) & NFCIP_PFB_PNI_MASK) ))/*!< Returns a PFB I-PDU with the given packet number (pni)                   */
+#define nfcip_PFBIPDU_MI( pni )        ( (uint8_t)(isoDep_PCBIBlock(pni) | NFCIP_PFB_MI_BIT))               /*!< Returns a PFB I-PDU with the given packet number (pni) indicating chaing */
 
-#define nfcip_PBF_PNI( pfb )           ( (uint8_t) (pfb & NFCIP_PFB_PNI_MASK ))                       /*!< Returns the Packet Number Information (pni)       */
+#define nfcip_PFBRPDU( pni )           ( (uint8_t)( 0x00U | NFCIP_PFB_RPDU | ((pni) & NFCIP_PFB_PNI_MASK) ))/*!< Returns a PFB R-PDU with the given packet number (pni)                   */
+#define nfcip_PFBRPDU_NACK( pni )      ( (uint8_t)(nfcip_PFBRPDU(pni) | NFCIP_PFB_NACK))                    /*!< Returns a PFB R-PDU with the given packet number (pni) indicating NACK   */
+#define nfcip_PFBRPDU_ACK( pni )       ( (uint8_t)(nfcip_PFBRPDU(pni) | NFCIP_PFB_ACK))                     /*!< Returns a PFB R-PDU with the given packet number (pni) indicating ACK    */
 
-#define nfcip_PPwGB( lr )              ( rfalNfcDepLR2PP( lr ) | NFCIP_PP_GB_MASK)                    /*!< Returns a PP byte containing the given PP value indicating GB                  */
+#define nfcip_PFBSPDU()                ( (uint8_t)( 0x00U | NFCIP_PFB_SPDU ))                           /*!< Returns a PFB S-PDU                                   */
+#define nfcip_PFBSPDU_ATN()            ( (uint8_t)(nfcip_PFBSPDU() | NFCIP_PFB_ATN))                    /*!< Returns a PFB S-PDU indicating ATN                    */
+#define nfcip_PFBSPDU_TO()             ( (uint8_t)(nfcip_PFBSPDU() | NFCIP_PFB_TO))                     /*!< Returns a PFB S-PDU indicating TO                     */
 
-#define nfcip_DIDMax( did )            ( MIN( (did), RFAL_NFCDEP_DID_MAX) )                           /*!< Ensures that the given did has proper value  Digital 14.6.2.3 DID [0 14]       */
-#define nfcip_RTOXTargMax( wt )        ( MIN( (RFAL_NFCDEP_RWT_TRG_MAX / rfalNfcDepWT2RWT(wt)), NFCIP_TARG_MAX_RTOX) )/*!< Calculates the Maximum RTOX value for the given wt as a Target */
 
-#define nfcipIsInitiator( st )         ( ((st) >= NFCIP_ST_INIT_IDLE) && ((st) <= NFCIP_ST_INIT_RLS) )/*!< Checks if module is set as Initiator                                           */
-#define nfcipIsTarget( st )            (!nfcipIsInitiator(st))                                        /*!< Checks if module is set as Target                                              */
+#define nfcip_PNIInc( pni )            ( (uint8_t) (((pni)+1U) & NFCIP_PFB_PNI_MASK) )                  /*!< Returns a incremented PNI from the given (pni)        */
+#define nfcip_PNIDec( pni )            ( (uint8_t) (((pni)-1U) & NFCIP_PFB_PNI_MASK) )                  /*!< Returns a decremented PNI from the given (pni)        */
 
-#define nfcipIsBRAllowed( br, mBR )    (((1<<(br)) & mBR) != 0)                                       /*!< Checks bit rate is allowed by given mask                                       */
+#define nfcip_PBF_PNI( pfb )           ( (uint8_t) ((pfb) & NFCIP_PFB_PNI_MASK ))                       /*!< Returns the Packet Number Information (pni)           */
 
-#define nfcipIsEmptyDEPEnabled( op )   (!nfcipIsEmptyDEPDisabled(op))                                 /*!< Checks if empty payload is allowed by operation config  NCI 1.0 Table 81       */
-#define nfcipIsEmptyDEPDisabled( op )  ((op & RFAL_NFCDEP_OPER_EMPTY_DEP_DIS) != 0)                   /*!< Checks if empty payload is not allowed by operation config  NCI 1.0 Table 81   */
+#define nfcip_PPwGB( lr )              ( rfalNfcDepLR2PP( lr ) | NFCIP_PP_GB_MASK)                      /*!< Returns a PP byte containing the given PP value indicating GB                  */
 
-#define nfcipIsRTOXReqEnabled( op )    (!nfcipIsRTOXReqDisabled(op))                                  /*!< Checks if send a RTOX_REQ is allowed by operation config  NCI 1.0 Table 81     */
-#define nfcipIsRTOXReqDisabled( op )   ((op & RFAL_NFCDEP_OPER_RTOX_REQ_DIS) != 0)                    /*!< Checks if send a RTOX_REQ is not allowed by operation config  NCI 1.0 Table 81 */
+#define nfcip_DIDMax( did )            ( MIN( (did), RFAL_NFCDEP_DID_MAX) )                             /*!< Ensures that the given did has proper value  Digital 14.6.2.3 DID [0 14]       */
+#define nfcip_RTOXTargMax( wt )        (uint8_t)( MIN( (RFAL_NFCDEP_RWT_TRG_MAX / rfalNfcDepWT2RWT(wt)), NFCIP_TARG_MAX_RTOX) )/*!< Calculates the Maximum RTOX value for the given wt as a Target */
+
+#define nfcipIsInitiator( st )         ( ((st) >= NFCIP_ST_INIT_IDLE) && ((st) <= NFCIP_ST_INIT_RLS) )  /*!< Checks if module is set as Initiator                                           */
+#define nfcipIsTarget( st )            (!nfcipIsInitiator(st))                                          /*!< Checks if module is set as Target                                              */
+
+#define nfcipIsBRAllowed( br, mBR )    (((1U<<(br)) & (mBR)) != 0U)                                     /*!< Checks bit rate is allowed by given mask                                       */
+
+#define nfcipIsEmptyDEPEnabled( op )   (!nfcipIsEmptyDEPDisabled(op))                                   /*!< Checks if empty payload is allowed by operation config  NCI 1.0 Table 81       */
+#define nfcipIsEmptyDEPDisabled( op )  (((op) & RFAL_NFCDEP_OPER_EMPTY_DEP_DIS) != 0U)                  /*!< Checks if empty payload is not allowed by operation config  NCI 1.0 Table 81   */
+
+#define nfcipIsRTOXReqEnabled( op )    (!nfcipIsRTOXReqDisabled(op))                                    /*!< Checks if send a RTOX_REQ is allowed by operation config  NCI 1.0 Table 81     */
+#define nfcipIsRTOXReqDisabled( op )   (((op) & RFAL_NFCDEP_OPER_RTOX_REQ_DIS) != 0U)                   /*!< Checks if send a RTOX_REQ is not allowed by operation config  NCI 1.0 Table 81 */
 
 
 /*! Checks if isDeactivating callback is set and calls it, otherwise returns false */
 #define nfcipIsDeactivationPending()   ( (gNfcip.isDeactivating == NULL) ? false : gNfcip.isDeactivating() )
+    
+/*! Returns the RWT Activation according to the current communication mode */
+#define nfcipRWTActivation()            ((gNfcip.cfg.commMode == RFAL_NFCDEP_COMM_ACTIVE) ? NFCIP_RWT_ACM_ACTIVATION : NFCIP_RWT_ACTIVATION)
 
 
-#define nfcipRTOXAdjust( v )           (v - (v>>3))                                                   /*!< Adjust RTOX timer value to a percentage of the total, current 88% */ 
+#define nfcipRTOXAdjust( v )           ((v) - ((v)>>3))                                                 /*!< Adjust RTOX timer value to a percentage of the total, current 88% */ 
 
 /*******************************************************************************/
 
-/* timerPollTimeoutValue is necessary after timerCalculateTimeout so that system will wake up upon timer timeout. */
-#define nfcipTimerStart( timer, time_ms ) timer = platformTimerCreate(time_ms)                        /*!< Configures and starts the RTOX timer   */
-#define nfcipTimerisExpired( timer )      platformTimerIsExpired( timer )                             /*!< Checks RTOX timer has expired                   */
+// timerPollTimeoutValue is necessary after timerCalculateTimeout so that system will wake up upon timer timeout.
+#define nfcipTimerStart( timer, time_ms ) (timer) = platformTimerCreate((uint16_t)(time_ms))            /*!< Configures and starts the RTOX timer            */
+#define nfcipTimerisExpired( timer )      platformTimerIsExpired( timer )                               /*!< Checks RTOX timer has expired                   */
 
-#define nfcipLogE(...)                                                                                /*!< Macro for the error log method                  */
-#define nfcipLogW(...)                                                                                /*!< Macro for the warning log method                */
-#define nfcipLogI(...)                                                                                /*!< Macro for the info log method                   */
-#define nfcipLogD(...)                                                                                /*!< Macro for the debug log method                  */
+#define nfcipLogE(...)                                                                                  /*!< Macro for the error log method                  */
+#define nfcipLogW(...)                                                                                  /*!< Macro for the warning log method                */
+#define nfcipLogI(...)                                                                                  /*!< Macro for the info log method                   */
+#define nfcipLogD(...)                                                                                  /*!< Macro for the debug log method                  */
 
 
 /*! Digital 1.1 - 16.12.5.2  The Target SHALL NOT attempt any error recovery and remains in Rx mode upon Transmission or a Protocol Error */
-#define nfcDepReEnableRx( rxB, rxBL, rxL )       rfalTransceiveBlockingTx( NULL, 0, rxB, rxBL, rxL, ( RFAL_TXRX_FLAGS_DEFAULT | RFAL_TXRX_FLAGS_NFCIP1_ON ), RFAL_FWT_NONE )
+#define nfcDepReEnableRx( rxB, rxBL, rxL )       rfalTransceiveBlockingTx( NULL, 0, (rxB), (rxBL), (rxL), ( RFAL_TXRX_FLAGS_DEFAULT | (uint32_t)RFAL_TXRX_FLAGS_NFCIP1_ON ), RFAL_FWT_NONE )
 
 /*
  ******************************************************************************
@@ -241,7 +243,7 @@ typedef struct{
     uint8_t*  txBuf;         /*!< Pointer to the Tx buffer to be sent             */
     uint16_t  txBufLen;      /*!< Length of the data in the txBuf                 */
     uint8_t   txBufPaylPos;  /*!< Position inside txBuf where data starts         */
-    uint8_t   txChaining;    /*!< Flag indicating chaining on transmission        */
+    bool      txChaining;    /*!< Flag indicating chaining on transmission        */
     
     uint8_t*  rxBuf;         /*!< Pointer to the Rx buffer for incoming data      */
     uint16_t  rxBufLen;      /*!< Length of the data in the rxBuf                 */
@@ -254,7 +256,7 @@ typedef struct{
 } rfalNfcDepDEPParams;
 
 /*! NFCIP module states */
-typedef enum NfcipState
+typedef enum
 {
     NFCIP_ST_IDLE,
     NFCIP_ST_INIT_IDLE,
@@ -295,7 +297,7 @@ typedef enum{
 
 /*! Struct that holds all NFCIP data */
 typedef struct{  
-  rfalNfcDepConfigs       cfg;               /*!< Holds the current configuration to be used   */
+  rfalNfcDepConfigs       cfg;               /*!< Holds the current configuration to be used    */
   
   rfalNfcDepState         state;             /*!< Current state of the NFCIP module             */
   uint8_t                 pni;               /*!< Packet Number Information (PNI) counter       */
@@ -340,7 +342,7 @@ typedef struct{
  ******************************************************************************
  */
 
-static rfalNfcDep gNfcip;              /*!< NFCIP module instance                          */
+static rfalNfcDep gNfcip;                    /*!< NFCIP module instance                         */
 
 
 /*
@@ -350,7 +352,7 @@ static rfalNfcDep gNfcip;              /*!< NFCIP module instance               
  */
 
 static ReturnCode nfcipTxRx( rfalNfcDepCmd cmd, uint8_t* txBuf, uint32_t fwt, uint8_t* paylBuf, uint8_t paylBufLen, uint8_t* rxBuf, uint16_t rxBufLen, uint16_t *rxActLen );
-static ReturnCode nfcipTx( rfalNfcDepCmd cmd, uint8_t* txBuf, uint8_t *paylBuf, uint16_t paylLen, uint8_t pfb, uint32_t fwt );
+static ReturnCode nfcipTx( rfalNfcDepCmd cmd, uint8_t* txBuf, uint8_t *paylBuf, uint16_t paylLen, uint8_t pfbData, uint32_t fwt );
 static ReturnCode nfcipDEPControlMsg( uint8_t pfb, uint8_t RTOX  );
 static ReturnCode nfcipInitiatorHandleDEP( ReturnCode rxRes, uint16_t rxLen, uint16_t *outActRxLen, bool *outIsChaining );
 static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, bool *outIsChaining );
@@ -359,14 +361,14 @@ static ReturnCode nfcipTargetHandleActivation( rfalNfcDepDevice *nfcDepDev, uint
 
 /*!
  ******************************************************************************
- * \brief NFCIP Congigure
+ * \brief NFCIP Configure
  * 
  * Configures the nfcip layer with the given configurations 
  * 
  * \param[in] cfg   : nfcip configuration for following communication
  ******************************************************************************
  */
-static void nfcipConfig( rfalNfcDepConfigs cfg );
+static void nfcipConfig( const rfalNfcDepConfigs * cfg );
 
 
 /*!
@@ -448,14 +450,13 @@ static ReturnCode nfcipDataTx( uint8_t* txBuf, uint16_t txBufLen, uint32_t fwt )
  * 
  * Copies incoming data to rxBuf
  * 
- * \param[out] rxBuf       : buffer to hold incomming data 
- * \param[in]  rxBufLen    : rxBuf capacity 
- * \param[out] actualRxLen : length of the data received  
+ * \param[in] blocking    : reception is to be done blocking or non-blocking
  * 
+ * \return ERR_BUSY       : Busy
  * \return ERR_NONE       : No error
  ******************************************************************************
  */
-static ReturnCode nfcipDataRx( void );
+static ReturnCode nfcipDataRx( bool blocking );
 
 
 /*
@@ -476,12 +477,12 @@ static bool nfcipDxIsSupported( uint8_t Dx, uint8_t BRx, uint8_t BSx )
 	Bx = MIN(BRx, BSx);
 	
 	/* Lower bit rates must be supported for P2P */
-	if( (Dx <= RFAL_NFCDEP_Dx_04_424) )
+	if( (Dx <= (uint8_t)RFAL_NFCDEP_Dx_04_424) )
 	{
 		return true;
 	}
 	
-	if( (Dx == RFAL_NFCDEP_Dx_08_848) && (Bx >= RFAL_NFCDEP_Bx_08_848) )
+	if( (Dx == (uint8_t)RFAL_NFCDEP_Dx_08_848) && (Bx >= (uint8_t)RFAL_NFCDEP_Bx_08_848) )
 	{
 		return true;
 	}
@@ -494,9 +495,6 @@ static bool nfcipDxIsSupported( uint8_t Dx, uint8_t BRx, uint8_t BSx )
 static ReturnCode nfcipTxRx( rfalNfcDepCmd cmd, uint8_t* txBuf, uint32_t fwt, uint8_t* paylBuf, uint8_t paylBufLen, uint8_t* rxBuf, uint16_t rxBufLen, uint16_t *rxActLen )
 {
     ReturnCode ret;
-    uint32_t   reRun;
-    
-    reRun = NFCIP_LOOP_MAX;                                          /* set maximum loop reRuns */
     
     if( (cmd == NFCIP_CMD_DEP_REQ) || (cmd == NFCIP_CMD_DEP_RES) ) /* this method cannot be used for DEPs */
     {
@@ -512,7 +510,7 @@ static ReturnCode nfcipTxRx( rfalNfcDepCmd cmd, uint8_t* txBuf, uint32_t fwt, ui
     /*******************************************************************************/
 	/* Transmission                                                                */
 	/*******************************************************************************/
-    if(txBuf != NULL)                                                /* if nothing to Tx, just do Rx */               
+    if(txBuf != NULL)                                              /* if nothing to Tx, just do Rx */               
     {
         EXIT_ON_ERR( ret, nfcipTx( cmd, txBuf, paylBuf, paylBufLen, 0, fwt ) ); 
     }
@@ -520,19 +518,7 @@ static ReturnCode nfcipTxRx( rfalNfcDepCmd cmd, uint8_t* txBuf, uint32_t fwt, ui
     /*******************************************************************************/
 	/* Reception                                                                   */
 	/*******************************************************************************/
-    do                                                               /* call Rx() until done or max reRuns reached */
-    {
-        ret = nfcipDataRx();
-        
-        rfalWorker();        
-             
-        if( !reRun-- )                                               /* if max reRuns reached return error */
-        {
-        	return ERR_MAX_RERUNS;
-        }
-    }
-    while( ret == ERR_NO_MASK(ERR_BUSY) );
-    
+    ret = nfcipDataRx( true );
     if( ret != ERR_NONE )
     {
         return ret;
@@ -551,6 +537,7 @@ static ReturnCode nfcipDEPControlMsg( uint8_t pfb, uint8_t RTOX  )
     rfalNfcDepCmd  depCmd;
     uint32_t       fwt;
 
+
     /*******************************************************************************/
     /* Calculate Cmd and fwt to be used                                            */
     /*******************************************************************************/
@@ -559,11 +546,12 @@ static ReturnCode nfcipDEPControlMsg( uint8_t pfb, uint8_t RTOX  )
     
     if( nfcip_PFBisSTO( pfb ) )
     {
-        return nfcipTx( depCmd, ctrlMsg, &RTOX, sizeof(RTOX), pfb, fwt );
+        ctrlMsg[RFAL_NFCDEP_DEPREQ_HEADER_LEN] = RTOX;
+        return nfcipTx( depCmd, ctrlMsg, &ctrlMsg[RFAL_NFCDEP_DEPREQ_HEADER_LEN], sizeof(uint8_t), pfb, fwt );
     }
     else
     {
-        return nfcipTx( depCmd, ctrlMsg, 0, 0, pfb, fwt );
+        return nfcipTx( depCmd, ctrlMsg, NULL, 0, pfb, fwt );
     }
 }
 
@@ -715,7 +703,7 @@ static ReturnCode nfcipInitiatorHandleDEP( ReturnCode rxRes, uint16_t rxLen, uin
     }
     
     /* Digital 1.0 14.15.5.5 Protocol Error  */
-    if( gNfcip.rxBuf[rxMsgIt++] != NFCIP_CMD_DEP_RES )
+    if( gNfcip.rxBuf[rxMsgIt++] != (uint8_t)NFCIP_CMD_DEP_RES )
     {
     	nfcipLogW( " NFCIP(I) error %02X instead of %02X \r\n", gNfcip.rxBuf[--rxMsgIt], NFCIP_CMD_DEP_RES );
         return ERR_PROTO;
@@ -734,7 +722,7 @@ static ReturnCode nfcipInitiatorHandleDEP( ReturnCode rxRes, uint16_t rxLen, uin
     /* Digital 1.0 14.8.2.1  check if DID is expected and match -> Protocol Error  */
     if( gNfcip.cfg.did != RFAL_NFCDEP_DID_NO ) 
     {
-        if( !nfcip_PFBhasDID( rxPFB ) || gNfcip.rxBuf[rxMsgIt++] != gNfcip.cfg.did )
+        if( (gNfcip.rxBuf[rxMsgIt++] != gNfcip.cfg.did) || !nfcip_PFBhasDID( rxPFB ) )
         {
             return ERR_PROTO;
         }
@@ -744,20 +732,28 @@ static ReturnCode nfcipInitiatorHandleDEP( ReturnCode rxRes, uint16_t rxLen, uin
     {
         return ERR_PROTO;
     }
+    else
+    {
+        /* MISRA 15.7 - Empty else */
+    }
     
     /*******************************************************************************/
     /* Digital 1.0 14.6.2.8 & 14.6.3.11 NAD must not be used  */
     if( gNfcip.cfg.nad != RFAL_NFCDEP_NAD_NO ) 
     {
-        if( !nfcip_PFBhasNAD( rxPFB ) || gNfcip.rxBuf[rxMsgIt++] != gNfcip.cfg.nad )
+        if( (gNfcip.rxBuf[rxMsgIt++] != gNfcip.cfg.nad) || !nfcip_PFBhasNAD( rxPFB ) )
         {
             return ERR_PROTO;
-        }
+        }        
         optHdrLen++;                                    /* Inc header optional field cnt*/
     }
     else if( nfcip_PFBhasNAD( rxPFB ) )                 /* NAD not expected but rcv */
     {
         return ERR_PROTO;
+    }
+    else
+    {
+        /* MISRA 15.7 - Empty else */
     }
        
     /*******************************************************************************/
@@ -769,7 +765,7 @@ static ReturnCode nfcipInitiatorHandleDEP( ReturnCode rxRes, uint16_t rxLen, uin
         /* R ACK                                                                       */
         /*******************************************************************************/
         if( nfcip_PFBisRACK( rxPFB ) )
-        {            
+        {
             nfcipLogI( " NFCIP(I) Rcvd ACK  \r\n" );
             if( gNfcip.pni == nfcip_PBF_PNI( rxPFB ) )
             {
@@ -795,7 +791,7 @@ static ReturnCode nfcipInitiatorHandleDEP( ReturnCode rxRes, uint16_t rxLen, uin
                 
                 /* Extended the MAY in Digital 1.0 14.12.4.5 to only reTransmit if the ACK
                  * is for the previous DEP, otherwise raise Protocol immediately 
-                 * If the PNI difference is more than 1 it`s worthless to reTransmit 3x
+                 * If the PNI difference is more than 1 it is worthless to reTransmit 3x
                  * and after raise the error                                              */
                 
                 if( nfcip_PNIDec( gNfcip.pni ) ==  nfcip_PBF_PNI( rxPFB ) )
@@ -820,16 +816,16 @@ static ReturnCode nfcipInitiatorHandleDEP( ReturnCode rxRes, uint16_t rxLen, uin
     /* Process S-PDU                                                               */
     /*******************************************************************************/
     if( nfcip_PFBisSPDU( rxPFB ) )                                
-    {       
+    {
         nfcipLogI( " NFCIP(I) Rcvd S-PDU  \r\n" );
         /*******************************************************************************/
         /* S ATN                                                                       */
         /*******************************************************************************/
-        if( nfcip_PFBisSATN( rxPFB ) )                         /*    If is a S-ATN     */
-        {            
+        if( nfcip_PFBisSATN( rxPFB ) )                         /* If is a S-ATN        */
+        {
             nfcipLogI( " NFCIP(I) Rcvd ATN  \r\n" );
             if( nfcip_PFBisSATN( gNfcip.lastPFB ) )            /* Check if is expected */
-            {                
+            {  
                 gNfcip.cntATNRetrys = 0;                       /* Clear ATN counter    */
                 
                 /* Although spec is not clear NFC Forum Digital test is expecting to
@@ -853,7 +849,7 @@ static ReturnCode nfcipInitiatorHandleDEP( ReturnCode rxRes, uint16_t rxLen, uin
                 
                 return ERR_BUSY;
             }
-            else                                                 /* Digital 1.0  14.12.4.4 & 14.12.4.8 */
+            else                                               /* Digital 1.0  14.12.4.4 & 14.12.4.8 */
             {
                 return ERR_PROTO;
             }
@@ -861,7 +857,7 @@ static ReturnCode nfcipInitiatorHandleDEP( ReturnCode rxRes, uint16_t rxLen, uin
         /*******************************************************************************/
         /* S TO                                                                        */
         /*******************************************************************************/
-        else if( nfcip_PFBisSTO( rxPFB ) )                        /* If is a S-TO (RTOX)  */
+        else if( nfcip_PFBisSTO( rxPFB ) )                     /* If is a S-TO (RTOX)  */
         {
             nfcipLogI( " NFCIP(I) Rcvd TO  \r\n" );
             
@@ -885,9 +881,11 @@ static ReturnCode nfcipInitiatorHandleDEP( ReturnCode rxRes, uint16_t rxLen, uin
             
             return ERR_BUSY;
         }
-        
-        /* Unexpected S-PDU */
-        return ERR_PROTO;
+        else
+        {
+            /* Unexpected S-PDU */
+            return ERR_PROTO;                       /*  PRQA S  2880 # MISRA 2.1 - Guard code to prevent unexpected behavior */
+        }
     }
     
     /*******************************************************************************/
@@ -909,11 +907,11 @@ static ReturnCode nfcipInitiatorHandleDEP( ReturnCode rxRes, uint16_t rxLen, uin
         
         /* Successful data Exchange */
         nfcipClearCounters();
-        *outActRxLen  = (nfcDepLen - RFAL_NFCDEP_DEP_HEADER - optHdrLen);
+        *outActRxLen  = ((uint16_t)nfcDepLen - RFAL_NFCDEP_DEP_HEADER - (uint16_t)optHdrLen);
         
-        if( (gNfcip.rxBuf + gNfcip.rxBufPaylPos) != (gNfcip.rxBuf + RFAL_NFCDEP_DEP_HEADER + optHdrLen) )
+        if( (&gNfcip.rxBuf[gNfcip.rxBufPaylPos] != &gNfcip.rxBuf[RFAL_NFCDEP_DEP_HEADER + optHdrLen]) && (*outActRxLen > 0U) )
         {
-            ST_MEMMOVE( (gNfcip.rxBuf + gNfcip.rxBufPaylPos), (gNfcip.rxBuf + RFAL_NFCDEP_DEP_HEADER + optHdrLen), *outActRxLen );
+            ST_MEMMOVE( &gNfcip.rxBuf[gNfcip.rxBufPaylPos], &gNfcip.rxBuf[RFAL_NFCDEP_DEP_HEADER + optHdrLen], *outActRxLen );
         }
 
         /*******************************************************************************/
@@ -934,7 +932,7 @@ static ReturnCode nfcipInitiatorHandleDEP( ReturnCode rxRes, uint16_t rxLen, uin
             gNfcip.isRxChaining = false;
             gNfcip.state        = NFCIP_ST_INIT_DEP_IDLE;
             
-            return ERR_NONE;                            /* Data exchange done */
+            ret = ERR_NONE;    /* Data exchange done */
         }
     }
     return ret;
@@ -949,7 +947,7 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
     uint8_t    rxMsgIt;
     uint8_t    rxPFB;
     uint8_t    optHdrLen;
-    uint8_t    resBuf[NFCIP_TARGET_RES_MAX];
+    uint8_t    resBuf[RFAL_NFCDEP_HEADER_PAD + NFCIP_TARGET_RES_MAX];
         
     
     ret        = ERR_INTERNAL;
@@ -969,6 +967,13 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
         case ERR_NONE:
             break;
             
+        case ERR_LINK_LOSS:
+            nfcipLogW( " NFCIP(T) Error: %d \r\n", rxRes );
+            return rxRes;
+            
+        case ERR_BUSY:
+            return ERR_BUSY;  /* Debug purposes */
+            
         case ERR_TIMEOUT:
         case ERR_CRC:
         case ERR_PAR:
@@ -983,14 +988,6 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
             
             nfcDepReEnableRx( gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen );
             return ERR_BUSY;
-        
-        case ERR_LINK_LOSS:
-            nfcipLogW( " NFCIP(T) Error: %d \r\n", rxRes );
-            return rxRes;
-            
-        case ERR_BUSY:
-            return ERR_BUSY;  /* Debug purposes */
-            
     }    
         
     /*******************************************************************************/
@@ -1015,45 +1012,45 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
     switch( gNfcip.rxBuf[rxMsgIt++] )
     {               
         /*******************************************************************************/
-        case NFCIP_CMD_DEP_REQ:
+        case (uint8_t)NFCIP_CMD_DEP_REQ:
             break;                                /* Continue to normal DEP processing */
     
         /*******************************************************************************/
-        case NFCIP_CMD_DSL_REQ:
+        case (uint8_t)NFCIP_CMD_DSL_REQ:
             
             nfcipLogI( " NFCIP(T) rx DSL \r\n" );
             
             /* Digital 1.0  14.9.1.2 If DID is used and incorrect ignore it */
             /* [Digital 1.0, 16.9.1.2]: If DID == 0, Target SHALL ignore DSL_REQ with DID */
-            if ( ((gNfcip.cfg.did != RFAL_NFCDEP_DID_NO) && ((nfcDepLen != RFAL_NFCDEP_DSL_RLS_LEN_DID) || (gNfcip.rxBuf[rxMsgIt++] != gNfcip.cfg.did)) )
-               ||((gNfcip.cfg.did == RFAL_NFCDEP_DID_NO) && (nfcDepLen != RFAL_NFCDEP_DSL_RLS_LEN_NO_DID))
+            if (   (((gNfcip.rxBuf[rxMsgIt++] != gNfcip.cfg.did) || (nfcDepLen != RFAL_NFCDEP_DSL_RLS_LEN_DID)) && (gNfcip.cfg.did != RFAL_NFCDEP_DID_NO) )
+                || ((gNfcip.cfg.did == RFAL_NFCDEP_DID_NO) && (nfcDepLen != RFAL_NFCDEP_DSL_RLS_LEN_NO_DID))
                )
-            {                
+            {
                 nfcipLogI( " NFCIP(T) DSL wrong DID, ignoring \r\n" );
                 return ERR_BUSY;
             }
             
-            nfcipTx( NFCIP_CMD_DSL_RES, resBuf, 0, 0, 0, NFCIP_NO_FWT );
+            nfcipTx( NFCIP_CMD_DSL_RES, resBuf, NULL, 0, 0, NFCIP_NO_FWT );
             
             gNfcip.state = NFCIP_ST_TARG_DEP_SLEEP;
             return ERR_SLEEP_REQ;
             
         /*******************************************************************************/
-        case NFCIP_CMD_RLS_REQ:
+        case (uint8_t)NFCIP_CMD_RLS_REQ:
             
             nfcipLogI( " NFCIP(T) rx RLS \r\n" );
             
             /* Digital 1.0  14.10.1.2 If DID is used and incorrect ignore it */
             /* [Digital 1.0, 16.10.2.2]: If DID == 0, Target SHALL ignore DSL_REQ with DID */
-            if ( ( (gNfcip.cfg.did != RFAL_NFCDEP_DID_NO) && ((nfcDepLen != RFAL_NFCDEP_DSL_RLS_LEN_DID) || (gNfcip.rxBuf[rxMsgIt++] != gNfcip.cfg.did)) )
-               ||( (gNfcip.cfg.did == RFAL_NFCDEP_DID_NO) && (nfcDepLen > RFAL_NFCDEP_DSL_RLS_LEN_NO_DID))
+            if (   (((gNfcip.rxBuf[rxMsgIt++] != gNfcip.cfg.did) || (nfcDepLen != RFAL_NFCDEP_DSL_RLS_LEN_DID)) && (gNfcip.cfg.did != RFAL_NFCDEP_DID_NO) )
+                || ((gNfcip.cfg.did == RFAL_NFCDEP_DID_NO) && (nfcDepLen > RFAL_NFCDEP_DSL_RLS_LEN_NO_DID))
                )
-            {                
+            {
                 nfcipLogI( " NFCIP(T) RLS wrong DID, ignoring \r\n" );
                 return ERR_BUSY;
             }
-                        
-            nfcipTx( NFCIP_CMD_RLS_RES, resBuf, 0, 0, 0, NFCIP_NO_FWT );
+                
+            nfcipTx( NFCIP_CMD_RLS_RES, resBuf, NULL, 0, 0, NFCIP_NO_FWT );
             
             gNfcip.state = NFCIP_ST_TARG_DEP_IDLE;
             return ERR_RELEASE_REQ;
@@ -1085,7 +1082,12 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
     /*******************************************************************************/   
     if( gNfcip.cfg.did != RFAL_NFCDEP_DID_NO ) 
     {
-        if( !nfcip_PFBhasDID( rxPFB ) || gNfcip.rxBuf[rxMsgIt++] != gNfcip.cfg.did )
+        if( !nfcip_PFBhasDID( rxPFB ) )
+        {
+            nfcDepReEnableRx( gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen );
+            return ERR_BUSY; /* ERR_PROTO - Ignore bad/missing DID  */
+        }
+        if( gNfcip.rxBuf[rxMsgIt++] != gNfcip.cfg.did ) /* MISRA 13.5 */
         {
             nfcDepReEnableRx( gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen );
             return ERR_BUSY; /* ERR_PROTO - Ignore bad/missing DID  */
@@ -1097,22 +1099,30 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
         nfcDepReEnableRx( gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen );
         return ERR_BUSY; /* ERR_PROTO - Ignore unexpected DID  */
     }
+    else
+    {
+        /* MISRA 15.7 - Empty else */
+    }
                                   
         
     /*******************************************************************************/
     if( gNfcip.cfg.nad != RFAL_NFCDEP_NAD_NO ) 
     {
-        if( !nfcip_PFBhasNAD( rxPFB ) || gNfcip.rxBuf[rxMsgIt++] != gNfcip.cfg.nad )
+        if( (gNfcip.rxBuf[rxMsgIt++] != gNfcip.cfg.did) || !nfcip_PFBhasDID( rxPFB ) )
         {
             nfcDepReEnableRx( gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen );
-            return ERR_BUSY; /* ERR_PROTO - Ignore bad/missing NAD  */
+            return ERR_BUSY;                            /* ERR_PROTO - Ignore bad/missing DID  */
         }
         optHdrLen++;                                    /* Inc header optional field cnt*/
     }
     else if( nfcip_PFBhasNAD( rxPFB ) )                 /* NAD not expected but rcv */
     {
         nfcDepReEnableRx( gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen );
-        return ERR_BUSY; /* ERR_PROTO - Ignore unexpected NAD  */
+        return ERR_BUSY;                                /* ERR_PROTO - Ignore unexpected NAD  */
+    }
+    else
+    {
+        /* MISRA 15.7 - Empty else */
     }
     
        
@@ -1126,15 +1136,15 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
         /* R ACK                                                                       */
         /*******************************************************************************/
         if( nfcip_PFBisRACK( rxPFB ) )
-        {            
+        {
             nfcipLogI( " NFCIP(T) Rcvd ACK  \r\n" );
             if( gNfcip.pni == nfcip_PBF_PNI( rxPFB ) )
-            {                
+            {
                 /* R-ACK while not performing chaining -> Protocol error */
                 if( !gNfcip.isTxChaining )
                 {
                     nfcDepReEnableRx( gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen );
-                    return ERR_BUSY; /* ERR_PROTO - Ignore unexpected ACK  */
+                    return ERR_BUSY;                    /* ERR_PROTO - Ignore unexpected ACK  */
                 }
                 
                 /* This block has been transmitted and acknowledged, perform RTOX until next data is provided  */
@@ -1143,7 +1153,7 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
                 nfcipTimerStart( gNfcip.RTOXTimer, nfcipRTOXAdjust( nfcipConv1FcToMs( rfalNfcDepWT2RWT( gNfcip.cfg.to ) )) );
                 gNfcip.state = NFCIP_ST_TARG_DEP_RTOX;
                 
-                return ERR_NONE;                            /* This block has been transmitted */
+                return ERR_NONE;                        /* This block has been transmitted */
             }
             
             /* Digital 1.0 14.12.3.4 - If last send was ATN and rx PNI is minus 1 */
@@ -1155,6 +1165,10 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
                 
                 gNfcip.state = NFCIP_ST_TARG_DEP_TX;
                 return ERR_BUSY;
+            }
+            else
+            {
+                /* MISRA 15.7 - Empty else */
             }
         }
         /*******************************************************************************/
@@ -1170,18 +1184,20 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
             gNfcip.state = NFCIP_ST_TARG_DEP_TX;
             return ERR_BUSY;
         }
-        
-        nfcipLogI( " NFCIP(T) Unexpected R-PDU \r\n" );
-        
-        nfcDepReEnableRx( gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen );
-        return ERR_BUSY; /* ERR_PROTO - Ignore unexpected R-PDU  */
+        else
+        {        
+            nfcipLogI( " NFCIP(T) Unexpected R-PDU \r\n" );
+            
+            nfcDepReEnableRx( gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen );
+            return ERR_BUSY; /* ERR_PROTO - Ignore unexpected R-PDU  */
+        }
     }
     
     /*******************************************************************************/
     /* Process S-PDU                                                               */
     /*******************************************************************************/
     if( nfcip_PFBisSPDU( rxPFB ) )
-    {        
+    {
         nfcipLogD( " NFCIP(T) Rcvd S-PDU  \r\n" );
         
         /*******************************************************************************/
@@ -1232,11 +1248,14 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
                 return ERR_BUSY;
             }
         }
-        /* Unexpected S-PDU */
-        nfcipLogI( " NFCIP(T) Unexpected S-PDU \r\n" );
-        
-        nfcDepReEnableRx( gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen );
-        return ERR_BUSY; /* ERR_PROTO - Ignore unexpected S-PDU  */
+        else
+        {
+            /* Unexpected S-PDU */
+            nfcipLogI( " NFCIP(T) Unexpected S-PDU \r\n" );         /*  PRQA S  2880 # MISRA 2.1 - Guard code to prevent unexpected behavior */
+            
+            nfcDepReEnableRx( gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen );
+            return ERR_BUSY; /* ERR_PROTO - Ignore unexpected S-PDU  */
+        }
     }
     
     /*******************************************************************************/
@@ -1272,7 +1291,7 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
             }
                         
             nfcDepReEnableRx( gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen );
-            return ERR_BUSY; /* ERR_PROTO - Ignore bad PNI value  */
+            return ERR_BUSY;            /* ERR_PROTO - Ignore bad PNI value  */
         }
         
         nfcipLogD( " NFCIP(T) Rcvd IPDU OK PNI: %d  \r\n", gNfcip.pni );
@@ -1280,13 +1299,13 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
         /*******************************************************************************/
         /* Successful data exchange                                                    */
         /*******************************************************************************/
-        *outActRxLen  = (nfcDepLen - RFAL_NFCDEP_DEP_HEADER - optHdrLen);
+        *outActRxLen  = ((uint16_t)nfcDepLen - RFAL_NFCDEP_DEP_HEADER - (uint16_t)optHdrLen);
         
         nfcipClearCounters();
 
-        if( (gNfcip.rxBuf + gNfcip.rxBufPaylPos) != (gNfcip.rxBuf + RFAL_NFCDEP_DEP_HEADER + optHdrLen) )
+        if( (&gNfcip.rxBuf[gNfcip.rxBufPaylPos] != &gNfcip.rxBuf[RFAL_NFCDEP_DEP_HEADER + optHdrLen]) && (*outActRxLen > 0U) )
         {
-            ST_MEMMOVE( (gNfcip.rxBuf + gNfcip.rxBufPaylPos), (gNfcip.rxBuf + RFAL_NFCDEP_DEP_HEADER + optHdrLen), *outActRxLen );
+            ST_MEMMOVE( &gNfcip.rxBuf[gNfcip.rxBufPaylPos], &gNfcip.rxBuf[RFAL_NFCDEP_DEP_HEADER + optHdrLen], *outActRxLen );
         }
         
         
@@ -1319,7 +1338,7 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
             gNfcip.state = NFCIP_ST_TARG_DEP_RTOX;
             
             gNfcip.isRxChaining = false;
-            return ERR_NONE;                            /* Data exchange done */
+            ret = ERR_NONE;                            /* Data exchange done */
         }
     }
     return ret;
@@ -1327,29 +1346,36 @@ static ReturnCode nfcipTargetHandleRX( ReturnCode rxRes, uint16_t *outActRxLen, 
 
 
 /*******************************************************************************/
-static ReturnCode nfcipTx( rfalNfcDepCmd cmd, uint8_t* txBuf, uint8_t *paylBuf, uint16_t paylLen, uint8_t pfb, uint32_t fwt )
+static ReturnCode nfcipTx( rfalNfcDepCmd cmd, uint8_t* txBuf, uint8_t *paylBuf, uint16_t paylLen, uint8_t pfbData, uint32_t fwt )
 {
     uint16_t txBufIt;
     uint8_t *txBlock;
+    uint8_t *payloadBuf;
+    uint8_t  pfb;
     
+   
     if( txBuf == NULL )
     {
         return ERR_PARAM;
     }
     
+
+    payloadBuf = paylBuf;                                               /* MISRA 17.8: Use intermediate variable */
     
-    if( (paylLen == 0) || (paylBuf == NULL) )
+    if( (paylLen == 0U) || (payloadBuf == NULL) )
     {
-        paylBuf = (txBuf + RFAL_NFCDEP_DEPREQ_HEADER_LEN);  /* If not a DEP (no Data) ensure enough space for header */
+        payloadBuf = (uint8_t*) &txBuf[RFAL_NFCDEP_DEPREQ_HEADER_LEN];  /* If not a DEP (no Data) ensure enough space for header */
     }
     
     
     txBufIt  = 0;
-    txBlock  = paylBuf;                                  /* Point to beginning of the Data, and go backwards     */    
+    pfb      = pfbData;                                                 /* MISRA 17.8: Use intermediate variable */
+    
+    txBlock  = payloadBuf;                                              /* Point to beginning of the Data, and go backwards     */    
         
     
-    gNfcip.lastCmd     = cmd;                            /* store last cmd sent    */
-    gNfcip.lastPFB     = NFCIP_PFB_INVALID;              /* reset last pfb sent    */
+    gNfcip.lastCmd = (uint8_t)cmd;                                      /* Store last cmd sent    */
+    gNfcip.lastPFB = NFCIP_PFB_INVALID;                                 /* Reset last pfb sent    */
     
     /*******************************************************************************/
     /* Compute outgoing NFCIP message                                              */
@@ -1360,40 +1386,39 @@ static ReturnCode nfcipTx( rfalNfcDepCmd cmd, uint8_t* txBuf, uint8_t *paylBuf, 
         case NFCIP_CMD_ATR_RES:
         case NFCIP_CMD_ATR_REQ:
             
-            rfalNfcDepSetNFCID( paylBuf, gNfcip.cfg.nfcid, gNfcip.cfg.nfcidLen );        /* NFCID */
+            rfalNfcDepSetNFCID( payloadBuf, gNfcip.cfg.nfcid, gNfcip.cfg.nfcidLen );    /* NFCID */
             txBufIt += RFAL_NFCDEP_NFCID3_LEN;
             
-            *(paylBuf + txBufIt++) = gNfcip.cfg.did;                                     /* DID   */
-            *(paylBuf + txBufIt++) = gNfcip.cfg.bs;                                      /* BS    */
-            *(paylBuf + txBufIt++) = gNfcip.cfg.br;                                      /* BR    */
+            payloadBuf[txBufIt++] = gNfcip.cfg.did;                                     /* DID   */
+            payloadBuf[txBufIt++] = gNfcip.cfg.bs;                                      /* BS    */
+            payloadBuf[txBufIt++] = gNfcip.cfg.br;                                      /* BR    */
             
             if( cmd == NFCIP_CMD_ATR_RES )
             {
-                *(paylBuf + txBufIt++) = gNfcip.cfg.to;                                  /* ATR_RES[ TO ] */
+                payloadBuf[txBufIt++] = gNfcip.cfg.to;                                  /* ATR_RES[ TO ] */
             }
                                     
-            if( gNfcip.cfg.gbLen > 0)
+            if( gNfcip.cfg.gbLen > 0U)
             {
-                *(paylBuf + txBufIt++) = nfcip_PPwGB( gNfcip.cfg.lr );                   /* PP signalling GB  */
-                ST_MEMCPY( (paylBuf + txBufIt), gNfcip.cfg.gb, gNfcip.cfg.gbLen );      /* set General Bytes */
+                payloadBuf[txBufIt++] = nfcip_PPwGB( gNfcip.cfg.lr );                   /* PP signalling GB  */
+                ST_MEMCPY( &payloadBuf[txBufIt], gNfcip.cfg.gb, gNfcip.cfg.gbLen );     /* set General Bytes */
                 txBufIt += gNfcip.cfg.gbLen;
             }
             else
             {
-                *(paylBuf + txBufIt++) = rfalNfcDepLR2PP( gNfcip.cfg.lr );               /* PP without GB        */
+                payloadBuf[txBufIt++] = rfalNfcDepLR2PP( gNfcip.cfg.lr );               /* PP without GB     */
             }
             
             if( (txBufIt + RFAL_NFCDEP_CMDTYPE_LEN + RFAL_NFCDEP_CMD_LEN) > RFAL_NFCDEP_ATRREQ_MAX_LEN )   /* Check max ATR length (ATR_REQ = ATR_RES)*/
             {
                 return ERR_PARAM;
             }
-            
             break;
             
         /*******************************************************************************/
         case NFCIP_CMD_WUP_REQ:                               /* ISO 18092 - 12.5.2.1 */
             
-            rfalNfcDepSetNFCID( (paylBuf), gNfcip.cfg.nfcid, gNfcip.cfg.nfcidLen );      /* NFCID */
+            rfalNfcDepSetNFCID( (payloadBuf), gNfcip.cfg.nfcid, gNfcip.cfg.nfcidLen );   /* NFCID */
             txBufIt += RFAL_NFCDEP_NFCID3_LEN;
             
             *(--txBlock) = gNfcip.cfg.did;                                               /* DID   */
@@ -1425,9 +1450,9 @@ static ReturnCode nfcipTx( rfalNfcDepCmd cmd, uint8_t* txBuf, uint8_t *paylBuf, 
         case NFCIP_CMD_DEP_RES:
             
             /* Compute optional PFB bits */
-            if(gNfcip.cfg.did != RFAL_NFCDEP_DID_NO)                 pfb |= NFCIP_PFB_DID_BIT;
-            if(gNfcip.cfg.nad != RFAL_NFCDEP_NAD_NO)                 pfb |= NFCIP_PFB_NAD_BIT;
-            if((gNfcip.isTxChaining) && (nfcip_PFBisIPDU(pfb)) )     pfb |= NFCIP_PFB_MI_BIT;
+            if (gNfcip.cfg.did != RFAL_NFCDEP_DID_NO)                {   pfb |= NFCIP_PFB_DID_BIT;       }
+            if (gNfcip.cfg.nad != RFAL_NFCDEP_NAD_NO)                {   pfb |= NFCIP_PFB_NAD_BIT;       }
+            if ((gNfcip.isTxChaining) && (nfcip_PFBisIPDU(pfb)) )    {   pfb |= NFCIP_PFB_MI_BIT;        }
             
             /* Store PFB for future handling */
             gNfcip.lastPFB       = pfb;                                                  /* store PFB sent */
@@ -1454,7 +1479,7 @@ static ReturnCode nfcipTx( rfalNfcDepCmd cmd, uint8_t* txBuf, uint8_t *paylBuf, 
                         
             
             /* NCI 1.0 - Check if Empty frames are allowed */
-            if( (paylLen == 0) && nfcipIsEmptyDEPDisabled(gNfcip.cfg.oper) && nfcip_PFBisIPDU(pfb) )
+            if( (paylLen == 0U) && nfcipIsEmptyDEPDisabled(gNfcip.cfg.oper) && nfcip_PFBisIPDU(pfb) )
             {
                 return ERR_PARAM;
             }
@@ -1468,14 +1493,14 @@ static ReturnCode nfcipTx( rfalNfcDepCmd cmd, uint8_t* txBuf, uint8_t *paylBuf, 
     /*******************************************************************************/
     /* Prepend Header                                                              */
     /*******************************************************************************/    
-    *(--txBlock) = (uint8_t)cmd;                                                        /* CMD     */
-    *(--txBlock) = ( nfcipCmdIsReq(cmd) ? NFCIP_REQ : NFCIP_RES );                      /* CMDType */
+    *(--txBlock) = (uint8_t)cmd;                                                         /* CMD     */
+    *(--txBlock) = (uint8_t)( nfcipCmdIsReq(cmd) ? NFCIP_REQ : NFCIP_RES );              /* CMDType */
         
     
-    txBufIt += paylLen + (paylBuf - txBlock);                                           /* Calculate overall buffer size */
+    txBufIt += paylLen + (uint16_t)((uint32_t)payloadBuf - (uint32_t)txBlock);           /* Calculate overall buffer size */
     
     
-    if( txBufIt > gNfcip.fsc )                                                          /* Check if msg length violates the maximum payload size FSC */
+    if( txBufIt > gNfcip.fsc )                                                           /* Check if msg length violates the maximum payload size FSC */
     {
         return ERR_NOTSUPP;
     }
@@ -1491,13 +1516,18 @@ static ReturnCode nfcipTx( rfalNfcDepCmd cmd, uint8_t* txBuf, uint8_t *paylBuf, 
  */
 
 /*******************************************************************************/
-static void nfcipConfig( rfalNfcDepConfigs cfg )
-{    
-    ST_MEMCPY(&gNfcip.cfg, &cfg, sizeof(rfalNfcDepConfigs));      /* Copy given config to local       */
+static void nfcipConfig( const rfalNfcDepConfigs * cfg )
+{
+    if (cfg == NULL) 
+    {
+        return;
+    }
     
-    gNfcip.cfg.to   = MIN( RFAL_NFCDEP_WT_TRG_MAX, gNfcip.cfg.to); /* Ensure proper WT value           */
-    gNfcip.cfg.did  = nfcip_DIDMax( gNfcip.cfg.did );              /* Ensure proper DID value          */
-    gNfcip.fsc      = rfalNfcDepLR2FS( gNfcip.cfg.lr );            /* Calculate FSC based on given LR  */
+    ST_MEMCPY(&gNfcip.cfg, cfg, sizeof(rfalNfcDepConfigs));          /* Copy given config to local       */
+    
+    gNfcip.cfg.to   = MIN( RFAL_NFCDEP_WT_TRG_MAX, gNfcip.cfg.to);   /* Ensure proper WT value           */
+    gNfcip.cfg.did  = nfcip_DIDMax( gNfcip.cfg.did );                /* Ensure proper DID value          */
+    gNfcip.fsc      = rfalNfcDepLR2FS( gNfcip.cfg.lr );              /* Calculate FSC based on given LR  */
     
     gNfcip.state = ( ( gNfcip.cfg.role ==  RFAL_NFCDEP_ROLE_TARGET) ? NFCIP_ST_TARG_WAIT_ATR : NFCIP_ST_INIT_IDLE );
 }
@@ -1525,9 +1555,9 @@ static ReturnCode nfcipRun( uint16_t *outActRxLen, bool *outIsChaining  )
         case NFCIP_ST_INIT_DEP_TX:
             
             nfcipLogD( " NFCIP(I) Tx PNI: %d txLen: %d \r\n", gNfcip.pni, gNfcip.txBufLen );
-            ret = nfcipTx( NFCIP_CMD_DEP_REQ, gNfcip.txBuf, (gNfcip.txBuf + gNfcip.txBufPaylPos), gNfcip.txBufLen, nfcip_PFBIPDU( gNfcip.pni ), (gNfcip.cfg.fwt + gNfcip.cfg.dFwt) );
+            ret = nfcipTx( NFCIP_CMD_DEP_REQ, gNfcip.txBuf, &gNfcip.txBuf[gNfcip.txBufPaylPos], gNfcip.txBufLen, nfcip_PFBIPDU( gNfcip.pni ), (gNfcip.cfg.fwt + gNfcip.cfg.dFwt) );
                         
-            switch( ERR_NO_MASK(ret) )
+            switch( ret )
             {
                 case ERR_PARAM:
                 default:
@@ -1536,15 +1566,16 @@ static ReturnCode nfcipRun( uint16_t *outActRxLen, bool *outIsChaining  )
                   
               case ERR_NONE:
                   gNfcip.state = NFCIP_ST_INIT_DEP_RX;
+                  break;
             }
             /* fall through */
             
         /*******************************************************************************/
-        case NFCIP_ST_INIT_DEP_RX:
+        case NFCIP_ST_INIT_DEP_RX:          /*  PRQA S 2003 # MISRA 16.3 - Intentional fall through */
 
-            ret = nfcipDataRx();
+            ret = nfcipDataRx( false );
             
-            if( ret != ERR_NO_MASK(ERR_BUSY) )
+            if( ret != ERR_BUSY )
             {
                 ret = nfcipInitiatorHandleDEP( ret, *gNfcip.rxRcvdLen, outActRxLen, outIsChaining );
             }
@@ -1554,7 +1585,7 @@ static ReturnCode nfcipRun( uint16_t *outActRxLen, bool *outIsChaining  )
         /*******************************************************************************/    
         case NFCIP_ST_TARG_DEP_RTOX:
             
-            if( !nfcipTimerisExpired( gNfcip.RTOXTimer ) )                     /* Do nothing until RTOX timer has expired */
+            if( !nfcipTimerisExpired( gNfcip.RTOXTimer ) )                    /* Do nothing until RTOX timer has expired */
             {
                 return ERR_BUSY;
             }
@@ -1569,27 +1600,27 @@ static ReturnCode nfcipRun( uint16_t *outActRxLen, bool *outIsChaining  )
                 return ERR_TIMEOUT;
             } 
 
-            if( gNfcip.cntRTOXRetrys++ > NFCIP_MAX_RTOX_RETRYS )                   /* Check maximum consecutive RTOX requests */
+            if( gNfcip.cntRTOXRetrys++ > NFCIP_MAX_RTOX_RETRYS )              /* Check maximum consecutive RTOX requests */
             {
                 return ERR_PROTO;
             }
             
             nfcipLogI( " NFCIP(T) RTOX sent \r\n" );
             
-            gNfcip.lastRTOX = nfcip_RTOXTargMax(gNfcip.cfg.to);               /* Calculate requested RTOX value, and send it   */                        
+            gNfcip.lastRTOX = nfcip_RTOXTargMax(gNfcip.cfg.to);               /* Calculate requested RTOX value, and send it */                        
             EXIT_ON_ERR( ret, nfcipDEPControlMsg( nfcip_PFBSPDU_TO(), gNfcip.lastRTOX ) );
             
             /* Set waiting for RTOX Ack Flag */
             gNfcip.isWait4RTOX = true;
             
-            gNfcip.state = NFCIP_ST_TARG_DEP_RX;                              /* Go back to Rx to process RTOX ack        */
+            gNfcip.state = NFCIP_ST_TARG_DEP_RX;                              /* Go back to Rx to process RTOX ack       */
             return ERR_BUSY;
             
         /*******************************************************************************/
         case NFCIP_ST_TARG_DEP_TX:
             
             nfcipLogD( " NFCIP(T) Tx PNI: %d txLen: %d \r\n", gNfcip.pni, gNfcip.txBufLen );
-            ret = nfcipTx( NFCIP_CMD_DEP_RES, gNfcip.txBuf, (gNfcip.txBuf + gNfcip.txBufPaylPos), gNfcip.txBufLen, nfcip_PFBIPDU( gNfcip.pni ), NFCIP_NO_FWT );
+            ret = nfcipTx( NFCIP_CMD_DEP_RES, gNfcip.txBuf, &gNfcip.txBuf[gNfcip.txBufPaylPos], gNfcip.txBufLen, nfcip_PFBIPDU( gNfcip.pni ), NFCIP_NO_FWT );
             
             /* Clear flags */
             gNfcip.isTxPending = false;
@@ -1598,20 +1629,21 @@ static ReturnCode nfcipRun( uint16_t *outActRxLen, bool *outIsChaining  )
             /* Digital 1.0 14.12.3.4 Increment the current PNI after Tx */
             gNfcip.pni = nfcip_PNIInc( gNfcip.pni );
             
-            switch( ERR_NO_MASK(ret) )
+            switch( ret )
             {
                 case ERR_PARAM:
                 default:
-                  gNfcip.state = NFCIP_ST_TARG_DEP_IDLE;                      /* Upon Tx error, goto IDLE state         */
+                  gNfcip.state = NFCIP_ST_TARG_DEP_IDLE;                      /* Upon Tx error, goto IDLE state */
                   return ret;
                   
               case ERR_NONE:
-                  gNfcip.state = NFCIP_ST_TARG_DEP_RX;                       /* All OK, goto Rx state                   */
+                  gNfcip.state = NFCIP_ST_TARG_DEP_RX;                        /* All OK, goto Rx state          */
+                  break;
             }
             /* fall through */
             
         /*******************************************************************************/
-        case NFCIP_ST_TARG_DEP_RX:
+        case NFCIP_ST_TARG_DEP_RX:   /*  PRQA S 2003 # MISRA 16.3 - Intentional fall through */
             
             if( gNfcip.isReqPending )    /* if already has Data should be from a DEP from nfcipTargetHandleActivation()  */
             {
@@ -1622,10 +1654,10 @@ static ReturnCode nfcipRun( uint16_t *outActRxLen, bool *outIsChaining  )
             }
             else
             {
-                ret = nfcipDataRx();
+                ret = nfcipDataRx( false );
             }
             
-            if( ret != ERR_NO_MASK(ERR_BUSY) )
+            if( ret != ERR_BUSY )
             {
                 ret = nfcipTargetHandleRX( ret, outActRxLen, outIsChaining );
             }
@@ -1634,6 +1666,7 @@ static ReturnCode nfcipRun( uint16_t *outActRxLen, bool *outIsChaining  )
             
         /*******************************************************************************/
         default:
+            /* MISRA 16.4: no empty default statement (a comment being enough) */
             break;
     }
     return ret;
@@ -1710,7 +1743,7 @@ static void nfcipSetDEPParams( rfalNfcDepDEPParams *DEPParams )
     if(gNfcip.cfg.role == RFAL_NFCDEP_ROLE_TARGET)
     {
         /* If there's any data to be sent go for Tx */
-        if(DEPParams->txBufLen > 0)
+        if(DEPParams->txBufLen > 0U)
         {
             /* Ensure that an RTOX Ack is not being expected at moment */
             if( !gNfcip.isWait4RTOX )
@@ -1746,7 +1779,7 @@ bool rfalNfcDepTargetRcvdATR( void )
 
 
 /*******************************************************************************/
-bool rfalNfcDepIsAtrReq( uint8_t* buf, uint16_t bufLen, uint8_t* nfcid3 )
+bool rfalNfcDepIsAtrReq( const uint8_t* buf, uint16_t bufLen, uint8_t* nfcid3 )
 {
     uint8_t msgIt;
     
@@ -1757,20 +1790,20 @@ bool rfalNfcDepIsAtrReq( uint8_t* buf, uint16_t bufLen, uint8_t* nfcid3 )
         return false;
     }
     
-    if ( *(buf + msgIt++) != NFCIP_REQ )
+    if ( buf[msgIt++] != NFCIP_REQ )
     {
         return false;
     }
     
-    if( *(buf + msgIt++) != NFCIP_CMD_ATR_REQ )
+    if( buf[msgIt++] != (uint8_t)NFCIP_CMD_ATR_REQ )
     {
         return false;
     }
     
-    /* Output NFID2 if requested */
+    /* Output NFID3 if requested */
     if( nfcid3 != NULL )
     {
-        ST_MEMCPY( nfcid3, (uint8_t*)(buf + RFAL_NFCDEP_ATR_REQ_NFCID3_POS), RFAL_NFCDEP_NFCID3_LEN );
+        ST_MEMCPY( nfcid3, &buf[RFAL_NFCDEP_ATR_REQ_NFCID3_POS], RFAL_NFCDEP_NFCID3_LEN );
     }
      
     return true;
@@ -1804,7 +1837,7 @@ static ReturnCode nfcipTargetHandleActivation( rfalNfcDepDevice *nfcDepDev, uint
     /*******************************************************************************/
     /*  Wait and process incoming cmd (PSL / DEP)                                  */
     /*******************************************************************************/        
-    ret = nfcipDataRx();
+    ret = nfcipDataRx( false );
 
     if( ret != ERR_NONE )
     {
@@ -1816,26 +1849,26 @@ static ReturnCode nfcipTargetHandleActivation( rfalNfcDepDevice *nfcDepDev, uint
  
     msgIt++;                                              /* Skip LEN byte                */
     
-    if ( *(gNfcip.rxBuf + msgIt++) != NFCIP_REQ )
+    if ( gNfcip.rxBuf[msgIt++] != NFCIP_REQ )
     {
         return ERR_PROTO;
     }
     
-    if( *(gNfcip.rxBuf + msgIt) == NFCIP_CMD_PSL_REQ )
+    if( gNfcip.rxBuf[msgIt] == (uint8_t)NFCIP_CMD_PSL_REQ )
     {
         msgIt++;
         
-        if( *(gNfcip.rxBuf + msgIt++) != gNfcip.cfg.did ) /* Checking DID                 */
+        if( gNfcip.rxBuf[msgIt++] != gNfcip.cfg.did )     /* Checking DID                 */
         {
             return ERR_PROTO;
         }
         
         nfcipLogI( " NFCIP(T) PSL REQ rcvd \r\n" );
         
-        *outBRS = *(gNfcip.rxBuf + msgIt++);              /* assign output BRS value      */
+        *outBRS = gNfcip.rxBuf[msgIt++];                  /* assign output BRS value      */
         
         /* Store FSL(LR) and update current config */
-        gNfcip.cfg.lr = (*(gNfcip.rxBuf + msgIt++) & RFAL_NFCDEP_LR_VAL_MASK);
+        gNfcip.cfg.lr = (gNfcip.rxBuf[msgIt++] & RFAL_NFCDEP_LR_VAL_MASK);
         gNfcip.fsc    = rfalNfcDepLR2FS( gNfcip.cfg.lr );
         
         /*******************************************************************************/
@@ -1843,6 +1876,7 @@ static ReturnCode nfcipTargetHandleActivation( rfalNfcDepDevice *nfcDepDev, uint
         if( nfcDepDev != NULL )
         {
             /* Update Bitrate info */
+            /* PRQA S 4342 2 # MISRA 10.5 - Layout of enum rfalBitRate and definition of rfalNfcDepBRS2DSI guarantee no invalid enum values to be created */
             nfcDepDev->info.DSI = (rfalBitRate)rfalNfcDepBRS2DSI( *outBRS );   /* DSI codes the bit rate from Initiator to Target */
             nfcDepDev->info.DRI = (rfalBitRate)rfalNfcDepBRS2DRI( *outBRS );   /* DRI codes the bit rate from Target to Initiator */
             
@@ -1855,26 +1889,26 @@ static ReturnCode nfcipTargetHandleActivation( rfalNfcDepDevice *nfcDepDev, uint
             nfcDepDev->activation.Initiator.ATR_REQ.PPi |= rfalNfcDepLR2PP( gNfcip.cfg.lr );
         }
         
-        EXIT_ON_ERR( ret, nfcipTx( NFCIP_CMD_PSL_RES, txBuf, 0, 0, 0, NFCIP_NO_FWT ) );
+        EXIT_ON_ERR( ret, nfcipTx( NFCIP_CMD_PSL_RES, txBuf, NULL, 0, 0, NFCIP_NO_FWT ) );
     }
     else
     {
-        if( *(gNfcip.rxBuf + msgIt) == NFCIP_CMD_DEP_REQ )
+        if( gNfcip.rxBuf[msgIt] == (uint8_t)NFCIP_CMD_DEP_REQ )
         {
             msgIt++;
                     
             /*******************************************************************************/
             /* Digital 1.0 14.12.3.1 PNI must be initialized to 0 */
-            if( nfcip_PBF_PNI( *(gNfcip.rxBuf + msgIt) ) != 0 )
+            if( nfcip_PBF_PNI( gNfcip.rxBuf[msgIt] ) != 0U )
             {
                 return ERR_PROTO;
             }
             
             /*******************************************************************************/
             /* Digital 1.0 14.8.2.1  check if DID is expected and match -> Protocol Error  */
-            if( nfcip_PFBhasDID( *(gNfcip.rxBuf + msgIt) ) ) 
+            if( nfcip_PFBhasDID( gNfcip.rxBuf[ msgIt] ) ) 
             {
-                if( *(gNfcip.rxBuf + (++msgIt)) != gNfcip.cfg.did)
+                if( gNfcip.rxBuf[++msgIt] != gNfcip.cfg.did )
                 {
                     return ERR_PROTO;
                 }
@@ -1882,6 +1916,10 @@ static ReturnCode nfcipTargetHandleActivation( rfalNfcDepDevice *nfcDepDev, uint
             else if( gNfcip.cfg.did != RFAL_NFCDEP_DID_NO )          /* DID expected but not rcv */
             {
                 return ERR_PROTO;
+            }
+            else
+            {
+                /* MISRA 15.7 - Empty else */
             }
         }
         
@@ -1895,7 +1933,7 @@ static ReturnCode nfcipTargetHandleActivation( rfalNfcDepDevice *nfcDepDev, uint
 
 
 /*******************************************************************************/
-ReturnCode rfalNfcDepATR( rfalNfcDepAtrParam* param, rfalNfcDepAtrRes *atrRes, uint8_t* atrResLen )
+ReturnCode rfalNfcDepATR( const rfalNfcDepAtrParam* param, rfalNfcDepAtrRes *atrRes, uint8_t* atrResLen )
 {
     ReturnCode        ret;
     rfalNfcDepConfigs cfg;
@@ -1925,47 +1963,53 @@ ReturnCode rfalNfcDepATR( rfalNfcDepAtrParam* param, rfalNfcDepAtrRes *atrRes, u
     
     
     cfg.gbLen = param->GBLen;
-    ST_MEMCPY( cfg.gb, param->GB, cfg.gbLen );
+    if( cfg.gbLen > 0U )                          /* MISRA 21.18 */
+    {
+        ST_MEMCPY( cfg.gb, param->GB, cfg.gbLen );
+    }
     
     cfg.nfcidLen = param->nfcidLen;
-    ST_MEMCPY( cfg.nfcid, param->nfcid, param->nfcidLen );
+    if( cfg.nfcidLen > 0U )                       /* MISRA 21.18 */
+    {
+        ST_MEMCPY( cfg.nfcid, param->nfcid, cfg.nfcidLen );
+    }
     
     cfg.role     = RFAL_NFCDEP_ROLE_INITIATOR;
     cfg.oper     = param->operParam;
     cfg.commMode = param->commMode;
 
     rfalNfcDepInitialize();
-    nfcipConfig( cfg );
+    nfcipConfig( &cfg );
     
     /*******************************************************************************/
     /* Send ATR_REQ                                                                */
     /*******************************************************************************/
     
-    EXIT_ON_ERR( ret, nfcipTxRx(NFCIP_CMD_ATR_REQ, txBuf, NFCIP_RWT_ACTIVATION, NULL, 0, rxBuf, NFCIP_ATRRES_BUF_LEN, &rxLen ) );
+    EXIT_ON_ERR( ret, nfcipTxRx(NFCIP_CMD_ATR_REQ, txBuf, nfcipRWTActivation(), NULL, 0, rxBuf, NFCIP_ATRRES_BUF_LEN, &rxLen ) );
     
     
     /*******************************************************************************/
     /* ATR sent, check response                                                    */
     /*******************************************************************************/
     msgIt = 0;
-    rxLen = (uint16_t)(*(rxBuf + msgIt++) - RFAL_NFCDEP_LEN_LEN);                /* use LEN byte             */
+    rxLen = ((uint16_t)rxBuf[msgIt++] - RFAL_NFCDEP_LEN_LEN);                           /* use LEN byte             */
     
     if( (rxLen < RFAL_NFCDEP_ATRRES_MIN_LEN) || (rxLen > RFAL_NFCDEP_ATRRES_MAX_LEN) )  /* Checking length: ATR_RES */
     {
         return ERR_PROTO;
     }
     
-    if( *(rxBuf + msgIt++) != NFCIP_RES )                                   /* Checking if is a response*/
+    if( rxBuf[msgIt++] != NFCIP_RES )                                                   /* Checking if is a response*/
     {
         return ERR_PROTO;
     }
     
-    if( *(rxBuf + msgIt++) != NFCIP_CMD_ATR_RES )                           /* Checking if is a ATR RES */
+    if( rxBuf[msgIt++] != (uint8_t)NFCIP_CMD_ATR_RES )                                  /* Checking if is a ATR RES */
     {
         return ERR_PROTO;
     }
     
-    ST_MEMCPY(atrRes, (rxBuf + RFAL_NFCDEP_LEN_LEN), rxLen);
+    ST_MEMCPY( (uint8_t*)atrRes, (rxBuf + RFAL_NFCDEP_LEN_LEN), rxLen );
     *atrResLen = (uint8_t)rxLen;
     
     return ERR_NONE;
@@ -1978,43 +2022,42 @@ ReturnCode rfalNfcDepPSL( uint8_t BRS, uint8_t FSL )
     ReturnCode ret;
     uint16_t   rxLen;
     uint8_t    msgIt;
-    uint8_t    txBuf[NFCIP_PSLREQ_LEN];
-    uint8_t    pslBuf[NFCIP_PSLPAY_LEN];
+    uint8_t    txBuf[NFCIP_PSLREQ_LEN + NFCIP_PSLPAY_LEN];
     uint8_t    rxBuf[NFCIP_PSLRES_LEN];
     
-    msgIt = 0;
+    msgIt = NFCIP_PSLREQ_LEN;
     
-    pslBuf[msgIt++] = BRS;
-    pslBuf[msgIt++] = FSL;
+    txBuf[msgIt++] = BRS;
+    txBuf[msgIt++] = FSL;
     
     /*******************************************************************************/
     /* Send PSL REQ and wait for response                                          */
     /*******************************************************************************/
-    EXIT_ON_ERR( ret, nfcipTxRx( NFCIP_CMD_PSL_REQ, txBuf, NFCIP_RWT_ACTIVATION, pslBuf, msgIt, rxBuf, NFCIP_PSLRES_LEN, &rxLen ) );
+    EXIT_ON_ERR( ret, nfcipTxRx( NFCIP_CMD_PSL_REQ, txBuf, nfcipRWTActivation(), &txBuf[NFCIP_PSLREQ_LEN], (msgIt - NFCIP_PSLREQ_LEN), rxBuf, NFCIP_PSLRES_LEN, &rxLen ) );
     
     
     /*******************************************************************************/
     /* PSL sent, check response                                                    */
     /*******************************************************************************/
     msgIt = 0;
-    rxLen = (uint16_t)(*(rxBuf + msgIt++) );               /* use LEN byte                   */
+    rxLen = (uint16_t)(rxBuf[msgIt++]);                /* use LEN byte                   */
         
-    if( rxLen < NFCIP_PSLRES_LEN )                    /* Checking length: LEN + RLS_RES */
+    if( rxLen < NFCIP_PSLRES_LEN )                     /* Checking length: LEN + RLS_RES */
     {
         return ERR_PROTO;
     }
     
-    if( *(rxBuf + msgIt++) != NFCIP_RES )             /* Checking if is a response      */
+    if( rxBuf[msgIt++] != NFCIP_RES )                  /* Checking if is a response      */
     {
         return ERR_PROTO;
     }
     
-    if( *(rxBuf + msgIt++) != NFCIP_CMD_PSL_RES )     /* Checking if is a PSL RES       */
+    if( rxBuf[msgIt++] != (uint8_t)NFCIP_CMD_PSL_RES ) /* Checking if is a PSL RES       */
     {
         return ERR_PROTO;
     }
     
-    if( *(rxBuf + msgIt++) != gNfcip.cfg.did )        /* Checking DID                   */
+    if( rxBuf[msgIt++] != gNfcip.cfg.did )             /* Checking DID                   */
     {
         return ERR_PROTO;
     }
@@ -2038,31 +2081,34 @@ ReturnCode rfalNfcDepDSL( void )
     }
     
     /* Repeating a DSL REQ is optional, not doing it */
-    EXIT_ON_ERR( ret, nfcipTxRx( NFCIP_CMD_DSL_REQ, txBuf, NFCIP_RWT_ACTIVATION, 0, 0, rxBuf, RFAL_NFCDEP_ATRRES_MAX_LEN, &rxLen  ) );
+    EXIT_ON_ERR( ret, nfcipTxRx( NFCIP_CMD_DSL_REQ, txBuf, nfcipRWTActivation(), NULL, 0, rxBuf, RFAL_NFCDEP_ATRRES_MAX_LEN, &rxLen  ) );
     
     /*******************************************************************************/
     rxMsgIt = 0;
     
-    if( *(rxBuf + rxMsgIt++) < NFCIP_DSLRES_MIN )     /* Checking length: LEN + DSL_RES */
+    if( rxBuf[rxMsgIt++] < NFCIP_DSLRES_MIN )             /* Checking length: LEN + DSL_RES */
     {
         return ERR_PROTO;
     }
         
-    if( *(rxBuf + rxMsgIt++) != NFCIP_RES )           /* Checking if is a response      */
+    if( rxBuf[rxMsgIt++] != NFCIP_RES )                   /* Checking if is a response      */
     {
         return ERR_PROTO;
     }
     
-    if( *(rxBuf + rxMsgIt++) != NFCIP_CMD_DSL_RES )  /* Checking if is DSL RES          */
+    if( rxBuf[rxMsgIt++] != (uint8_t)NFCIP_CMD_DSL_RES )  /* Checking if is DSL RES          */
     {
         return ERR_PROTO;
     }
      
-    if( (gNfcip.cfg.did != RFAL_NFCDEP_DID_NO) && (*(rxBuf + rxMsgIt++) != gNfcip.cfg.did )  )
+    if( gNfcip.cfg.did != RFAL_NFCDEP_DID_NO ) 
     {
-        return ERR_PROTO;
+        if ( rxBuf[rxMsgIt++] != gNfcip.cfg.did ) 
+        {
+            return ERR_PROTO;
+        }
     }
-    
+
     return ERR_NONE;
 }
 
@@ -2076,33 +2122,38 @@ ReturnCode rfalNfcDepRLS( void )
     uint8_t    rxMsgIt;
     uint16_t   rxLen = 0;
     
-    if( gNfcip.cfg.role == RFAL_NFCDEP_ROLE_TARGET )
-        return ERR_NONE;                                  /* Target has no release procedure */
+    if ( gNfcip.cfg.role == RFAL_NFCDEP_ROLE_TARGET )  /* Target has no release procedure */
+    {
+        return ERR_NONE;
+    }
         
     /* Repeating a RLS REQ is optional, not doing it */
-    EXIT_ON_ERR( ret, nfcipTxRx( NFCIP_CMD_RLS_REQ, txBuf, NFCIP_RWT_ACTIVATION, 0, 0, rxBuf, RFAL_NFCDEP_ATRRES_MAX_LEN, &rxLen  ) );
+    EXIT_ON_ERR( ret, nfcipTxRx( NFCIP_CMD_RLS_REQ, txBuf, nfcipRWTActivation(), NULL, 0, rxBuf, RFAL_NFCDEP_ATRRES_MAX_LEN, &rxLen  ) );
     
     /*******************************************************************************/
     rxMsgIt = 0;
        
-    if( *(rxBuf + rxMsgIt++) < NFCIP_RLSRES_MIN )     /* Checking length: LEN + RLS_RES */
+    if( rxBuf[rxMsgIt++] < NFCIP_RLSRES_MIN )             /* Checking length: LEN + RLS_RES */
     {
         return ERR_PROTO;
     }
         
-    if( *(rxBuf + rxMsgIt++) != NFCIP_RES )           /* Checking if is a response      */
+    if( rxBuf[rxMsgIt++] != NFCIP_RES )                   /* Checking if is a response      */
     {
         return ERR_PROTO;
     }
     
-    if( *(rxBuf + rxMsgIt++) != NFCIP_CMD_RLS_RES )  /* Checking if is RLS RES        */
+    if( rxBuf[rxMsgIt++] != (uint8_t)NFCIP_CMD_RLS_RES )  /* Checking if is RLS RES         */
     {
         return ERR_PROTO;
     }
      
-    if( (gNfcip.cfg.did != RFAL_NFCDEP_DID_NO) && (*(rxBuf + rxMsgIt++) != gNfcip.cfg.did )  )
+    if( gNfcip.cfg.did != RFAL_NFCDEP_DID_NO ) 
     {
-        return ERR_PROTO;
+        if ( rxBuf[rxMsgIt++] != gNfcip.cfg.did ) 
+        {
+            return ERR_PROTO;
+        }
     }
     
     return ERR_NONE;
@@ -2139,9 +2190,9 @@ ReturnCode rfalNfcDepInitiatorHandleActivation( rfalNfcDepAtrParam* param, rfalB
          }
          break;
     }
-    while( (maxRetyrs--) );
+    while( (maxRetyrs--) != 0U );
     
-    if( ERR_NO_MASK(ret) != ERR_NONE )
+    if( ret != ERR_NONE )
     {
         return ret;
     }
@@ -2156,7 +2207,7 @@ ReturnCode rfalNfcDepInitiatorHandleActivation( rfalNfcDepAtrParam* param, rfalB
     nfcDepDev->info.FS    = rfalNfcDepLR2FS( nfcDepDev->info.LR );
     nfcDepDev->info.WT    = (nfcDepDev->activation.Target.ATR_RES.TO & RFAL_NFCDEP_WT_MASK);
     nfcDepDev->info.FWT   = rfalNfcDepCalculateRWT( nfcDepDev->info.WT );
-    nfcDepDev->info.dFWT  = rfalNfcDepCalculateRWT( RFAL_NFCDEP_WT_DELTA );
+    nfcDepDev->info.dFWT  = RFAL_NFCDEP_WT_DELTA;
     
     rfalGetBitRate( &nfcDepDev->info.DSI, &nfcDepDev->info.DRI );
     
@@ -2170,14 +2221,15 @@ ReturnCode rfalNfcDepInitiatorHandleActivation( rfalNfcDepAtrParam* param, rfalB
     PSL_FSL = nfcDepDev->info.LR;                       /* Set current Frame Size                           */
     
     
-#if 0
-    /* Activity 1.0 
-    *     9.4.6.3   NFC-F NFC-DEP Activation
-    *     9.4.4.15  NFC-A NFC-DEP Activation
+
+    /* Activity 1.0  9.4.4.15 & 9.4.6.3   NFC-DEP Activation PSL
+    *  Activity 2.0  9.4.4.17 & 9.4.6.6   NFC-DEP Activation PSL
     *     
-    *  PSL_REQ shall only be sent if desired bit rate is different from current
+    *  PSL_REQ shall only be sent if desired bit rate is different from current (Activity 1.0)
+    *  PSL_REQ shall be sent to update LR or bit rate  (Activity 2.0)
     * */
-    
+
+#if 0 /* PSL due to LR is disabled, can be enabled if desired*/
     /*******************************************************************************/
     /* Check Frame Size                                                            */
     /*******************************************************************************/
@@ -2187,7 +2239,7 @@ ReturnCode rfalNfcDepInitiatorHandleActivation( rfalNfcDepAtrParam* param, rfalB
         
         nfcDepDev->info.LR   = MIN( nfcDepDev->info.LR, gNfcip.cfg.lr );
         
-        gNfcip.cfg.lr = nfcDepDev->info.LR                 /* Update nfcip LR  to be used */
+        gNfcip.cfg.lr = nfcDepDev->info.LR;                /* Update nfcip LR  to be used */
         gNfcip.fsc    = rfalNfcDepLR2FS( gNfcip.cfg.lr );  /* Update nfcip FSC to be used */     
         
         PSL_FSL       = gNfcip.cfg.lr;                     /* Set LR to be sent           */
@@ -2200,13 +2252,16 @@ ReturnCode rfalNfcDepInitiatorHandleActivation( rfalNfcDepAtrParam* param, rfalB
     /*******************************************************************************/
     /* Check Baud rates                                                            */
     /*******************************************************************************/
-    if( ((nfcDepDev->info.DSI != desiredBR) && nfcipDxIsSupported( desiredBR, nfcDepDev->activation.Target.ATR_RES.BRt, nfcDepDev->activation.Target.ATR_RES.BSt ))    /* if desired BR is different and supported     */
-       /* || (target->brt != RFAL_NFCDEP_Bx_NO_HIGH_BR) || (target->bst != RFAL_NFCDEP_Bx_NO_HIGH_BR)  */  )  /* if target supports higher BR, must send PSL? */
+    if( nfcDepDev->info.DSI != desiredBR )    /* if desired BR is different    */
     {
-        sendPSL = true;
-        PSL_BRS = rfalNfcDepDx2BRS( desiredBR );
+       /* || (target->brt != RFAL_NFCDEP_Bx_NO_HIGH_BR) || (target->bst != RFAL_NFCDEP_Bx_NO_HIGH_BR)  */  /* if target supports higher BR, must send PSL? */
+        if( nfcipDxIsSupported( (uint8_t)desiredBR, nfcDepDev->activation.Target.ATR_RES.BRt, nfcDepDev->activation.Target.ATR_RES.BSt ) )  /* if desired BR is supported     */    /* MISRA 13.5 */
+        {
+            sendPSL = true;
+            PSL_BRS = rfalNfcDepDx2BRS( desiredBR );
         
-        nfcipLogI( " NFCIP(I) BR differ, PSL BR: 0x%02X \r\n", PSL_BRS );
+            nfcipLogI( " NFCIP(I) BR differ, PSL BR: 0x%02X \r\n", PSL_BRS );
+        }
     }
 
     
@@ -2253,9 +2308,9 @@ uint32_t rfalNfcDepCalculateRWT( uint8_t wt )
 {
     /* Digital 1.0  14.6.3.8  &  Digital 1.1  16.6.3.9     */
     /* Digital 1.1  16.6.3.9 treat all RFU values as WT=14 */
-    wt = MIN( RFAL_NFCDEP_WT_INI_MAX, wt );
+    uint8_t responseWaitTime = MIN( RFAL_NFCDEP_WT_INI_MAX, wt );
         
-    return rfalNfcDepWT2RWT(wt);
+    return (uint32_t)rfalNfcDepWT2RWT(responseWaitTime);
 }
 
 
@@ -2263,28 +2318,39 @@ uint32_t rfalNfcDepCalculateRWT( uint8_t wt )
 /*******************************************************************************/
 static ReturnCode nfcipDataTx( uint8_t* txBuf, uint16_t txBufLen, uint32_t fwt )
 {
-   return rfalTransceiveBlockingTx( txBuf, txBufLen, gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen, (RFAL_TXRX_FLAGS_DEFAULT | RFAL_TXRX_FLAGS_NFCIP1_ON), ((fwt == NFCIP_NO_FWT) ? RFAL_FWT_NONE : rfalConv64fcTo1fc(fwt)) );
+   return rfalTransceiveBlockingTx( txBuf, txBufLen, gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen, (RFAL_TXRX_FLAGS_DEFAULT | (uint32_t)RFAL_TXRX_FLAGS_NFCIP1_ON), ((fwt == NFCIP_NO_FWT) ? RFAL_FWT_NONE : fwt) );
 }
 
 
 /*******************************************************************************/
-static ReturnCode nfcipDataRx( void )
+static ReturnCode nfcipDataRx( bool blocking )
 {
     ReturnCode ret;
     
-    ret = rfalGetTransceiveStatus();
+    /* Perform Rx either blocking or non-blocking */
+    if( blocking )
+    {
+        ret = rfalTransceiveBlockingRx();
+    }
+    else
+    {
+        ret = rfalGetTransceiveStatus();
+    }
     
     if( ret != ERR_BUSY )
     {
-        (*gNfcip.rxRcvdLen) = rfalConvBitsToBytes( *gNfcip.rxRcvdLen );
-    
-        if( (ret == ERR_NONE) && (gNfcip.rxRcvdLen != NULL) && (gNfcip.rxBuf != NULL) )
+        if( gNfcip.rxRcvdLen != NULL )
         {
-            /* Digital 1.1  16.4.1.3 - Length byte LEN SHALL have a value between 3 and 255 -> otherwise treat as Transmission Error *
-             *                       - Ensure that actual received and frame length do match, otherwise treat as Transmission error  */
-            if( (*gNfcip.rxRcvdLen != (uint16_t)*gNfcip.rxBuf) || (*gNfcip.rxRcvdLen < RFAL_NFCDEP_LEN_MIN) || (*gNfcip.rxRcvdLen > RFAL_NFCDEP_LEN_MAX) )
+            (*gNfcip.rxRcvdLen) = rfalConvBitsToBytes( *gNfcip.rxRcvdLen );
+                        
+            if( (ret == ERR_NONE) && (gNfcip.rxBuf != NULL) )
             {
-                return ERR_FRAMING;
+                /* Digital 1.1  16.4.1.3 - Length byte LEN SHALL have a value between 3 and 255 -> otherwise treat as Transmission Error *
+                 *                       - Ensure that actual received and frame length do match, otherwise treat as Transmission error  */
+                if( (*gNfcip.rxRcvdLen != (uint16_t)*gNfcip.rxBuf) || (*gNfcip.rxRcvdLen < RFAL_NFCDEP_LEN_MIN) || (*gNfcip.rxRcvdLen > RFAL_NFCDEP_LEN_MAX) )
+                {
+                    return ERR_FRAMING;
+                }
             }
         }
     }
@@ -2294,7 +2360,7 @@ static ReturnCode nfcipDataRx( void )
 
 
 /*******************************************************************************/
-ReturnCode rfalNfcDepListenStartActivation( rfalNfcDepTargetParam *param, uint8_t *atrReq, uint16_t atrReqLength, rfalNfcDepListenActvParam rxParam )
+ReturnCode rfalNfcDepListenStartActivation( const rfalNfcDepTargetParam *param, const uint8_t *atrReq, uint16_t atrReqLength, rfalNfcDepListenActvParam rxParam )
 {
     ReturnCode        ret;
     rfalNfcDepConfigs cfg;
@@ -2313,10 +2379,13 @@ ReturnCode rfalNfcDepListenStartActivation( rfalNfcDepTargetParam *param, uint8_
         return ERR_PARAM;
     }
     
-    rxParam.nfcDepDev->activation.Initiator.ATR_REQLen = atrReqLength;                   /* nfcipIsAtrReq() is already checking Min and Max buffer lengths */ 
-    ST_MEMCPY( (uint8_t*)&rxParam.nfcDepDev->activation.Initiator.ATR_REQ, atrReq, atrReqLength );
+    rxParam.nfcDepDev->activation.Initiator.ATR_REQLen = (uint8_t)atrReqLength;                   /* nfcipIsAtrReq() is already checking Min and Max buffer lengths */ 
+    if( atrReqLength > 0U )                                                                       /* MISRA 21.18 */
+    {
+        ST_MEMCPY( (uint8_t*)&rxParam.nfcDepDev->activation.Initiator.ATR_REQ, atrReq, atrReqLength );
+    }        
     
-    rxParam.nfcDepDev->info.GBLen = (atrReqLength - RFAL_NFCDEP_ATRREQ_MIN_LEN);
+    rxParam.nfcDepDev->info.GBLen = (uint8_t)(atrReqLength - RFAL_NFCDEP_ATRREQ_MIN_LEN);
     rxParam.nfcDepDev->info.DID   = rxParam.nfcDepDev->activation.Initiator.ATR_REQ.DID;
     rxParam.nfcDepDev->info.NAD   = RFAL_NFCDEP_NAD_NO;                        /* Digital 1.1  16.6.2.9  Initiator SHALL NOT use NAD */
     rxParam.nfcDepDev->info.LR    = rfalNfcDepPP2LR( rxParam.nfcDepDev->activation.Initiator.ATR_REQ.PPi );
@@ -2345,7 +2414,10 @@ ReturnCode rfalNfcDepListenStartActivation( rfalNfcDepTargetParam *param, uint8_
     cfg.lr = rfalNfcDepPP2LR(param->ppt);
     
     cfg.gbLen = param->GBtLen;
-    ST_MEMCPY(cfg.gb, param->GBt, cfg.gbLen);
+    if( cfg.gbLen > 0U )          /* MISRA 21.18 */
+    {
+        ST_MEMCPY(cfg.gb, param->GBt, cfg.gbLen);
+    }
     
     cfg.nfcidLen = RFAL_NFCDEP_NFCID3_LEN;
     ST_MEMCPY(cfg.nfcid, param->nfcid3, RFAL_NFCDEP_NFCID3_LEN);
@@ -2357,7 +2429,7 @@ ReturnCode rfalNfcDepListenStartActivation( rfalNfcDepTargetParam *param, uint8_
     cfg.commMode = param->commMode;
 
     rfalNfcDepInitialize();
-    nfcipConfig( cfg );
+    nfcipConfig( &cfg );
         
     
     /*******************************************************************************/
@@ -2409,15 +2481,15 @@ ReturnCode rfalNfcDepListenGetActivationStatus( void )
             break;
         
         case ERR_BUSY:
-            /* do nothing */
+            // do nothing
             break;
             
         case ERR_PROTO:
         default:
-            /* re-enable receiving of data */
+            // re-enable receiving of data
             nfcDepReEnableRx( gNfcip.rxBuf, gNfcip.rxBufLen, gNfcip.rxRcvdLen );
             break;
-    } 
+    } // if (no err)
     
     return err;
 }

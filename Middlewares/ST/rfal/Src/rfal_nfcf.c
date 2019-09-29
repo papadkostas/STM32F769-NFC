@@ -1,6 +1,6 @@
 
 /******************************************************************************
-  * @attention
+  * \attention
   *
   * <h2><center>&copy; COPYRIGHT 2016 STMicroelectronics</center></h2>
   *
@@ -8,7 +8,7 @@
   * You may not use this file except in compliance with the License.
   * You may obtain a copy of the License at:
   *
-  *        http://www.st.com/myliberty
+  *        www.st.com/myliberty
   *
   * Unless required by applicable law or agreed to in writing, software 
   * distributed under the License is distributed on an "AS IS" BASIS, 
@@ -22,7 +22,7 @@
 
 /*
  *      PROJECT:   ST25R391x firmware
- *      $Revision: $
+ *      Revision:
  *      LANGUAGE:  ISO C99
  */
 
@@ -52,7 +52,7 @@
  */
 
 #ifndef RFAL_FEATURE_NFCF
-    #error " RFAL: Module configuration missing. Please enable/disable NFC-F module by setting: RFAL_FEATURE_NFCF "
+    #define RFAL_FEATURE_NFCF   false    /* NFC-F module configuration missing. Disabled by default */
 #endif
 
 #if RFAL_FEATURE_NFCF
@@ -62,18 +62,32 @@
  * GLOBAL DEFINES
  ******************************************************************************
  */
-#define RFAL_NFCF_SENSF_REQ_LEN_MIN                5     /*!< SENSF_RES minimum length                   */
+#define RFAL_NFCF_SENSF_REQ_LEN_MIN                5U     /*!< SENSF_RES minimum length                              */
 
-#define RFAL_NFCF_READ_WO_ENCRYPTION_MIN_LEN       15    /*!< Minimum length for a Check Command   -  T3T  5.4.1 */
-#define RFAL_NFCF_WRITE_WO_ENCRYPTION_MIN_LEN      31    /*!< Minimum length for an Update Command -  T3T  5.5.1 */
+#define RFAL_NFCF_READ_WO_ENCRYPTION_MIN_LEN       15U    /*!< Minimum length for a Check Command         T3T  5.4.1 */
+#define RFAL_NFCF_WRITE_WO_ENCRYPTION_MIN_LEN      31U    /*!< Minimum length for an Update Command       T3T  5.5.1 */
 
+#define RFAL_NFCF_CHECK_RES_MIN_LEN                11U    /*!< CHECK Response minimum length       T3T 1.0  Table 8  */
+#define RFAL_NFCF_UPDATE_RES_MIN_LEN               11U    /*!< UPDATE Response minimum length      T3T 1.0  Table 8  */
+
+#define RFAL_NFCF_CHECK_REQ_MAX_LEN                86U    /*!< Max length of a Check request        T3T 1.0  Table 7 */
+#define RFAL_NFCF_CHECK_REQ_MAX_SERV               15U    /*!< Max Services number on Check request T3T 1.0  5.4.1.5 */
+#define RFAL_NFCF_CHECK_REQ_MAX_BLOCK              15U    /*!< Max Blocks number on Check request  T3T 1.0  5.4.1.10 */
+#define RFAL_NFCF_UPDATE_REQ_MAX_SERV              15U    /*!< Max Services number Update request  T3T 1.0  5.4.1.5  */
+#define RFAL_NFCF_UPDATE_REQ_MAX_BLOCK             13U    /*!< Max Blocks number on Update request T3T 1.0  5.4.1.10 */
+
+
+/*! MRT Check | Uupdate = (Tt3t x ((A+1) + n (B+1)) x 4^E) + dRWTt3t    T3T  5.8
+    Max values used: A = 7 ; B = 7 ; E = 3 ; n = 15 (NFC Forum n = 15, JIS n = 32)
+*/
+#define RFAL_NFCF_MRT_CHECK_UPDATE   ((4096 * (8 + (15 * 8)) * 64 ) + 16)
 
 /*
  ******************************************************************************
  * GLOBAL MACROS
  ******************************************************************************
  */
-#define rfalNfcfSlots2CardNum( s )                 (s+1) /*!< Converts Time Slot Number (TSN) into num of slots  */
+#define rfalNfcfSlots2CardNum( s )                 ((uint8_t)(s)+1U) /*!< Converts Time Slot Number (TSN) into num of slots  */
 
 /*
 ******************************************************************************
@@ -134,24 +148,29 @@ static void rfalNfcfComputeValidSENF( rfalNfcfListenDevice *outDevInfo, uint8_t 
     uint8_t             tmpIdx;
     bool                duplicate;    
     rfalNfcfSensfResBuf *sensfBuf;
+    rfalNfcfSensfResBuf sensfCopy;
     
     
     /*******************************************************************************/
     /* Go through all responses check if valid and duplicates                      */
     /*******************************************************************************/
-    while( (gRfalNfcfGreedyF.pollFound > 0) && ((*curDevIdx) < devLimit) )
+    while( (gRfalNfcfGreedyF.pollFound > 0U) && ((*curDevIdx) < devLimit) )
     {
         duplicate = false;
         gRfalNfcfGreedyF.pollFound--;
         
+        /* MISRA 11.3 - Cannot point directly into different object type, use local copy */
+        ST_MEMCPY( (uint8_t*)&sensfCopy, (uint8_t*)&gRfalNfcfGreedyF.POLL_F[gRfalNfcfGreedyF.pollFound], sizeof(rfalNfcfSensfResBuf) );
+        
+        
         /* Point to received SENSF_RES */
-        sensfBuf = (rfalNfcfSensfResBuf*) &gRfalNfcfGreedyF.POLL_F[gRfalNfcfGreedyF.pollFound];
+        sensfBuf = &sensfCopy;
         
         
         /* Check for devices that are already in device list */
         for( tmpIdx = 0; tmpIdx < (*curDevIdx); tmpIdx++ )
         {
-            if( !ST_BYTECMP( sensfBuf->SENSF_RES.NFCID2, outDevInfo[tmpIdx].sensfRes.NFCID2, RFAL_NFCF_NFCID2_LEN ) )
+            if( ST_BYTECMP( sensfBuf->SENSF_RES.NFCID2, outDevInfo[tmpIdx].sensfRes.NFCID2, RFAL_NFCF_NFCID2_LEN ) == 0 )
             {
                 duplicate = true;
                 break;
@@ -171,7 +190,7 @@ static void rfalNfcfComputeValidSENF( rfalNfcfListenDevice *outDevInfo, uint8_t 
         }
         
         /* Check if the response is a SENSF_RES / Polling response */
-        if( sensfBuf->SENSF_RES.CMD != RFAL_NFCF_CMD_POLLING_RES )
+        if( sensfBuf->SENSF_RES.CMD != (uint8_t)RFAL_NFCF_CMD_POLLING_RES )
         {
             continue;
         }
@@ -181,14 +200,14 @@ static void rfalNfcfComputeValidSENF( rfalNfcfListenDevice *outDevInfo, uint8_t 
         {
             /* overwrite deviceInfo/GRE_SENSF_RES with SENSF_RES */
             outDevInfo[tmpIdx].sensfResLen = (sensfBuf->LEN - RFAL_NFCF_LENGTH_LEN);
-            ST_MEMCPY( &outDevInfo[tmpIdx].sensfRes, &sensfBuf->SENSF_RES.CMD, outDevInfo[tmpIdx].sensfResLen );
+            ST_MEMCPY( &outDevInfo[tmpIdx].sensfRes, &sensfBuf->SENSF_RES, outDevInfo[tmpIdx].sensfResLen );
             continue;
         }
         else
         {
             /* fill deviceInfo/GRE_SENSF_RES with new SENSF_RES */
             outDevInfo[(*curDevIdx)].sensfResLen = (sensfBuf->LEN - RFAL_NFCF_LENGTH_LEN);
-            ST_MEMCPY( &outDevInfo[(*curDevIdx)].sensfRes, &sensfBuf->SENSF_RES.CMD, outDevInfo[(*curDevIdx)].sensfResLen );            
+            ST_MEMCPY( &outDevInfo[(*curDevIdx)].sensfRes, &sensfBuf->SENSF_RES, outDevInfo[(*curDevIdx)].sensfResLen );            
         }
         
         /* Check if this device supports NFC-DEP and signal it (ACTIVITY 1.1   9.3.6.63) */        
@@ -251,7 +270,7 @@ ReturnCode rfalNfcfPollerCollisionResolution( rfalComplianceMode compMode, uint8
     ReturnCode  ret;
     bool        nfcDepFound;
     
-    if( nfcfDevList == NULL || devCnt == NULL )
+    if( (nfcfDevList == NULL) || (devCnt == NULL) )
     {
         return ERR_PARAM;
     }
@@ -268,7 +287,7 @@ ReturnCode rfalNfcfPollerCollisionResolution( rfalComplianceMode compMode, uint8
     /* CON_DEVICES_LIMIT = 0 Just check if devices from Tech Detection exceeds -> always true  */
     /* Allow the number of slots open on Technology Detection                                  */
     /*******************************************************************************************/
-    rfalNfcfComputeValidSENF( nfcfDevList, devCnt, (devLimit == 0 ? rfalNfcfSlots2CardNum( RFAL_FELICA_4_SLOTS ) : devLimit), false, &nfcDepFound );
+    rfalNfcfComputeValidSENF( nfcfDevList, devCnt, ((devLimit == 0U) ? rfalNfcfSlots2CardNum( RFAL_FELICA_4_SLOTS ) : devLimit), false, &nfcDepFound );
 
     
     /*******************************************************************************/
@@ -306,9 +325,193 @@ ReturnCode rfalNfcfPollerCollisionResolution( rfalComplianceMode compMode, uint8
     return ERR_NONE;
 }
 
+/*******************************************************************************/
+ReturnCode rfalNfcfPollerCheck( const uint8_t* nfcid2, const rfalNfcfServBlockListParam *servBlock, uint8_t *rxBuf, uint16_t rxBufLen, uint16_t *rcvdLen )
+{
+    uint8_t    txBuf[RFAL_NFCF_CHECK_REQ_MAX_LEN];
+    uint8_t    msgIt;
+    uint8_t    i;
+    ReturnCode ret;
+    uint8_t    *checkRes;
+    
+    /* Check parameters */
+    if( (nfcid2 == NULL) || (rxBuf == NULL) || (servBlock == NULL)                           ||
+        (servBlock->numBlock == 0U) || (servBlock->numBlock > RFAL_NFCF_CHECK_REQ_MAX_BLOCK) ||
+        (servBlock->numServ == 0U) || (servBlock->numServ > RFAL_NFCF_CHECK_REQ_MAX_SERV)    ||
+        (rxBufLen < (RFAL_NFCF_LENGTH_LEN + RFAL_NFCF_CHECK_RES_MIN_LEN))                      )
+    {
+        return ERR_PARAM;
+    }
+    
+    msgIt = 0;
+    
+    /*******************************************************************************/
+    /* Compose CHECK command/request                                               */
+    
+    txBuf[msgIt++] = RFAL_NFCF_CMD_READ_WITHOUT_ENCRYPTION;                               /* Command Code    */
+    
+    ST_MEMCPY( &txBuf[msgIt], nfcid2, RFAL_NFCF_NFCID2_LEN );                             /* NFCID2          */
+    msgIt += RFAL_NFCF_NFCID2_LEN;
+    
+    txBuf[msgIt++] = servBlock->numServ;                                                  /* NoS             */
+    for( i = 0; i < servBlock->numServ; i++)
+    {
+        txBuf[msgIt++] = (uint8_t)((servBlock->servList[i] >> 0U) & 0xFFU);               /* Service Code    */
+        txBuf[msgIt++] = (uint8_t)((servBlock->servList[i] >> 8U) & 0xFFU);            
+    }
+    
+    txBuf[msgIt++] = servBlock->numBlock;                                                 /* NoB             */
+    for( i = 0; i < servBlock->numBlock; i++)
+    {
+        txBuf[msgIt++] = servBlock->blockList[i].conf;                                    /* Block list element conf (Flag|Access|Service) */
+        if( (servBlock->blockList[i].conf & 0x80U) != 0U )                                /* Check if 2 or 3 byte block list element       */
+        {
+            txBuf[msgIt++] = (uint8_t)(servBlock->blockList[i].blockNum & 0xFFU);         /* 1byte Block Num */
+        }
+        else
+        {
+            txBuf[msgIt++] = (uint8_t)((servBlock->blockList[i].blockNum >> 0U) & 0xFFU); /* 2byte Block Num */
+            txBuf[msgIt++] = (uint8_t)((servBlock->blockList[i].blockNum >> 8U) & 0xFFU);
+        }
+    }
+    
+    /*******************************************************************************/
+    /* Transceive CHECK command/request                                            */
+    ret = rfalTransceiveBlockingTxRx( txBuf, msgIt, rxBuf, rxBufLen, rcvdLen, RFAL_TXRX_FLAGS_DEFAULT, RFAL_NFCF_MRT_CHECK_UPDATE );
+    
+    if( ret == ERR_NONE )
+    {
+        /* Skip LEN byte */
+        checkRes = (rxBuf + RFAL_NFCF_LENGTH_LEN);
+        
+        /* Check response length */
+        if( *rcvdLen < (RFAL_NFCF_LENGTH_LEN + RFAL_NFCF_CHECKUPDATE_RES_ST2_POS) )
+        {
+            ret = ERR_PROTO;
+        }
+        /* Check for a valid response */
+        else if( (checkRes[RFAL_NFCF_CMD_POS] != (uint8_t)RFAL_NFCF_CMD_READ_WITHOUT_ENCRYPTION_RES) ||
+                 (checkRes[RFAL_NFCF_CHECKUPDATE_RES_ST1_POS] != RFAL_NFCF_STATUS_FLAG_SUCCESS)      || 
+                 (checkRes[RFAL_NFCF_CHECKUPDATE_RES_ST2_POS] != RFAL_NFCF_STATUS_FLAG_SUCCESS)        )
+        {
+            ret = ERR_REQUEST;
+        }
+        /* CHECK succesfull, remove header */
+        else
+        {
+            (*rcvdLen) -= (RFAL_NFCF_LENGTH_LEN + RFAL_NFCF_CHECKUPDATE_RES_NOB_POS);
+            
+            if( *rcvdLen > 0U )
+            {
+                ST_MEMMOVE( rxBuf, &checkRes[RFAL_NFCF_CHECKUPDATE_RES_NOB_POS], (*rcvdLen) );
+            }
+        }
+    }
+    
+    return ret;
+}
+
 
 /*******************************************************************************/
-bool rfalNfcfListenerIsT3TReq( uint8_t* buf, uint16_t bufLen, uint8_t* nfcid2 )
+ReturnCode rfalNfcfPollerUpdate( const uint8_t* nfcid2, const rfalNfcfServBlockListParam *servBlock,  uint8_t *txBuf, uint16_t txBufLen, const uint8_t *blockData, uint8_t *rxBuf, uint16_t rxBufLen )
+{
+    uint8_t    i;
+    uint16_t   msgIt;
+    uint16_t   rcvdLen;
+    uint16_t   auxLen;
+    uint8_t    *updateRes;
+    ReturnCode ret;
+
+    /* Check parameters */
+    if( (nfcid2 == NULL) || (rxBuf == NULL) || (servBlock == NULL) || (txBuf == NULL)         ||
+        (servBlock->numBlock == 0U) || (servBlock->numBlock > RFAL_NFCF_UPDATE_REQ_MAX_BLOCK) ||
+        (servBlock->numServ == 0U)   || (servBlock->numServ > RFAL_NFCF_UPDATE_REQ_MAX_SERV)  ||
+        (rxBufLen < (RFAL_NFCF_LENGTH_LEN + RFAL_NFCF_UPDATE_RES_MIN_LEN))                      )
+    {
+        return ERR_PARAM;
+    }
+    
+    /* Calculate required txBuffer lenth */
+    auxLen = (uint16_t)( RFAL_NFCF_CMD_LEN + RFAL_NFCF_NFCID2_LEN + ( servBlock->numServ * sizeof(rfalNfcfServ) ) + 
+              (servBlock->numBlock * sizeof(rfalNfcfBlockListElem)) + (uint16_t)((uint16_t)servBlock->numBlock * RFAL_NFCF_BLOCK_LEN) );
+    
+    /* Check whether the provided buffer is sufficient for this request */
+    if( txBufLen < auxLen )
+    {
+        return ERR_PARAM;
+    }
+        
+    msgIt = 0;
+    
+    /*******************************************************************************/
+    /* Compose UPDATE command/request                                              */
+    
+    txBuf[msgIt++] = RFAL_NFCF_CMD_WRITE_WITHOUT_ENCRYPTION;                              /* Command Code    */
+    
+    ST_MEMCPY( &txBuf[msgIt], nfcid2, RFAL_NFCF_NFCID2_LEN );                             /* NFCID2          */
+    msgIt += RFAL_NFCF_NFCID2_LEN;
+    
+    txBuf[msgIt++] = servBlock->numServ;                                                  /* NoS             */
+    for( i = 0; i < servBlock->numServ; i++)
+    {
+        txBuf[msgIt++] = (uint8_t)((servBlock->servList[i] >> 0U) & 0xFFU);               /* Service Code    */
+        txBuf[msgIt++] = (uint8_t)((servBlock->servList[i] >> 8U) & 0xFFU);            
+    }
+    
+    txBuf[msgIt++] = servBlock->numBlock;                                                 /* NoB             */
+    for( i = 0; i < servBlock->numBlock; i++)
+    {
+        txBuf[msgIt++] = servBlock->blockList[i].conf;                                    /* Block list element conf (Flag|Access|Service) */
+        if( (servBlock->blockList[i].conf & 0x80U) != 0U )                                /* Check if 2 or 3 byte block list element       */
+        {
+            txBuf[msgIt++] = (uint8_t)(servBlock->blockList[i].blockNum & 0xFFU);         /* 1byte Block Num */
+        }
+        else
+        {
+            txBuf[msgIt++] = (uint8_t)((servBlock->blockList[i].blockNum >> 0U) & 0xFFU); /* 2byte Block Num */
+            txBuf[msgIt++] = (uint8_t)((servBlock->blockList[i].blockNum >> 8U) & 0xFFU);
+        }
+    }
+    
+    auxLen = ((uint16_t)servBlock->numBlock * RFAL_NFCF_BLOCK_LEN);
+    ST_MEMCPY( &txBuf[msgIt], blockData, auxLen );                                        /* Block Data      */
+    msgIt += auxLen;
+    
+    
+    /*******************************************************************************/
+    /* Transceive UPDATE command/request                                           */
+    ret = rfalTransceiveBlockingTxRx( txBuf, msgIt, rxBuf, rxBufLen, &rcvdLen, RFAL_TXRX_FLAGS_DEFAULT, RFAL_NFCF_MRT_CHECK_UPDATE );
+    
+    if( ret == ERR_NONE )
+    {
+        /* Skip LEN byte */
+        updateRes = (rxBuf + RFAL_NFCF_LENGTH_LEN);
+        
+        /* Check response length */
+        if( rcvdLen < (RFAL_NFCF_LENGTH_LEN + RFAL_NFCF_CHECKUPDATE_RES_ST2_POS) )
+        {
+            ret = ERR_PROTO;
+        }
+        /* Check for a valid response */
+        else if( (updateRes[RFAL_NFCF_CMD_POS] != (uint8_t)RFAL_NFCF_CMD_WRITE_WITHOUT_ENCRYPTION_RES) ||
+                 (updateRes[RFAL_NFCF_CHECKUPDATE_RES_ST1_POS] != RFAL_NFCF_STATUS_FLAG_SUCCESS)       ||
+                 (updateRes[RFAL_NFCF_CHECKUPDATE_RES_ST2_POS] != RFAL_NFCF_STATUS_FLAG_SUCCESS)         )
+        {
+            ret = ERR_REQUEST;
+        }
+        else
+        {
+            /* MISRA 15.7 - Empty else */
+        }
+    }
+    
+    return ret;
+}
+
+
+
+/*******************************************************************************/
+bool rfalNfcfListenerIsT3TReq( const uint8_t* buf, uint16_t bufLen, uint8_t* nfcid2 )
 {
     /* Check cmd byte */
     switch( *buf )
@@ -334,7 +537,7 @@ bool rfalNfcfListenerIsT3TReq( uint8_t* buf, uint16_t bufLen, uint8_t* nfcid2 )
     /* Output NFID2 if requested */
     if( nfcid2 != NULL )
     {
-        ST_MEMCPY( nfcid2, (uint8_t*)(buf + RFAL_NFCF_CMD_LEN), RFAL_NFCF_NFCID2_LEN );
+        ST_MEMCPY( nfcid2, &buf[RFAL_NFCF_CMD_LEN], RFAL_NFCF_NFCID2_LEN );
     }
     
     return true;

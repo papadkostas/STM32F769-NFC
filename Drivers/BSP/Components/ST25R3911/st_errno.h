@@ -1,6 +1,6 @@
 
 /******************************************************************************
-  * @attention
+  * \attention
   *
   * <h2><center>&copy; COPYRIGHT 2016 STMicroelectronics</center></h2>
   *
@@ -8,7 +8,7 @@
   * You may not use this file except in compliance with the License.
   * You may obtain a copy of the License at:
   *
-  *        http://www.st.com/myliberty
+  *        www.st.com/myliberty
   *
   * Unless required by applicable law or agreed to in writing, software 
   * distributed under the License is distributed on an "AS IS" BASIS, 
@@ -44,7 +44,6 @@
 */
 
 
-
 /*
 ******************************************************************************
 * GLOBAL DATA TYPES
@@ -64,56 +63,57 @@ typedef uint16_t      ReturnCode; /*!< Standard Return Code type from function. 
  * Error codes to be used within the application.
  * They are represented by an uint8_t
  */
-enum {
-    ERR_NONE                              =  0, /*!< no error occurred */
-    ERR_NOMEM                             =  1, /*!< not enough memory to perform the requested operation */
-    ERR_BUSY                              =  2, /*!< device or resource busy */
-    ERR_IO                                =  3, /*!< generic IO error */
-    ERR_TIMEOUT                           =  4, /*!< error due to timeout */
-    ERR_REQUEST                           =  5, /*!< invalid request or requested function can't be executed at the moment */
-    ERR_NOMSG                             =  6, /*!< No message of desired type */
-    ERR_PARAM                             =  7, /*!< Parameter error */
-    ERR_SYSTEM                            =  8, /*!< System error */
-    ERR_FRAMING                           =  9, /*!< Framing error */
-    ERR_OVERRUN                           = 10, /*!< lost one or more received bytes */
-    ERR_PROTO                             = 11, /*!< protocol error */
-    ERR_INTERNAL                          = 12, /*!< Internal Error */
-    ERR_AGAIN                             = 13, /*!< Call again */
-    ERR_MEM_CORRUPT                       = 14, /*!< memory corruption */
-    ERR_NOT_IMPLEMENTED                   = 15, /*!< not implemented */
-    ERR_PC_CORRUPT                        = 16, /*!< Program Counter has been manipulated or spike/noise trigger illegal operation */
-    ERR_SEND                              = 17, /*!< error sending*/
-    ERR_IGNORE                            = 18, /*!< indicates error detected but to be ignored */
-    ERR_SEMANTIC                          = 19, /*!< indicates error in state machine (unexpected cmd) */
-    ERR_SYNTAX                            = 20, /*!< indicates error in state machine (unknown cmd) */
-    ERR_CRC                               = 21, /*!< crc error */ 
-    ERR_NOTFOUND                          = 22, /*!< transponder not found */ 
-    ERR_NOTUNIQUE                         = 23, /*!< transponder not unique - more than one transponder in field */ 
-    ERR_NOTSUPP                           = 24, /*!< requested operation not supported */ 
-    ERR_WRITE                             = 25, /*!< write error */ 
-    ERR_FIFO                              = 26, /*!< fifo over or underflow error */ 
-    ERR_PAR                               = 27, /*!< parity error */ 
-    ERR_DONE                              = 28, /*!< transfer has already finished */
-    ERR_RF_COLLISION                      = 29, /*!< collision error (Bit Collision or during RF Collision avoidance ) */
-    ERR_HW_OVERRUN                        = 30, /*!< lost one or more received bytes */
-    ERR_RELEASE_REQ                       = 31, /*!< device requested release */
-    ERR_SLEEP_REQ                         = 32, /*!< device requested sleep */
-    ERR_WRONG_STATE                       = 33, /*!< incorrent state for requested operation */
-    ERR_MAX_RERUNS                        = 34, /*!< blocking procedure reached maximum runs */
-    ERR_DISABLED                          = 35, /*!< operation aborted due to disabled configuration */ 
-    ERR_HW_MISMATCH                       = 36, /*!< expected hw do not match  */
-    ERR_LINK_LOSS                         = 37, /*!< Other device's field didn't behave as expected: turned off by Initiator in Passive mode, or AP2P did not turn on field */
-    ERR_INVALID_HANDLE                    = 38, /*!< invalid or not initalized device handle */
 
-    ERR_INCOMPLETE_BYTE                   = 40, /*!< Incomplete byte rcvd         */
-    ERR_INCOMPLETE_BYTE_01                = 41, /*!< Incomplete byte rcvd - 1 bit */    
-    ERR_INCOMPLETE_BYTE_02                = 42, /*!< Incomplete byte rcvd - 2 bit */
-    ERR_INCOMPLETE_BYTE_03                = 43, /*!< Incomplete byte rcvd - 3 bit */
-    ERR_INCOMPLETE_BYTE_04                = 44, /*!< Incomplete byte rcvd - 4 bit */
-    ERR_INCOMPLETE_BYTE_05                = 45, /*!< Incomplete byte rcvd - 5 bit */
-    ERR_INCOMPLETE_BYTE_06                = 46, /*!< Incomplete byte rcvd - 6 bit */
-    ERR_INCOMPLETE_BYTE_07                = 47  /*!< Incomplete byte rcvd - 7 bit */
-};
+#define ERR_NONE                           ((ReturnCode)0U)  /*!< no error occurred */
+#define ERR_NOMEM                          ((ReturnCode)1U)  /*!< not enough memory to perform the requested operation */
+#define ERR_BUSY                           ((ReturnCode)2U)  /*!< device or resource busy */
+#define ERR_IO                             ((ReturnCode)3U)  /*!< generic IO error */
+#define ERR_TIMEOUT                        ((ReturnCode)4U)  /*!< error due to timeout */
+#define ERR_REQUEST                        ((ReturnCode)5U)  /*!< invalid request or requested function can't be executed at the moment */
+#define ERR_NOMSG                          ((ReturnCode)6U)  /*!< No message of desired type */
+#define ERR_PARAM                          ((ReturnCode)7U)  /*!< Parameter error */
+#define ERR_SYSTEM                         ((ReturnCode)8U)  /*!< System error */
+#define ERR_FRAMING                        ((ReturnCode)9U)  /*!< Framing error */
+#define ERR_OVERRUN                        ((ReturnCode)10U) /*!< lost one or more received bytes */
+#define ERR_PROTO                          ((ReturnCode)11U) /*!< protocol error */
+#define ERR_INTERNAL                       ((ReturnCode)12U) /*!< Internal Error */
+#define ERR_AGAIN                          ((ReturnCode)13U) /*!< Call again */
+#define ERR_MEM_CORRUPT                    ((ReturnCode)14U) /*!< memory corruption */
+#define ERR_NOT_IMPLEMENTED                ((ReturnCode)15U) /*!< not implemented */
+#define ERR_PC_CORRUPT                     ((ReturnCode)16U) /*!< Program Counter has been manipulated or spike/noise trigger illegal operation */
+#define ERR_SEND                           ((ReturnCode)17U) /*!< error sending*/
+#define ERR_IGNORE                         ((ReturnCode)18U) /*!< indicates error detected but to be ignored */
+#define ERR_SEMANTIC                       ((ReturnCode)19U) /*!< indicates error in state machine (unexpected cmd) */
+#define ERR_SYNTAX                         ((ReturnCode)20U) /*!< indicates error in state machine (unknown cmd) */
+#define ERR_CRC                            ((ReturnCode)21U) /*!< crc error */ 
+#define ERR_NOTFOUND                       ((ReturnCode)22U) /*!< transponder not found */ 
+#define ERR_NOTUNIQUE                      ((ReturnCode)23U) /*!< transponder not unique - more than one transponder in field */ 
+#define ERR_NOTSUPP                        ((ReturnCode)24U) /*!< requested operation not supported */ 
+#define ERR_WRITE                          ((ReturnCode)25U) /*!< write error */ 
+#define ERR_FIFO                           ((ReturnCode)26U) /*!< fifo over or underflow error */ 
+#define ERR_PAR                            ((ReturnCode)27U) /*!< parity error */ 
+#define ERR_DONE                           ((ReturnCode)28U) /*!< transfer has already finished */
+#define ERR_RF_COLLISION                   ((ReturnCode)29U) /*!< collision error (Bit Collision or during RF Collision avoidance ) */
+#define ERR_HW_OVERRUN                     ((ReturnCode)30U) /*!< lost one or more received bytes */
+#define ERR_RELEASE_REQ                    ((ReturnCode)31U) /*!< device requested release */
+#define ERR_SLEEP_REQ                      ((ReturnCode)32U) /*!< device requested sleep */
+#define ERR_WRONG_STATE                    ((ReturnCode)33U) /*!< incorrent state for requested operation */
+#define ERR_MAX_RERUNS                     ((ReturnCode)34U) /*!< blocking procedure reached maximum runs */
+#define ERR_DISABLED                       ((ReturnCode)35U) /*!< operation aborted due to disabled configuration */ 
+#define ERR_HW_MISMATCH                    ((ReturnCode)36U) /*!< expected hw do not match  */
+#define ERR_LINK_LOSS                      ((ReturnCode)37U) /*!< Other device's field didn't behave as expected: turned off by Initiator in Passive mode, or AP2P did not turn on field */
+#define ERR_INVALID_HANDLE                 ((ReturnCode)38U) /*!< invalid or not initalized device handle */
+
+#define ERR_INCOMPLETE_BYTE                ((ReturnCode)40U) /*!< Incomplete byte rcvd         */
+#define ERR_INCOMPLETE_BYTE_01             ((ReturnCode)41U) /*!< Incomplete byte rcvd - 1 bit */    
+#define ERR_INCOMPLETE_BYTE_02             ((ReturnCode)42U) /*!< Incomplete byte rcvd - 2 bit */
+#define ERR_INCOMPLETE_BYTE_03             ((ReturnCode)43U) /*!< Incomplete byte rcvd - 3 bit */
+#define ERR_INCOMPLETE_BYTE_04             ((ReturnCode)44U) /*!< Incomplete byte rcvd - 4 bit */
+#define ERR_INCOMPLETE_BYTE_05             ((ReturnCode)45U) /*!< Incomplete byte rcvd - 5 bit */
+#define ERR_INCOMPLETE_BYTE_06             ((ReturnCode)46U) /*!< Incomplete byte rcvd - 6 bit */
+#define ERR_INCOMPLETE_BYTE_07             ((ReturnCode)47U) /*!< Incomplete byte rcvd - 7 bit */
+
+
 
 
 /* General Sub-category number */
@@ -130,17 +130,17 @@ enum {
 #define ERR_I2C_GRP                         (0x0F00)  /*!< I2c errors */
 
 
-#define ERR_INSERT_SIO_GRP(x)               (ERR_SIO_GRP     | x)  /*!< Insert the SIO grp */
-#define ERR_INSERT_RINGBUF_GRP(x)           (ERR_RINGBUF_GRP | x)  /*!< Insert the Ring Buffer grp */
-#define ERR_INSERT_RFAL_GRP(x)              (ERR_RFAL_GRP  | x)    /*!< Insert the RFAL grp */
-#define ERR_INSERT_SPI_GRP(x)               (ERR_SPI_GRP     | x)  /*!< Insert the spi grp */
-#define ERR_INSERT_I2C_GRP(x)               (ERR_I2C_GRP     | x)  /*!< Insert the i2c grp */
-#define ERR_INSERT_UART_GRP(x)              (ERR_UART_GRP    | x)  /*!< Insert the uart grp */
-#define ERR_INSERT_TIMER_GRP(x)             (ERR_TIMER_GRP   | x)  /*!< Insert the timer grp */
-#define ERR_INSERT_MQ_GRP(x)                (ERR_MQ_GRP      | x)  /*!< Insert the mq grp */
-#define ERR_INSERT_PROCESS_GRP(x)           (ERR_PROCESS_GRP | x)  /*!< Insert the process grp */
-#define ERR_INSERT_WARN_GRP(x)              (ERR_WARN_GRP    | x)  /*!< Insert the i2c grp */
-#define ERR_INSERT_GENERIC_GRP(x)           (ERR_GENERIC_GRP | x)  /*!< Insert the generic grp */
+#define ERR_INSERT_SIO_GRP(x)               (ERR_SIO_GRP     | (x))  /*!< Insert the SIO grp */
+#define ERR_INSERT_RINGBUF_GRP(x)           (ERR_RINGBUF_GRP | (x))  /*!< Insert the Ring Buffer grp */
+#define ERR_INSERT_RFAL_GRP(x)              (ERR_RFAL_GRP    | (x))  /*!< Insert the RFAL grp */
+#define ERR_INSERT_SPI_GRP(x)               (ERR_SPI_GRP     | (x))  /*!< Insert the spi grp */
+#define ERR_INSERT_I2C_GRP(x)               (ERR_I2C_GRP     | (x))  /*!< Insert the i2c grp */
+#define ERR_INSERT_UART_GRP(x)              (ERR_UART_GRP    | (x))  /*!< Insert the uart grp */
+#define ERR_INSERT_TIMER_GRP(x)             (ERR_TIMER_GRP   | (x))  /*!< Insert the timer grp */
+#define ERR_INSERT_MQ_GRP(x)                (ERR_MQ_GRP      | (x))  /*!< Insert the mq grp */
+#define ERR_INSERT_PROCESS_GRP(x)           (ERR_PROCESS_GRP | (x))  /*!< Insert the process grp */
+#define ERR_INSERT_WARN_GRP(x)              (ERR_WARN_GRP    | (x))  /*!< Insert the i2c grp */
+#define ERR_INSERT_GENERIC_GRP(x)           (ERR_GENERIC_GRP | (x))  /*!< Insert the generic grp */
 
 
 /*
@@ -149,15 +149,16 @@ enum {
 ******************************************************************************
 */
 
-#define ERR_NO_MASK(x)                      (x & 0x00FF)    /*!< Mask the error number */
+#define ERR_NO_MASK(x)                      ((uint16_t)(x) & 0x00FFU)    /*!< Mask the error number */
 
 
 
 /*! Common code to exit a function with the error if function f return error */
-#define EXIT_ON_ERR(r, f)     \
-    if (ERR_NONE != (r = f))  \
-    {                         \
-        return r;             \
+#define EXIT_ON_ERR(r, f) \
+    (r) = (f);            \
+    if (ERR_NONE != (r))  \
+    {                     \
+        return (r);       \
     }
 
 #endif /* ST_ERRNO_H */

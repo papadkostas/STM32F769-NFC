@@ -1,6 +1,6 @@
 
 /******************************************************************************
-  * @attention
+  * \attention
   *
   * <h2><center>&copy; COPYRIGHT 2016 STMicroelectronics</center></h2>
   *
@@ -8,7 +8,7 @@
   * You may not use this file except in compliance with the License.
   * You may obtain a copy of the License at:
   *
-  *        http://www.st.com/myliberty
+  *        www.st.com/myliberty
   *
   * Unless required by applicable law or agreed to in writing, software 
   * distributed under the License is distributed on an "AS IS" BASIS, 
@@ -22,11 +22,11 @@
 
 /*
  *      PROJECT:   ST25R391x firmware
- *      $Revision: $
+ *      Revision:
  *      LANGUAGE:  ISO C99
  */
 
-/*! \file rfal_iso15693.h
+/*! \file rfal_iso15693_2.h
  *
  *  \author Ulrich Herrmann
  *
@@ -53,33 +53,27 @@
 * GLOBAL DATATYPES
 ******************************************************************************
 */
-/*! 
- * enum holding possible VCD codings
- */
+/*! Enum holding possible VCD codings  */
 typedef enum
 {
     ISO15693_VCD_CODING_1_4,
     ISO15693_VCD_CODING_1_256
 }iso15693VcdCoding_t;
 
-/*! 
- * enum holding possible VICC datarates
- */
+/*! Enum holding possible VICC datarates */
 
-/*! 
- * Configuration parameter used by #iso15693PhyConfigure
- */
+/*! Configuration parameter used by #iso15693PhyConfigure  */
 typedef struct
 {
-    iso15693VcdCoding_t coding;      /*!< desired VCD coding                                       */
-    bool                fastMode;    /*!< Fast mode - all pulse numbers and times are divided by 2 */
+    iso15693VcdCoding_t coding;           /*!< desired VCD coding                                       */
+    uint32_t                speedMode;    /*!< 0: normal mode, 1: 2^1 = x2 Fast mode, 2 : 2^2 = x4 mode, 3 : 2^3 = x8 mode - all rx pulse numbers and times are divided by 1,2,4,8 */
 }iso15693PhyConfig_t;
 
 /*! Parameters how the stream mode should work */
 struct iso15693StreamConfig {
-    uint8_t useBPSK; /*!< 0: subcarrier, 1:BPSK */
-    uint8_t din; /*!< the divider for the in subcarrier frequency: fc/2^din  */
-    uint8_t dout; /*!< the divider for the in subcarrier frequency fc/2^dout */
+    uint8_t useBPSK;              /*!< 0: subcarrier, 1:BPSK */
+    uint8_t din;                  /*!< the divider for the in subcarrier frequency: fc/2^din  */
+    uint8_t dout;                 /*!< the divider for the in subcarrier frequency fc/2^dout */
     uint8_t report_period_length; /*!< the length of the reporting period 2^report_period_length*/
 };
 /*
@@ -88,16 +82,17 @@ struct iso15693StreamConfig {
 ******************************************************************************
 */
 
-/* t1min = 308,2us = 4192/fc = 65.5 * 64/fc */
-#define ISO15693_MASK_RECEIVE_TIME (65)
+#define ISO15693_REQ_FLAG_TWO_SUBCARRIERS 0x01U   /*!< Flag indication that communication uses two subcarriers */
+#define ISO15693_REQ_FLAG_HIGH_DATARATE   0x02U   /*!< Flag indication that communication uses high bitrate    */
+#define ISO15693_MASK_FDT_LISTEN         (65)     /*!< t1min = 308,2us = 4192/fc = 65.5 * 64/fc                */
 
-/* t1max = 323,3us = 4384/fc = 68.5 * 64/fc
+/*! t1max = 323,3us = 4384/fc = 68.5 * 64/fc
  *         12 = 768/fc unmodulated time of single subcarrior SoF */
-#define ISO15693_NO_RESPONSE_TIME (69 + 12)
+#define ISO15693_FWT (69 + 12)
 
 
-#define ISO15693_REQ_FLAG_TWO_SUBCARRIERS 0x01
-#define ISO15693_REQ_FLAG_HIGH_DATARATE   0x02
+
+
 /*
 ******************************************************************************
 * GLOBAL FUNCTION PROTOTYPES
@@ -105,9 +100,7 @@ struct iso15693StreamConfig {
 */
 /*! 
  *****************************************************************************
- *  \brief  Initialize the ISO15693 phy.
- *  \note This function needs to be called every time after switching
- *  from a different mode and before #iso15693Initialize
+ *  \brief  Initialize the ISO15693 phy
  *
  *  \param[in] config : ISO15693 phy related configuration (See #iso15693PhyConfig_t)
  *  \param[out] needed_stream_config : return a pointer to the stream config 
@@ -123,7 +116,7 @@ extern ReturnCode iso15693PhyConfigure(const iso15693PhyConfig_t* config,
 
 /*! 
  *****************************************************************************
- *  \brief  Return current phy configuration.
+ *  \brief  Return current phy configuration
  *
  *  This function returns current Phy configuration previously
  *  set by #iso15693PhyConfigure
@@ -141,7 +134,7 @@ extern ReturnCode iso15693PhyGetConfiguration(iso15693PhyConfig_t* config);
  *  \brief  Code an ISO15693 compatible frame
  *
  *  This function takes \a length bytes from \a buffer, perform proper
- *  encoding and sends out the frame to the ST25R3911.
+ *  encoding and sends out the frame to the ST25R391x.
  *
  *  \param[in] buffer : data to send, modified to adapt flags.
  *  \param[in] length : number of bytes to send.
@@ -174,11 +167,11 @@ extern ReturnCode iso15693VCDCode(uint8_t* buffer, uint16_t length, bool sendCrc
  *****************************************************************************
  *  \brief  Receive an ISO15693 compatible frame
  *
- *  This function receives an ISO15693 frame from the ST25R3911, decodes the frame
+ *  This function receives an ISO15693 frame from the ST25R391x, decodes the frame
  *  and writes the raw data to \a buffer.
  *  \note Buffer needs to be big enough to hold CRC also (+2 bytes)
  *
- *  \param[out] inBuf : buffer with the hamming coded stream to be decoded
+ *  \param[in] inBuf : buffer with the hamming coded stream to be decoded
  *  \param[in] inBufLen : number of bytes to decode (=length of buffer).
  *  \param[out] outBuf : buffer where received data shall be written to.
  *  \param[in] outBufLen : Length of output buffer, should be approx twice the size of inBuf
@@ -196,7 +189,7 @@ extern ReturnCode iso15693VCDCode(uint8_t* buffer, uint16_t length, bool sendCrc
  *
  *****************************************************************************
  */
-extern ReturnCode iso15693VICCDecode(uint8_t *inBuf,
+extern ReturnCode iso15693VICCDecode(const uint8_t *inBuf,
                       uint16_t inBufLen,
                       uint8_t* outBuf,
                       uint16_t outBufLen,

@@ -7,7 +7,7 @@
   * You may not use this file except in compliance with the License.
   * You may obtain a copy of the License at:
   *
-  *        http://www.st.com/myliberty
+  *        www.st.com/myliberty
   *
   * Unless required by applicable law or agreed to in writing, software 
   * distributed under the License is distributed on an "AS IS" BASIS, 
@@ -79,6 +79,11 @@ bool timerIsExpired( uint32_t timer )
   
   uDiff = (timer - platformGetSysTick());   /* Calculate the diff between the timers */
   sDiff = uDiff;                            /* Convert the diff to a signed var      */
+  /* Having done this has two side effects: 
+   * 1) all differences smaller than -(2^31) ms (~25d) will become positive
+   *    Signaling not expired: acceptable!
+   * 2) Time roll-over case will be handled correctly: super!
+   */
   
   /* Check if the given timer has expired already */
   if( sDiff < 0 )

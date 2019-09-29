@@ -35,7 +35,7 @@
  * INCLUDES
  ******************************************************************************
  */
-#include "rfal_dynamicPower.h"
+#include "rfal_dpo.h"
 
 
 /*
@@ -44,12 +44,13 @@
  ******************************************************************************
  */
 
-const uint8_t rfalDynamicPowerDefaultSettings [] = {
+ /*! Default DPO table */
+const uint8_t rfalDpoDefaultSettings [] = {
                 0x00, 255, 200,
-                0x01, 190, 170,
-                0x02, 160, 140,
-                0x03, 130, 110,
-                0x0E,  80, 0
+                0x01, 210, 150,
+                0x02, 160, 100,
+                0x03, 110, 50,
+                0x0E,  60, 0
 };
 
 #endif /* ST25R3911_DYNAMICPOWER_H */

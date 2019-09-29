@@ -1,6 +1,6 @@
 
 /******************************************************************************
-  * @attention
+  * \attention
   *
   * <h2><center>&copy; COPYRIGHT 2016 STMicroelectronics</center></h2>
   *
@@ -8,7 +8,7 @@
   * You may not use this file except in compliance with the License.
   * You may obtain a copy of the License at:
   *
-  *        http://www.st.com/myliberty
+  *        www.st.com/myliberty
   *
   * Unless required by applicable law or agreed to in writing, software 
   * distributed under the License is distributed on an "AS IS" BASIS, 
@@ -22,7 +22,7 @@
 
 /*
  *      PROJECT:   ST25R391x firmware
- *      $Revision: $
+ *      Revision:
  *      LANGUAGE:  ISO C99
  */
 
@@ -33,15 +33,15 @@
  *  \brief Implementation of ST25TB interface 
  *
  *
- * @addtogroup RFAL
+ * \addtogroup RFAL
  * @{
  *
- * @addtogroup RFAL-AL
- * @brief RFAL Abstraction Layer
+ * \addtogroup RFAL-AL
+ * \brief RFAL Abstraction Layer
  * @{
  *
- * @addtogroup ST25TB
- * @brief RFAL ST25TB Module
+ * \addtogroup ST25TB
+ * \brief RFAL ST25TB Module
  * @{
  * 
  */
@@ -66,10 +66,10 @@
  ******************************************************************************
  */
 
-#define RFAL_ST25TB_CHIP_ID_LEN      1       /*!< ST25TB chip ID length       */
-#define RFAL_ST25TB_CRC_LEN          2       /*!< ST25TB CRC length           */
-#define RFAL_ST25TB_UID_LEN          8       /*!< ST25TB Unique ID length     */
-#define RFAL_ST25TB_BLOCK_LEN        4       /*!< ST25TB Data Block length    */
+#define RFAL_ST25TB_CHIP_ID_LEN      1U       /*!< ST25TB chip ID length       */
+#define RFAL_ST25TB_CRC_LEN          2U       /*!< ST25TB CRC length           */
+#define RFAL_ST25TB_UID_LEN          8U       /*!< ST25TB Unique ID length     */
+#define RFAL_ST25TB_BLOCK_LEN        4U       /*!< ST25TB Data Block length    */
 
 /*
 ******************************************************************************
@@ -305,7 +305,7 @@ ReturnCode rfalSt25tbPollerReadBlock( uint8_t blockAddress, rfalSt25tbBlock *blo
  * \return ERR_NONE         : No error
  *****************************************************************************
  */
-ReturnCode rfalSt25tbPollerWriteBlock( uint8_t blockAddress, rfalSt25tbBlock *blockData  );
+ReturnCode rfalSt25tbPollerWriteBlock( uint8_t blockAddress, const rfalSt25tbBlock *blockData  );
 
 
 /*! 

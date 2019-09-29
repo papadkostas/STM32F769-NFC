@@ -1,6 +1,6 @@
 
 /******************************************************************************
-  * @attention
+  * \attention
   *
   * <h2><center>&copy; COPYRIGHT 2016 STMicroelectronics</center></h2>
   *
@@ -8,7 +8,7 @@
   * You may not use this file except in compliance with the License.
   * You may obtain a copy of the License at:
   *
-  *        http://www.st.com/myliberty
+  *        www.st.com/myliberty
   *
   * Unless required by applicable law or agreed to in writing, software 
   * distributed under the License is distributed on an "AS IS" BASIS, 
@@ -22,7 +22,7 @@
 
 /*
  *      PROJECT:   ST25R391x firmware
- *      $Revision: $
+ *      Revision:
  *      LANGUAGE:  ISO C99
  */
 
@@ -36,15 +36,15 @@
  *  to handle a Type 1 Tag T1T (Topaz)
  *  
  *  
- * @addtogroup RFAL
+ * \addtogroup RFAL
  * @{
  *
- * @addtogroup RFAL-AL
- * @brief RFAL Abstraction Layer
+ * \addtogroup RFAL-AL
+ * \brief RFAL Abstraction Layer
  * @{
  *
- * @addtogroup T1T
- * @brief RFAL T1T Module
+ * \addtogroup T1T
+ * \brief RFAL T1T Module
  * @{
  *  
  */
@@ -155,7 +155,7 @@ ReturnCode rfalT1TPollerRid( rfalT1TRidRes *ridRes );
  * \return ERR_NONE         : No error
  *****************************************************************************
  */
-ReturnCode rfalT1TPollerRall( uint8_t* uid, uint8_t* rxBuf, uint16_t rxBufLen, uint16_t *rxRcvdLen );
+ReturnCode rfalT1TPollerRall( const uint8_t* uid, uint8_t* rxBuf, uint16_t rxBufLen, uint16_t *rxRcvdLen );
 
 
 /*! 
@@ -174,7 +174,7 @@ ReturnCode rfalT1TPollerRall( uint8_t* uid, uint8_t* rxBuf, uint16_t rxBufLen, u
  * \return ERR_NONE         : No error
  *****************************************************************************
  */
-ReturnCode rfalT1TPollerWrite( uint8_t* uid, uint8_t address, uint8_t data );
+ReturnCode rfalT1TPollerWrite( const uint8_t* uid, uint8_t address, uint8_t data );
 
 #endif /* RFAL_T1T_H */
 

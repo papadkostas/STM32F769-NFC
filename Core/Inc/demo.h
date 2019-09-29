@@ -51,6 +51,7 @@ extern "C" {
 /* Exported macro ------------------------------------------------------------*/
 
 /* Exported functions ------------------------------------------------------- */
+bool demoIni( void );
 extern void demoCycle(void);
 
 #ifdef __cplusplus

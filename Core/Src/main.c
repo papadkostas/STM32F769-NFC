@@ -28,8 +28,6 @@
 #include "demo.h"
 #include "platform.h"
 #include "st_errno.h"
-#include "rfal_rf.h"
-#include "rfal_analogConfig.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,6 +48,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+/* Private variables ---------------------------------------------------------*/
+uint8_t globalCommProtectCnt = 0;
 
 /* USER CODE END PV */
 
@@ -96,13 +96,11 @@ int main(void)
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   /* Initialize RFAL */
-  rfalAnalogConfigInitialize ();
-  rfalInitialize();
-  if (rfalInitialize () != ERR_NONE)
+  if (!demoIni())
     {
       /*
-       * in case the rfal initalization failed signal it by flashing all LED
-       * and stoping all operations
+       * in case the rfal initialization failed signal it by flashing all LED
+       * and stopping all operations
        */
       while (1)
 	{
@@ -117,8 +115,6 @@ int main(void)
     }
   else
     {
-      for (int i = 0; i < 2; i++)
-	{
 	  platformLedToogle(PLATFORM_LED_FIELD_PORT, PLATFORM_LED_FIELD_PIN);
 	  platformLedToogle(PLATFORM_LED_A_PORT, PLATFORM_LED_A_PIN);
 	  platformLedToogle(PLATFORM_LED_B_PORT, PLATFORM_LED_B_PIN);
@@ -126,8 +122,6 @@ int main(void)
 	  platformLedToogle(PLATFORM_LED_V_PORT, PLATFORM_LED_V_PIN);
 	  platformLedToogle(PLATFORM_LED_AP2P_PORT, PLATFORM_LED_AP2P_PIN);
 	  platformDelay(500);
-	}
-
       platformLedOff(PLATFORM_LED_A_PORT, PLATFORM_LED_A_PIN);
       platformLedOff(PLATFORM_LED_B_PORT, PLATFORM_LED_B_PIN);
       platformLedOff(PLATFORM_LED_F_PORT, PLATFORM_LED_F_PIN);
@@ -142,14 +136,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
     {
-      /* Run RFAL Worker */
-      rfalWorker ();
-
-      /* Run Demo Application */
-      demoCycle ();
-    /* USER CODE END WHILE */
+    /* Run Demo Application */
+	demoCycle();
+	/* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	//HAL_GPIO_TogglePin(GPIOJ, GPIO_PIN_13);
     }
   /* USER CODE END 3 */
 }

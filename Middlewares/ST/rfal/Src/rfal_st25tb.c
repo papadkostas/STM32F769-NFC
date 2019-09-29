@@ -1,6 +1,6 @@
 
 /******************************************************************************
-  * @attention
+  * \attention
   *
   * <h2><center>&copy; COPYRIGHT 2016 STMicroelectronics</center></h2>
   *
@@ -8,7 +8,7 @@
   * You may not use this file except in compliance with the License.
   * You may obtain a copy of the License at:
   *
-  *        http://www.st.com/myliberty
+  *      www.st.com/myliberty
   *
   * Unless required by applicable law or agreed to in writing, software 
   * distributed under the License is distributed on an "AS IS" BASIS, 
@@ -22,7 +22,7 @@
 
 /*
  *      PROJECT:   ST25R391x firmware
- *      $Revision: $
+ *      Revision:
  *      LANGUAGE:  ISO C99
  */
 
@@ -48,7 +48,7 @@
  ******************************************************************************
  */
 #ifndef RFAL_FEATURE_ST25TB
-    #error " RFAL: Module configuration missing. Please enable/disable ST25TB module by setting: RFAL_FEATURE_ST25TB "
+    #define RFAL_FEATURE_ST25TB   false    /* ST25TB module configuration missing. Disabled by default */
 #endif
 
 #if RFAL_FEATURE_ST25TB
@@ -59,28 +59,28 @@
  ******************************************************************************
  */
 
-#define RFAL_ST25TB_CMD_LEN          1                                 /*!< ST25TB length of a command                       */
-#define RFAL_ST25TB_SLOTS            16                                /*!< ST25TB number of slots                           */
-#define RFAL_ST25TB_SLOTNUM_MASK     0x0F                              /*!< ST25TB Slot Number bit mask on SlotMarker        */
-#define RFAL_ST25TB_SLOTNUM_SHIFT    4                                 /*!< ST25TB Slot Number shift on SlotMarker           */
+#define RFAL_ST25TB_CMD_LEN          1U                                 /*!< ST25TB length of a command                       */
+#define RFAL_ST25TB_SLOTS            16U                                /*!< ST25TB number of slots                           */
+#define RFAL_ST25TB_SLOTNUM_MASK     0x0FU                              /*!< ST25TB Slot Number bit mask on SlotMarker        */
+#define RFAL_ST25TB_SLOTNUM_SHIFT    4U                                 /*!< ST25TB Slot Number shift on SlotMarker           */
 
-#define RFAL_ST25TB_INITIATE_CMD1    0x06                              /*!< ST25TB Initiate command byte1                    */
-#define RFAL_ST25TB_INITIATE_CMD2    0x00                              /*!< ST25TB Initiate command byte2                    */
-#define RFAL_ST25TB_PCALL_CMD1       0x06                              /*!< ST25TB Pcall16 command byte1                     */
-#define RFAL_ST25TB_PCALL_CMD2       0x04                              /*!< ST25TB Pcall16 command byte2                     */
-#define RFAL_ST25TB_SELECT_CMD       0x0E                              /*!< ST25TB Select command                            */
-#define RFAL_ST25TB_GET_UID_CMD      0x0B                              /*!< ST25TB Get UID command                           */
-#define RFAL_ST25TB_COMPLETION_CMD   0x0F                              /*!< ST25TB Completion command                        */
-#define RFAL_ST25TB_RESET_INV_CMD    0x0C                              /*!< ST25TB Reset to Inventory command                */
-#define RFAL_ST25TB_READ_BLOCK_CMD   0x08                              /*!< ST25TB Read Block command                        */
-#define RFAL_ST25TB_WRITE_BLOCK_CMD  0x09                              /*!< ST25TB Write Block command                       */
+#define RFAL_ST25TB_INITIATE_CMD1    0x06U                              /*!< ST25TB Initiate command byte1                    */
+#define RFAL_ST25TB_INITIATE_CMD2    0x00U                              /*!< ST25TB Initiate command byte2                    */
+#define RFAL_ST25TB_PCALL_CMD1       0x06U                              /*!< ST25TB Pcall16 command byte1                     */
+#define RFAL_ST25TB_PCALL_CMD2       0x04U                              /*!< ST25TB Pcall16 command byte2                     */
+#define RFAL_ST25TB_SELECT_CMD       0x0EU                              /*!< ST25TB Select command                            */
+#define RFAL_ST25TB_GET_UID_CMD      0x0BU                              /*!< ST25TB Get UID command                           */
+#define RFAL_ST25TB_COMPLETION_CMD   0x0FU                              /*!< ST25TB Completion command                        */
+#define RFAL_ST25TB_RESET_INV_CMD    0x0CU                              /*!< ST25TB Reset to Inventory command                */
+#define RFAL_ST25TB_READ_BLOCK_CMD   0x08U                              /*!< ST25TB Read Block command                        */
+#define RFAL_ST25TB_WRITE_BLOCK_CMD  0x09U                              /*!< ST25TB Write Block command                       */
 
 
-#define RFAL_ST25TB_T0               2157                              /*!< ST25TB t0  159 us   ST25TB RF characteristics    */
-#define RFAL_ST25TB_T1               2048                              /*!< ST25TB t1  151 us   ST25TB RF characteristics    */
+#define RFAL_ST25TB_T0               2157U                              /*!< ST25TB t0  159 us   ST25TB RF characteristics    */
+#define RFAL_ST25TB_T1               2048U                              /*!< ST25TB t1  151 us   ST25TB RF characteristics    */
 
-#define RFAL_ST25TB_FWT             (RFAL_ST25TB_T0 + RFAL_ST25TB_T1)  /*!< ST25TB FWT  = T0 + T1                            */
-#define RFAL_ST25TB_TW              rfalConvMsTo1fc(7)                 /*!< ST25TB TW : Programming time for write max 7ms   */
+#define RFAL_ST25TB_FWT             (RFAL_ST25TB_T0 + RFAL_ST25TB_T1)   /*!< ST25TB FWT  = T0 + T1                            */
+#define RFAL_ST25TB_TW              rfalConvMsTo1fc(7U)                 /*!< ST25TB TW : Programming time for write max 7ms   */
 
 
 /*
@@ -138,6 +138,93 @@ typedef struct
 * LOCAL FUNCTION PROTOTYPES
 ******************************************************************************
 */
+/*! 
+ *****************************************************************************
+ * \brief  ST25TB Poller Do Collision Resolution
+ *  
+ * This method performs ST25TB Collision resolution loop for each slot
+ *   
+ * \param[in]  devLimit      : device limit value, and size st25tbDevList
+ * \param[out] st25tbDevList : ST35TB listener device info
+ * \param[out] devCnt        : Devices found counter
+ * 
+ * \return colPending         : true if a collision was detected
+ *****************************************************************************
+ */
+static bool rfalSt25tbPollerDoCollisionResolution( uint8_t devLimit, rfalSt25tbListenDevice *st25tbDevList, uint8_t *devCnt );
+
+/*
+******************************************************************************
+* LOCAL FUNCTION PROTOTYPES
+******************************************************************************
+*/
+
+
+static bool rfalSt25tbPollerDoCollisionResolution( uint8_t devLimit, rfalSt25tbListenDevice *st25tbDevList, uint8_t *devCnt )
+{
+    uint8_t    i;
+    uint8_t    chipId;
+    ReturnCode ret;
+    bool col;
+
+    col = false;
+    
+    for(i = 0; i < RFAL_ST25TB_SLOTS; i++)
+    {
+        platformDelay(1);  /* Wait t2: Answer to new request delay  */
+        
+        if( i==0U )
+        {
+            /* Step 2: Send Pcall16 */
+            ret = rfalSt25tbPollerPcall( &chipId );
+        }
+        else
+        {
+            /* Step 3-17: Send Pcall16 */
+            ret = rfalSt25tbPollerSlotMarker( i, &chipId );
+        }
+        
+        if( ret == ERR_NONE )
+        {
+            /* Found another device */
+            st25tbDevList[*devCnt].chipID       = chipId;
+            st25tbDevList[*devCnt].isDeselected = false;
+            
+            /* Select Device, retrieve its UID  */
+            ret = rfalSt25tbPollerSelect( chipId );
+
+            /* By Selecting this device, the previous gets Deselected */
+            if( (*devCnt) > 0U )
+            {
+                st25tbDevList[(*devCnt)-1U].isDeselected = true;
+            }
+
+            if( ERR_NONE == ret )
+            {
+                rfalSt25tbPollerGetUID( &st25tbDevList[*devCnt].UID );
+            }
+
+            if( ERR_NONE == ret )
+            {
+                (*devCnt)++;
+            }
+        }
+        else if( (ret == ERR_CRC) || (ret == ERR_FRAMING) )
+        {
+            col = true;
+        }
+        else
+        {
+            /* MISRA 15.7 - Empty else */
+        }
+        
+        if( *devCnt >= devLimit )
+        {
+            break;
+        }
+    }
+    return col;
+}
 
 
 /*
@@ -248,7 +335,7 @@ ReturnCode rfalSt25tbPollerSlotMarker( uint8_t slotNum, uint8_t *chipIdRes )
     uint16_t   rxLen;
     uint8_t    slotMarker;
 
-    if( (slotNum == 0) || (slotNum > 15) )
+    if( (slotNum == 0U) || (slotNum > 15U) )
     {
         return ERR_PARAM;
     }
@@ -322,12 +409,12 @@ ReturnCode rfalSt25tbPollerGetUID( rfalSt25tbUID *UID )
 /*******************************************************************************/
 ReturnCode rfalSt25tbPollerCollisionResolution( uint8_t devLimit, rfalSt25tbListenDevice *st25tbDevList, uint8_t *devCnt )
 {
-    uint8_t    i;
+    
     uint8_t    chipId;
     ReturnCode ret;
     bool       detected;  /* collision or device was detected */
     
-    if( (st25tbDevList == NULL) || (devCnt == NULL) || (devLimit == 0) )
+    if( (st25tbDevList == NULL) || (devCnt == NULL) || (devLimit == 0U) )
     {
         return ERR_PARAM;
     }
@@ -361,58 +448,7 @@ ReturnCode rfalSt25tbPollerCollisionResolution( uint8_t devLimit, rfalSt25tbList
         /* Multiple device responses */
         do
         {
-            detected = false;
-            
-            for(i = 0; i < RFAL_ST25TB_SLOTS; i++)
-            {
-                platformDelay(1);  /* Wait t2: Answer to new request delay  */
-                
-                if( i==0 )
-                {
-                    /* Step 2: Send Pcall16 */
-                    ret = rfalSt25tbPollerPcall( &chipId );
-                }
-                else
-                {
-                    /* Step 3-17: Send Pcall16 */
-                    ret = rfalSt25tbPollerSlotMarker( i, &chipId );
-                }
-                
-                if( ret == ERR_NONE )
-                {
-                    /* Found another device */
-                    st25tbDevList[*devCnt].chipID       = chipId;
-                    st25tbDevList[*devCnt].isDeselected = false;
-                    
-                    /* Select Device, retrieve its UID  */
-                    ret = rfalSt25tbPollerSelect( chipId );
-
-                    /* By Selecting this device, the previous gets Deselected */
-                    if( (*devCnt) > 0 )
-                    {
-                        st25tbDevList[(*devCnt)-1].isDeselected = true;
-                    }
-
-                    if( ERR_NONE == ret )
-                    {
-                        rfalSt25tbPollerGetUID( &st25tbDevList[*devCnt].UID );
-                    }
-
-                    if( ERR_NONE == ret )
-                    {
-                        (*devCnt)++;
-                    }
-                }
-                else if( (ret == ERR_CRC) || (ret == ERR_FRAMING) )
-                {
-                    detected = true;
-                }
-                
-                if( *devCnt >= devLimit )
-                {
-                    break;
-                }
-            }
+            detected = rfalSt25tbPollerDoCollisionResolution( devLimit, st25tbDevList, devCnt );
         }
         while( (detected == true) && (*devCnt < devLimit) );
     }
@@ -447,7 +483,7 @@ ReturnCode rfalSt25tbPollerReadBlock( uint8_t blockAddress, rfalSt25tbBlock *blo
 
 
 /*******************************************************************************/
-ReturnCode rfalSt25tbPollerWriteBlock( uint8_t blockAddress, rfalSt25tbBlock *blockData  )
+ReturnCode rfalSt25tbPollerWriteBlock( uint8_t blockAddress, const rfalSt25tbBlock *blockData  )
 {
     ReturnCode              ret;
     uint16_t                rxLen;
@@ -458,7 +494,7 @@ ReturnCode rfalSt25tbPollerWriteBlock( uint8_t blockAddress, rfalSt25tbBlock *bl
     /* Compute Write Block Request */
     writeBlockReq.cmd     = RFAL_ST25TB_WRITE_BLOCK_CMD;
     writeBlockReq.address = blockAddress;
-    ST_MEMCPY( writeBlockReq.data, blockData, RFAL_ST25TB_BLOCK_LEN );
+    ST_MEMCPY( &writeBlockReq.data, blockData, RFAL_ST25TB_BLOCK_LEN );
     
     /* Send Write Block Request */
     ret = rfalTransceiveBlockingTxRx( (uint8_t*)&writeBlockReq, sizeof(rfalSt25tbWriteBlockReq), tmpBlockData, RFAL_ST25TB_BLOCK_LEN, &rxLen, RFAL_TXRX_FLAGS_DEFAULT, (RFAL_ST25TB_FWT + RFAL_ST25TB_TW) );
@@ -469,7 +505,7 @@ ReturnCode rfalSt25tbPollerWriteBlock( uint8_t blockAddress, rfalSt25tbBlock *bl
         return ERR_PROTO; 
     }
     /* Check there was any error besides Timeout*/
-    else if( ret != ERR_TIMEOUT )
+    if( ret != ERR_TIMEOUT )
     {
         return ret;
     }
@@ -477,7 +513,7 @@ ReturnCode rfalSt25tbPollerWriteBlock( uint8_t blockAddress, rfalSt25tbBlock *bl
     ret = rfalSt25tbPollerReadBlock(blockAddress, &tmpBlockData);
     if( ret == ERR_NONE )
     {
-        if( !ST_BYTECMP( tmpBlockData, blockData, RFAL_ST25TB_BLOCK_LEN ) )
+        if( ST_BYTECMP( &tmpBlockData, blockData, RFAL_ST25TB_BLOCK_LEN ) == 0 )
         {
             return ERR_NONE;
         }

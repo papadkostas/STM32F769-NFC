@@ -1,6 +1,6 @@
 
 /******************************************************************************
-  * @attention
+  * \attention
   *
   * <h2><center>&copy; COPYRIGHT 2016 STMicroelectronics</center></h2>
   *
@@ -8,7 +8,7 @@
   * You may not use this file except in compliance with the License.
   * You may obtain a copy of the License at:
   *
-  *        http://www.st.com/myliberty
+  *        www.st.com/myliberty
   *
   * Unless required by applicable law or agreed to in writing, software 
   * distributed under the License is distributed on an "AS IS" BASIS, 
@@ -23,7 +23,7 @@
 
 /*
  *      PROJECT:   ST25R391x firmware
- *      $Revision: $
+ *      Revision:
  *      LANGUAGE:  ISO C99
  */
 
@@ -38,15 +38,15 @@
  *    - NFC Forum Digital Protocol  1.1 2014-01-14
  *
  *
- * @addtogroup RFAL
+ * \addtogroup RFAL
  * @{
  *
- * @addtogroup RFAL-AL
- * @brief RFAL Abstraction Layer
+ * \addtogroup RFAL-AL
+ * \brief RFAL Abstraction Layer
  * @{
  *
- * @addtogroup ISO-DEP
- * @brief RFAL ISO-DEP Module
+ * \addtogroup ISO-DEP
+ * \brief RFAL ISO-DEP Module
  * @{
  * 
  */
@@ -60,74 +60,94 @@
  */
 #include "platform.h"
 #include "rfal_nfcb.h"
-
 /*
  ******************************************************************************
  * DEFINES
  ******************************************************************************
  */
 
-#define RFAL_ISODEP_PROLOGUE_SIZE               (3)     /*!< Length of Prologue Field for I-Block Format                       */
+#define RFAL_ISODEP_PROLOGUE_SIZE               (3U)     /*!< Length of Prologue Field for I-Block Format                       */
 
-#define RFAL_ISODEP_PCB_LEN                     (1)     /*!< PCB length                                                        */
-#define RFAL_ISODEP_DID_LEN                     (1)     /*!< DID length                                                        */
-#define RFAL_ISODEP_NAD_LEN                     (1)     /*!< NAD length                                                        */
-#define RFAL_ISODEP_NO_DID                      (0x00)  /*!< DID value indicating the ISO-DEP layer not to use DID             */
-#define RFAL_ISODEP_NO_NAD                      (0xFF)  /*!< NAD value indicating the ISO-DEP layer not to use NAD             */
+#define RFAL_ISODEP_PCB_LEN                     (1U)     /*!< PCB length                                                        */
+#define RFAL_ISODEP_DID_LEN                     (1U)     /*!< DID length                                                        */
+#define RFAL_ISODEP_NAD_LEN                     (1U)     /*!< NAD length                                                        */
+#define RFAL_ISODEP_NO_DID                      (0x00U)  /*!< DID value indicating the ISO-DEP layer not to use DID             */
+#define RFAL_ISODEP_NO_NAD                      (0xFFU)  /*!< NAD value indicating the ISO-DEP layer not to use NAD             */
 
-#define RFAL_ISODEP_FSDI_DEFAULT                (8)     /*!< Default Frame Size Integer supported by NFCC as Initiator         */
-#define RFAL_ISODEP_FWI_MASK                    (0xF0)  /*!< Mask bits of FWI                                                  */
-#define RFAL_ISODEP_FWI_SHIFT                   (4)     /*!< Shift val of FWI                                                  */
-#define RFAL_ISODEP_FWI_DEFAULT                 (4)     /*!< Default value for FWI Digital 1.0 11.6.2.17                       */
-#define RFAL_ISODEP_ADV_FEATURE                 (0x0F)  /*!< Indicate 256 Bytes FSD and Advanc Proto Feature support:NAD & DID */
+#define RFAL_ISODEP_FWI_MASK                    (0xF0U)  /*!< Mask bits of FWI                                                  */
+#define RFAL_ISODEP_FWI_SHIFT                   (4U)     /*!< Shift val of FWI                                                  */
+#define RFAL_ISODEP_FWI_DEFAULT                 (4U)     /*!< Default value for FWI Digital 1.0 11.6.2.17                       */
+#define RFAL_ISODEP_ADV_FEATURE                 (0x0FU)  /*!< Indicate 256 Bytes FSD and Advanc Proto Feature support:NAD & DID */
 
-#define RFAL_ISODEP_DID_MAX                     (14)    /*!< Maximum DID value                                                 */
+#define RFAL_ISODEP_DID_MAX                     (14U)    /*!< Maximum DID value                                                 */
 
-#define RFAL_ISODEP_BRI_MASK                    (0x07)  /*!< Mask bits for Poll to Listen Send bitrate                         */
-#define RFAL_ISODEP_BSI_MASK                    (0x70)  /*!< Mask bits for Listen to Poll Send bitrate                         */
-#define RFAL_ISODEP_SAME_BITRATE_MASK           (0x80)  /*!< Mask bit indicate only same bit rate D for both direction support */
-#define RFAL_ISODEP_BITRATE_RFU_MASK            (0x08)  /*!< Mask bit for RFU                                                  */
+#define RFAL_ISODEP_BRI_MASK                    (0x07U)  /*!< Mask bits for Poll to Listen Send bitrate                         */
+#define RFAL_ISODEP_BSI_MASK                    (0x70U)  /*!< Mask bits for Listen to Poll Send bitrate                         */
+#define RFAL_ISODEP_SAME_BITRATE_MASK           (0x80U)  /*!< Mask bit indicate only same bit rate D for both direction support */
+#define RFAL_ISODEP_BITRATE_RFU_MASK            (0x08U)  /*!< Mask bit for RFU                                                  */
 
-/*! Maximum Frame Waiting Time = ((256 * 16/fc) * 2^FWImax) = ((256*16/fc)*2^14) = (67108864)/fc = 2^26 (1/fc)                 */
-#define RFAL_ISODEP_MAX_FWT                     (1<<26)
-
+/*! Maximum Frame Waiting Time = ((256 * 16/fc) * 2^FWImax) = ((256*16/fc)*2^14) = (67108864)/fc = 2^26 (1/fc)                  */
+#define RFAL_ISODEP_MAX_FWT                     ((uint32_t)1U<<26)
 
 
-#define RFAL_ISODEP_FSX_KEEP                    (0xFF)               /*!< Flag to keep FSX from activation                     */
-#define RFAL_ISODEP_DEFAULT_FSCI                RFAL_ISODEP_FSXI_256 /*!< FSCI default value to be used  in Listen Mode        */
-#define RFAL_ISODEP_DEFAULT_FSC                 RFAL_ISODEP_FSX_256  /*!< FSC default value (aligned RFAL_ISODEP_DEFAULT_FSCI) */
-#define RFAL_ISODEP_DEFAULT_SFGI                (0)                  /*!< SFGI Default value to be used  in Listen Mode        */
 
-#define RFAL_ISODEP_APDU_MAX_LEN                RFAL_ISODEP_FSX_1024  /*!< Max APDU length                                     */
+#define RFAL_ISODEP_FSDI_DEFAULT                RFAL_ISODEP_FSXI_256  /*!< Default Frame Size Integer in Poll mode              */
+#define RFAL_ISODEP_FSX_KEEP                    (0xFFU)               /*!< Flag to keep FSX from activation                     */
+#define RFAL_ISODEP_DEFAULT_FSCI                RFAL_ISODEP_FSXI_256  /*!< FSCI default value to be used  in Listen Mode        */
+#define RFAL_ISODEP_DEFAULT_FSC                 RFAL_ISODEP_FSX_256   /*!< FSC default value (aligned RFAL_ISODEP_DEFAULT_FSCI) */
+#define RFAL_ISODEP_DEFAULT_SFGI                (0U)                  /*!< SFGI Default value to be used  in Listen Mode        */
+#define RFAL_ISODEP_DEFAULT_FWI                 (8U)                  /*!< Default Listener FWI (Max)      Digital 2.0  B7 & B3 */
 
-#define RFAL_ISODEP_ATTRIB_RES_MBLI_NO_INFO     (0x00)  /*!< MBLI indicating no information on its internal input buffer size  */
-#define RFAL_ISODEP_ATTRIB_REQ_PARAM1_DEFAULT   (0x00)  /*!< Default values of Param 1 of ATTRIB_REQ Digital 1.0  12.6.1.3-5   */
-#define RFAL_ISODEP_ATTRIB_HLINFO_LEN           (32)    /*!< Maximum Size of Higher Layer Information                          */
-#define RFAL_ISODEP_ATS_HB_MAX_LEN              (15)    /*!< Maximum length of Historical Bytes  Digital 1.1  13.6.2.23        */
-#define RFAL_ISODEP_ATTRIB_REQ_MIN_LEN          (9)     /*!< Minimum Length of ATTRIB_REQ command                              */
-#define RFAL_ISODEP_ATTRIB_RES_MIN_LEN          (1)     /*!< Minimum Length of ATTRIB_RES response                             */
+#define RFAL_ISODEP_APDU_MAX_LEN                RFAL_ISODEP_FSX_1024  /*!< Max APDU length                                      */
 
-#define RFAL_ISODEP_ATS_TA_DPL_212              (0x01)  /*!< ATS TA DSI 212 kbps support bit mask                              */
-#define RFAL_ISODEP_ATS_TA_DPL_424              (0x02)  /*!< ATS TA DSI 424 kbps support bit mask                              */
-#define RFAL_ISODEP_ATS_TA_DPL_848              (0x04)  /*!< ATS TA DSI 848 kbps support bit mask                              */
-#define RFAL_ISODEP_ATS_TA_DLP_212              (0x10)  /*!< ATS TA DSI 212 kbps support bit mask                              */
-#define RFAL_ISODEP_ATS_TA_DLP_424              (0x20)  /*!< ATS TA DRI 424 kbps support bit mask                              */
-#define RFAL_ISODEP_ATS_TA_DLP_848              (0x40)  /*!< ATS TA DRI 848 kbps support bit mask                              */
-#define RFAL_ISODEP_ATS_TA_SAME_D               (0x80)  /*!< ATS TA same bit both directions bit mask                          */
-#define RFAL_ISODEP_ATS_TB_FWI_MASK             (0xF0)  /*!< Mask bits for FWI (Frame Waiting Integer) in TB byte              */
-#define RFAL_ISODEP_ATS_TB_SFGI_MASK            (0x0F)  /*!< Mask bits for SFGI (Start-Up Frame Guard Integer) in TB byte      */
+#define RFAL_ISODEP_ATTRIB_RES_MBLI_NO_INFO     (0x00U)  /*!< MBLI indicating no information on its internal input buffer size  */
+#define RFAL_ISODEP_ATTRIB_REQ_PARAM1_DEFAULT   (0x00U)  /*!< Default values of Param 1 of ATTRIB_REQ Digital 1.0  12.6.1.3-5   */
+#define RFAL_ISODEP_ATTRIB_HLINFO_LEN           (32U)    /*!< Maximum Size of Higher Layer Information                          */
+#define RFAL_ISODEP_ATS_HB_MAX_LEN              (15U)    /*!< Maximum length of Historical Bytes  Digital 1.1  13.6.2.23        */
+#define RFAL_ISODEP_ATTRIB_REQ_MIN_LEN          (9U)     /*!< Minimum Length of ATTRIB_REQ command                              */
+#define RFAL_ISODEP_ATTRIB_RES_MIN_LEN          (1U)     /*!< Minimum Length of ATTRIB_RES response                             */
 
-#define RFAL_ISODEP_ATS_T0_TA_PRESENCE_MASK     (0x10)  /*!< Mask bit for TA presence                                          */
-#define RFAL_ISODEP_ATS_T0_TB_PRESENCE_MASK     (0x20)  /*!< Mask bit for TB presence                                          */
-#define RFAL_ISODEP_ATS_T0_TC_PRESENCE_MASK     (0x40)  /*!< Mask bit for TC presence                                          */
-#define RFAL_ISODEP_ATS_T0_FSCI_MASK            (0x0F)  /*!< Mask bit for FSCI presence                                        */
-#define RFAL_ISODEP_ATS_T0_OFFSET               (0x01)  /*!< Offset of T0 in ATS Response                                      */
+#define RFAL_ISODEP_SPARAM_VALUES_MAX_LEN       (16U)    /*!< Maximum Length of the value field on S(PARAMETERS)                */
+#define RFAL_ISODEP_SPARAM_TAG_BLOCKINFO        (0xA0U)  /*!< S(PARAMETERS) tag Block information                               */
+#define RFAL_ISODEP_SPARAM_TAG_BRREQ            (0xA1U)  /*!< S(PARAMETERS) tag Bit rates Request                               */
+#define RFAL_ISODEP_SPARAM_TAG_BRIND            (0xA2U)  /*!< S(PARAMETERS) tag Bit rates Indication                            */
+#define RFAL_ISODEP_SPARAM_TAG_BRACT            (0xA3U)  /*!< S(PARAMETERS) tag Bit rates Activation                            */
+#define RFAL_ISODEP_SPARAM_TAG_BRACK            (0xA4U)  /*!< S(PARAMETERS) tag Bit rates Acknowledgement                       */
+
+#define RFAL_ISODEP_SPARAM_TAG_SUP_PCD2PICC     (0x80U)  /*!< S(PARAMETERS) tag Supported bit rates from PCD to PICC            */
+#define RFAL_ISODEP_SPARAM_TAG_SUP_PICC2PCD     (0x81U)  /*!< S(PARAMETERS) tag Supported bit rates from PICC to PCD            */
+#define RFAL_ISODEP_SPARAM_TAG_SUP_FRAME        (0x82U)  /*!< S(PARAMETERS) tag Supported framing options PICC to PCD           */
+#define RFAL_ISODEP_SPARAM_TAG_SEL_PCD2PICC     (0x83U)  /*!< S(PARAMETERS) tag Selected bit rate from PCD to PICC              */
+#define RFAL_ISODEP_SPARAM_TAG_SEL_PICC2PCD     (0x84U)  /*!< S(PARAMETERS) tag Selected bit rate from PICC to PCD              */
+#define RFAL_ISODEP_SPARAM_TAG_SEL_FRAME        (0x85U)  /*!< S(PARAMETERS) tag Selected framing options PICC to PCD            */
+
+#define RFAL_ISODEP_SPARAM_TAG_LEN              (1)      /*!< S(PARAMETERS) Tag Length                                          */
+#define RFAL_ISODEP_SPARAM_TAG_BRREQ_LEN        (0U)     /*!< S(PARAMETERS) tag Bit rates Request Length                        */
+#define RFAL_ISODEP_SPARAM_TAG_PICC2PCD_LEN     (2U)     /*!< S(PARAMETERS) bit rates from PCD to PICC Length                   */
+#define RFAL_ISODEP_SPARAM_TAG_PCD2PICC_LEN     (2U)     /*!< S(PARAMETERS) bit rates from PICC to PCD Length                   */
+#define RFAL_ISODEP_SPARAM_TAG_BRACK_LEN        (0U)     /*!< S(PARAMETERS) tag Bit rates Acknowledgement Length                */
+
+#define RFAL_ISODEP_ATS_TA_DPL_212              (0x01U)  /*!< ATS TA DSI 212 kbps support bit mask                              */
+#define RFAL_ISODEP_ATS_TA_DPL_424              (0x02U)  /*!< ATS TA DSI 424 kbps support bit mask                              */
+#define RFAL_ISODEP_ATS_TA_DPL_848              (0x04U)  /*!< ATS TA DSI 848 kbps support bit mask                              */
+#define RFAL_ISODEP_ATS_TA_DLP_212              (0x10U)  /*!< ATS TA DSI 212 kbps support bit mask                              */
+#define RFAL_ISODEP_ATS_TA_DLP_424              (0x20U)  /*!< ATS TA DRI 424 kbps support bit mask                              */
+#define RFAL_ISODEP_ATS_TA_DLP_848              (0x40U)  /*!< ATS TA DRI 848 kbps support bit mask                              */
+#define RFAL_ISODEP_ATS_TA_SAME_D               (0x80U)  /*!< ATS TA same bit both directions bit mask                          */
+#define RFAL_ISODEP_ATS_TB_FWI_MASK             (0xF0U)  /*!< Mask bits for FWI (Frame Waiting Integer) in TB byte              */
+#define RFAL_ISODEP_ATS_TB_SFGI_MASK            (0x0FU)  /*!< Mask bits for SFGI (Start-Up Frame Guard Integer) in TB byte      */
+
+#define RFAL_ISODEP_ATS_T0_TA_PRESENCE_MASK     (0x10U)  /*!< Mask bit for TA presence                                          */
+#define RFAL_ISODEP_ATS_T0_TB_PRESENCE_MASK     (0x20U)  /*!< Mask bit for TB presence                                          */
+#define RFAL_ISODEP_ATS_T0_TC_PRESENCE_MASK     (0x40U)  /*!< Mask bit for TC presence                                          */
+#define RFAL_ISODEP_ATS_T0_FSCI_MASK            (0x0FU)  /*!< Mask bit for FSCI presence                                        */
+#define RFAL_ISODEP_ATS_T0_OFFSET               (0x01U)  /*!< Offset of T0 in ATS Response                                      */
 
 
-#define RFAL_ISODEP_MAX_I_RETRYS                (2)     /*!< Number of retries for a I-Block  Digital 1.1   15.2.5.4                            */
-#define RFAL_ISODEP_MAX_R_RETRYS                (3)     /*!< Number of retries for a R-Block  Digital 1.1 A8 - nRETRY ACK/NAK:  [2,5]           */
-#define RFAL_ISODEP_MAX_S_RETRYS                (3)     /*!< Number of retries for a S-Block  Digital 1.1 A8 - nRETRY DESELECT: [0,5] WTX[2,5]  */
-#define RFAL_ISODEP_RATS_RETRIES                (1)     /*!< RATS retries upon fail           Digital 1.1  A.6 - [0,1]                          */
+#define RFAL_ISODEP_MAX_I_RETRYS                (2U)     /*!< Number of retries for a I-Block  Digital 1.1   15.2.5.4                            */
+#define RFAL_ISODEP_MAX_R_RETRYS                (3U)     /*!< Number of retries for a R-Block  Digital 1.1 A8 - nRETRY ACK/NAK:  [2,5]           */
+#define RFAL_ISODEP_MAX_S_RETRYS                (3U)     /*!< Number of retries for a S-Block  Digital 1.1 A8 - nRETRY DESELECT: [0,5] WTX[2,5]  */
+#define RFAL_ISODEP_RATS_RETRIES                (1U)     /*!< RATS retries upon fail           Digital 1.1  A.6 - [0,1]                          */
  
 
 /*! Frame Size for Proximity Card Integer definitions                                                               */
@@ -152,7 +172,7 @@ typedef enum
 typedef enum
 {
     RFAL_ISODEP_FSX_16   = 16,    /*!< Frame Size for Proximity Card with 16 bytes                         */
-    RFAL_ISODEP_FSX_24   = 24,    /*!< Frame Size for Proximity Card with 16 bytes                         */
+    RFAL_ISODEP_FSX_24   = 24,    /*!< Frame Size for Proximity Card with 24 bytes                         */
     RFAL_ISODEP_FSX_32   = 32,    /*!< Frame Size for Proximity Card with 32 bytes                         */
     RFAL_ISODEP_FSX_40   = 40,    /*!< Frame Size for Proximity Card with 40 bytes                         */
     RFAL_ISODEP_FSX_48   = 48,    /*!< Frame Size for Proximity Card with 48 bytes                         */
@@ -210,7 +230,7 @@ typedef struct
 /*! PPS Response format (Protocol and Parameter Selection) ISO14443-4  5.4                        */
 typedef struct
 {
-    uint8_t      PPSS;                              /*!< Start Byte:  [ 1101b | CID[4b] ]  */
+    uint8_t      PPSS;                              /*!< Start Byte:  [ 1101b | CID[4b] ]         */
 } rfalIsoDepPpsRes;
 
 
@@ -236,12 +256,20 @@ typedef struct
     uint8_t         HLInfo[RFAL_ISODEP_ATTRIB_HLINFO_LEN]; /*!< Higher Layer Information          */
 } rfalIsoDepAttribRes;
 
+/*! S(Parameters) Command Format  ISO14443-4 (2016) Table 4 */
+typedef struct
+{
+    uint8_t         tag;                                      /*!< S(PARAMETERS) Tag field        */
+    uint8_t         length;                                   /*!< S(PARAMETERS) Length field     */
+    uint8_t         value[RFAL_ISODEP_SPARAM_VALUES_MAX_LEN]; /*!< S(PARAMETERS) Value field      */
+} rfalIsoDepSParameter;
+
 
 /*! Activation info as Poller and Listener for NFC-A and NFC-B                                    */
-typedef union {
+typedef union {/*  PRQA S 0750 # MISRA 19.2 - Both members of the union will not be used concurrently, device is only of type A or B at a time. Thus no problem can occur. */
 
     /*! NFC-A information                                                                         */
-    union {
+    union {/*  PRQA S 0750 # MISRA 19.2 - Both members of the union will not be used concurrently, device is only PCD or PICC at a time. Thus no problem can occur. */
         struct {
             rfalIsoDepAts        ATS;               /*!< ATS response            (Poller mode)    */
             uint8_t              ATSLen;            /*!< ATS response length     (Poller mode)    */
@@ -252,7 +280,7 @@ typedef union {
     }A;
     
     /*! NFC-B information                                                                         */
-    union {
+    union {/*  PRQA S 0750 # MISRA 19.2 - Both members of the union will not be used concurrently, device is only PCD or PICC at a time. Thus no problem can occur. */
         struct{
             rfalIsoDepAttribRes  ATTRIB_RES;        /*!< ATTRIB_RES              (Poller mode)    */
             uint8_t              ATTRIB_RESLen;     /*!< ATTRIB_RES length       (Poller mode)    */
@@ -295,81 +323,81 @@ typedef struct {
 /*! ATTRIB Response parameters */
 typedef struct
 {
-    uint8_t  mbli;                                  /*!< MBLI                                     */
-    uint8_t  HLInfo[RFAL_ISODEP_ATTRIB_HLINFO_LEN]; /*!< Hi Layer Information                     */
-    uint8_t  HLInfoLen;                             /*!< Hi Layer Information Length              */
+    uint8_t  mbli;                                     /*!< MBLI                                     */
+    uint8_t  HLInfo[RFAL_ISODEP_ATTRIB_HLINFO_LEN];    /*!< Hi Layer Information                     */
+    uint8_t  HLInfoLen;                                /*!< Hi Layer Information Length              */
 } rfalIsoDepAttribResParam;
 
 
 /*! ATS Response parameter */
 typedef struct
 {
-    uint8_t     fsci;                               /*!< Frame Size of Proximity Card Integer     */
-    uint8_t     fwi;                                /*!< Frame Waiting Time Integer               */
-    uint8_t     sfgi;                               /*!< Start-Up Frame Guard Time Integer        */
-    bool        didSupport;                         /*!< DID Supported                            */
-    uint8_t     ta;                                 /*!< Max supported bitrate both direction     */
-    uint8_t     *hb;                                /*!< Historical Bytes data                    */
-    uint8_t     hbLen;                              /*!< Historical Bytes Length                  */
+    uint8_t     fsci;                                  /*!< Frame Size of Proximity Card Integer     */
+    uint8_t     fwi;                                   /*!< Frame Waiting Time Integer               */
+    uint8_t     sfgi;                                  /*!< Start-Up Frame Guard Time Integer        */
+    bool        didSupport;                            /*!< DID Supported                            */
+    uint8_t     ta;                                    /*!< Max supported bitrate both direction     */
+    uint8_t     *hb;                                   /*!< Historical Bytes data                    */
+    uint8_t     hbLen;                                 /*!< Historical Bytes Length                  */
 } rfalIsoDepAtsParam;
 
 
 /*! Structure of I-Block Buffer format from caller */
 typedef struct
 {
-    uint8_t  prologue[RFAL_ISODEP_PROLOGUE_SIZE];   /*!< Prologue/SoD buffer                      */
-    uint8_t  inf[RFAL_ISODEP_DEFAULT_FSC];          /*!< INF/Payload buffer                       */
+    uint8_t  prologue[RFAL_ISODEP_PROLOGUE_SIZE];      /*!< Prologue/SoD buffer                      */
+    uint8_t  inf[RFAL_FEATURE_ISO_DEP_IBLOCK_MAX_LEN]; /*!< INF/Payload buffer                       */
 } rfalIsoDepBufFormat;
 
 
 /*! Structure of APDU Buffer format from caller */
 typedef struct
 {
-    uint8_t  prologue[RFAL_ISODEP_PROLOGUE_SIZE];   /*!< Prologue/SoD buffer                      */
-    uint8_t  apdu[RFAL_ISODEP_APDU_MAX_LEN];        /*!< APDU/Payload buffer                      */
+    uint8_t  prologue[RFAL_ISODEP_PROLOGUE_SIZE];      /*!< Prologue/SoD buffer                      */
+    uint8_t  apdu[RFAL_FEATURE_ISO_DEP_APDU_MAX_LEN];  /*!< APDU/Payload buffer                      */
 } rfalIsoDepApduBufFormat;
 
 
 /*! Listen Activation Parameters Structure */
 typedef struct
 {
-    rfalIsoDepBufFormat  *rxBuf;                    /*!< Receive Buffer struct reference          */
-    uint16_t             *rxLen;                    /*!< Received INF data length in Bytes        */
-    bool                 *isRxChaining;             /*!< Received data is not complete            */
-    rfalIsoDepDevice     *isoDepDev;                /*!< ISO-DEP device info                      */
+    rfalIsoDepBufFormat  *rxBuf;                       /*!< Receive Buffer struct reference          */
+    uint16_t             *rxLen;                       /*!< Received INF data length in Bytes        */
+    bool                 *isRxChaining;                /*!< Received data is not complete            */
+    rfalIsoDepDevice     *isoDepDev;                   /*!< ISO-DEP device info                      */
 } rfalIsoDepListenActvParam;
 
 
 /*! Structure of parameters used on ISO DEP Transceive */
 typedef struct
 {
-    rfalIsoDepBufFormat  *txBuf;                    /*!< Transmit Buffer struct reference         */
-    uint16_t             txBufLen;                  /*!< Transmit Buffer INF field length in Bytes*/
-    bool                 isTxChaining;              /*!< Transmit data is not complete            */
-    rfalIsoDepBufFormat  *rxBuf;                    /*!< Receive Buffer struct reference in Bytes */
-    uint16_t             *rxLen;                    /*!< Received INF data length in Bytes         */
-    bool                 *isRxChaining;             /*!< Received data is not complete            */
-    uint32_t             FWT;                       /*!< FWT to be used (ignored in Listen Mode)  */
-    uint32_t             dFWT;                      /*!< Delta FWT to be used                     */
-    uint16_t             ourFSx;                    /*!< Our device Frame Size (FSD or FSC)       */
-    uint16_t             FSx;                       /*!< Other device Frame Size (FSD or FSC)     */
-    uint8_t              DID;                       /*!< Device ID (RFAL_ISODEP_NO_DID if no DID) */
+    rfalIsoDepBufFormat  *txBuf;                       /*!< Transmit Buffer struct reference         */
+    uint16_t             txBufLen;                     /*!< Transmit Buffer INF field length in Bytes*/
+    bool                 isTxChaining;                 /*!< Transmit data is not complete            */
+    rfalIsoDepBufFormat  *rxBuf;                       /*!< Receive Buffer struct reference in Bytes */
+    uint16_t             *rxLen;                       /*!< Received INF data length in Bytes        */
+    bool                 *isRxChaining;                /*!< Received data is not complete            */
+    uint32_t             FWT;                          /*!< FWT to be used (ignored in Listen Mode)  */
+    uint32_t             dFWT;                         /*!< Delta FWT to be used                     */
+    uint16_t             ourFSx;                       /*!< Our device Frame Size (FSD or FSC)       */
+    uint16_t             FSx;                          /*!< Other device Frame Size (FSD or FSC)     */
+    uint8_t              DID;                          /*!< Device ID (RFAL_ISODEP_NO_DID if no DID) */
 } rfalIsoDepTxRxParam;
 
 
 /*! Structure of parameters used on ISO DEP APDU Transceive */
 typedef struct
 {
-    rfalIsoDepApduBufFormat  *txBuf;                /*!< Transmit Buffer struct reference         */
-    uint16_t                 txBufLen;              /*!< Transmit Buffer INF field length in Bytes*/
-    rfalIsoDepApduBufFormat  *rxBuf;                /*!< Receive Buffer struct reference in Bytes */
-    uint16_t                 *rxLen;                /*!< Received INF data length in Bytes        */
-    rfalIsoDepBufFormat      *tmpBuf;               /*!< Temp buffer for Rx I-Blocks (internal)   */
-    uint32_t                 FWT;                   /*!< FWT to be used (ignored in Listen Mode)  */
-    uint32_t                 dFWT;                  /*!< Delta FWT to be used                     */
-    uint16_t                 FSx;                   /*!< Other device Frame Size (FSD or FSC)     */
-    uint16_t                 ourFSx;                /*!< Our device Frame Size (FSD or FSC)       */
-    uint8_t                  DID;                   /*!< Device ID (RFAL_ISODEP_NO_DID if no DID) */
+    rfalIsoDepApduBufFormat  *txBuf;                   /*!< Transmit Buffer struct reference         */
+    uint16_t                 txBufLen;                 /*!< Transmit Buffer INF field length in Bytes*/
+    rfalIsoDepApduBufFormat  *rxBuf;                   /*!< Receive Buffer struct reference in Bytes */
+    uint16_t                 *rxLen;                   /*!< Received INF data length in Bytes        */
+    rfalIsoDepBufFormat      *tmpBuf;                  /*!< Temp buffer for Rx I-Blocks (internal)   */
+    uint32_t                 FWT;                      /*!< FWT to be used (ignored in Listen Mode)  */
+    uint32_t                 dFWT;                     /*!< Delta FWT to be used                     */
+    uint16_t                 FSx;                      /*!< Other device Frame Size (FSD or FSC)     */
+    uint16_t                 ourFSx;                   /*!< Our device Frame Size (FSD or FSC)       */
+    uint8_t                  DID;                      /*!< Device ID (RFAL_ISODEP_NO_DID if no DID) */
 } rfalIsoDepApduTxRxParam;
 
 /*
@@ -422,13 +450,13 @@ void rfalIsoDepInitializeWithParams( rfalComplianceMode compMode, uint8_t maxRet
  *  
  *  The FSD/FSC value includes the header and CRC
  *
- *  \param[in] fsxi :  Frame Size for proximity coupling Device Integer
+ *  \param[in] FSxI :  Frame Size for proximity coupling Device Integer
  *  
  *  \return fsx : Frame Size for proximity coupling Device (FSD or FSC)
  *
  *****************************************************************************
  */
-uint16_t rfalIsoDepFSxI2FSx( uint8_t fsxi );
+uint16_t rfalIsoDepFSxI2FSx( uint8_t FSxI );
 
 
 /*! 
@@ -460,7 +488,7 @@ uint32_t rfalIsoDepFWI2FWT( uint8_t fwi );
  *  \return true if the data indicates a RATS command; false otherwise
  *****************************************************************************
  */
-bool rfalIsoDepIsRats( uint8_t *buf, uint8_t bufLen );
+bool rfalIsoDepIsRats( const uint8_t *buf, uint8_t bufLen );
 
 
 /*! 
@@ -476,7 +504,7 @@ bool rfalIsoDepIsRats( uint8_t *buf, uint8_t bufLen );
  *  \return true if the data indicates a ATTRIB command; false otherwise
  *****************************************************************************
  */
-bool rfalIsoDepIsAttrib( uint8_t *buf, uint8_t bufLen );
+bool rfalIsoDepIsAttrib( const uint8_t *buf, uint8_t bufLen );
 
 
 /*!
@@ -501,13 +529,13 @@ bool rfalIsoDepIsAttrib( uint8_t *buf, uint8_t bufLen );
  *  \param[in] attribResParam : reference to ATTRIB_RES parameters
  *  \param[in] buf            : reference to buffer containing RATS or ATTRIB
  *  \param[in] bufLen         : length in bytes of the given bufffer
- *  \param[in] rxParam        : reference to incoming reception information will be placed
+ *  \param[in] actParam       : reference to incoming reception information will be placed
  *  
  *  
  *  \warning Once the Activation has been completed the method 
  *  rfalIsoDepGetTransceiveStatus() must be called.
  *  If activation has completed due to reception of a data block (not PPS) the 
- *  buffer owned by the caller and passed on rxParam must still contain this data.
+ *  buffer owned by the caller and passed on actParam must still contain this data.
  *  The first data will be processed (I-Block or S-DSL) by rfalIsoDepGetTransceiveStatus()
  *  inform the caller and then for the next transaction use rfalIsoDepStartTransceive()
  * 
@@ -517,7 +545,7 @@ bool rfalIsoDepIsAttrib( uint8_t *buf, uint8_t bufLen );
  *  \return ERR_NOTSUPP : Feature not supported
  *****************************************************************************
  */
-ReturnCode rfalIsoDepListenStartActivation( rfalIsoDepAtsParam *atsParam, rfalIsoDepAttribResParam *attribResParam, uint8_t *buf, uint16_t bufLen, rfalIsoDepListenActvParam rxParam );
+ReturnCode rfalIsoDepListenStartActivation( rfalIsoDepAtsParam *atsParam, const rfalIsoDepAttribResParam *attribResParam, uint8_t *buf, uint16_t bufLen, rfalIsoDepListenActvParam actParam );
 
 
 /*!
@@ -725,7 +753,7 @@ ReturnCode rfalIsoDepPPS( uint8_t DID, rfalBitRate DSI, rfalBitRate DRI, rfalIso
  *  \return ERR_NONE         : No error, ATTRIB Response received
  *****************************************************************************
  */
-ReturnCode rfalIsoDepATTRIB( uint8_t* nfcid0, uint8_t PARAM1, rfalBitRate DSI, rfalBitRate DRI, rfalIsoDepFSxI FSDI, uint8_t PARAM3, uint8_t DID, uint8_t* HLInfo, uint8_t HLInfoLen, uint32_t fwt, rfalIsoDepAttribRes *attribRes, uint8_t *attribResLen );
+ReturnCode rfalIsoDepATTRIB( const uint8_t* nfcid0, uint8_t PARAM1, rfalBitRate DSI, rfalBitRate DRI, rfalIsoDepFSxI FSDI, uint8_t PARAM3, uint8_t DID, const uint8_t* HLInfo, uint8_t HLInfoLen, uint32_t fwt, rfalIsoDepAttribRes *attribRes, uint8_t *attribResLen );
 
 
 /*! 
@@ -741,6 +769,7 @@ ReturnCode rfalIsoDepATTRIB( uint8_t* nfcid0, uint8_t PARAM1, rfalBitRate DSI, r
  *****************************************************************************
  */
 ReturnCode rfalIsoDepDeselect( void );
+
 
 /*! 
  *****************************************************************************
@@ -799,7 +828,31 @@ ReturnCode rfalIsoDepPollAHandleActivation( rfalIsoDepFSxI FSDI, uint8_t DID, rf
  *  \return ERR_NONE         : No error, activation successful
  *****************************************************************************
  */
-ReturnCode rfalIsoDepPollBHandleActivation( rfalIsoDepFSxI FSDI, uint8_t DID, rfalBitRate maxBR, uint8_t PARAM1, rfalNfcbListenDevice *nfcbDev, uint8_t* HLInfo, uint8_t HLInfoLen, rfalIsoDepDevice *isoDepDev );
+ReturnCode rfalIsoDepPollBHandleActivation( rfalIsoDepFSxI FSDI, uint8_t DID, rfalBitRate maxBR, uint8_t PARAM1, const rfalNfcbListenDevice *nfcbDev, const uint8_t* HLInfo, uint8_t HLInfoLen, rfalIsoDepDevice *isoDepDev );
+
+
+/*! 
+ *****************************************************************************
+ *  \brief  ISO-DEP Poller Handle S(Parameters)
+ *   
+ *  This checks if PICC supports S(PARAMETERS), retieves PICC's
+ *  capabilities and sets the Bit Rate at the highest supported by both
+ *  devices
+ *   
+ *  \param[out] isoDepDev    : ISO-DEP information of the activated Listen device
+ *  \param[in]  maxTxBR      : Maximum Tx bit rate supported by PCD
+ *  \param[in]  maxRxBR      : Maximum Rx bit rate supported by PCD
+ *
+ *  \return ERR_WRONG_STATE  : RFAL not initialized or incorrect mode
+ *  \return ERR_PARAM        : Invalid parameters
+ *  \return ERR_IO           : Generic internal error
+ *  \return ERR_TIMEOUT      : Timeout error
+ *  \return ERR_FRAMING      : Framing error detected
+ *  \return ERR_PROTO        : Protocol error detected
+ *  \return ERR_NONE         : No error, S(PARAMETERS) selection successful
+ *****************************************************************************
+ */
+ReturnCode rfalIsoDepPollHandleSParameters( rfalIsoDepDevice *isoDepDev, rfalBitRate maxTxBR, rfalBitRate maxRxBR );
 
 
 #endif /* RFAL_ISODEP_H_ */
