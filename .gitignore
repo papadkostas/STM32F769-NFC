@@ -1,9 +1,6 @@
 # Created by https://www.gitignore.io/api/c
 # Edit at https://www.gitignore.io/?templates=c
 
-/Debug
-/.settings
-
 ### C ###
 # Prerequisites
 *.d
@@ -57,5 +54,11 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+#STM32CubeIDE
+Debug/
+.settings/
+*.launch
+*.cfg
 
 # End of https://www.gitignore.io/api/c
