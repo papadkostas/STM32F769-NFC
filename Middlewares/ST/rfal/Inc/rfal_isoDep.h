@@ -223,7 +223,7 @@ typedef struct
 {
     uint8_t      PPSS;                              /*!< Start Byte: [ 1101b | CID[4b] ]          */
     uint8_t      PPS0;                              /*!< Parameter 0:[ 000b | PPS1[1n] | 0001b ]  */
-    uint8_t      PPS1;                              /*!< Parameter 1:[ 0000b | DSI[2b] | DRI[2b] ]*/    
+    uint8_t      PPS1;                              /*!< Parameter 1:[ 0000b | DSI[2b] | DRI[2b] ]*/
 } rfalIsoDepPpsReq;
 
 
@@ -303,7 +303,7 @@ typedef struct {
     uint8_t            FSxI;            /*!< Frame Size Device/Card Integer (FSDI or FSCI)        */
     uint16_t           FSx;             /*!< Frame Size Device/Card (FSD or FSC)                  */
     uint32_t           MBL;             /*!< Maximum Buffer Length (optional for NFC-B)           */
-    rfalBitRate        DSI;             /*!< Bit Rate coding from Listener (PICC) to Poller (PCD) */
+    rfalBitRate        DSIx;            /*!< Bit Rate coding from Listener (PICC) to Poller (PCD) */
     rfalBitRate        DRI;             /*!< Bit Rate coding from Poller (PCD) to Listener (PICC) */
     uint8_t            DID;             /*!< Device ID                                            */
     uint8_t            NAD;             /*!< Node ADdress                                         */
@@ -720,7 +720,7 @@ ReturnCode rfalIsoDepRATS( rfalIsoDepFSxI FSDI, uint8_t DID, rfalIsoDepAts *ats 
  *  \return ERR_NONE         : No error, PPS Response received
  *****************************************************************************
  */
-ReturnCode rfalIsoDepPPS( uint8_t DID, rfalBitRate DSI, rfalBitRate DRI, rfalIsoDepPpsRes *ppsRes );
+ReturnCode rfalIsoDepPPS( uint8_t DID, rfalBitRate DSIx, rfalBitRate DRI, rfalIsoDepPpsRes *ppsRes );
 
 
 /*! 
@@ -753,7 +753,7 @@ ReturnCode rfalIsoDepPPS( uint8_t DID, rfalBitRate DSI, rfalBitRate DRI, rfalIso
  *  \return ERR_NONE         : No error, ATTRIB Response received
  *****************************************************************************
  */
-ReturnCode rfalIsoDepATTRIB( const uint8_t* nfcid0, uint8_t PARAM1, rfalBitRate DSI, rfalBitRate DRI, rfalIsoDepFSxI FSDI, uint8_t PARAM3, uint8_t DID, const uint8_t* HLInfo, uint8_t HLInfoLen, uint32_t fwt, rfalIsoDepAttribRes *attribRes, uint8_t *attribResLen );
+ReturnCode rfalIsoDepATTRIB( const uint8_t* nfcid0, uint8_t PARAM1, rfalBitRate DSIx, rfalBitRate DRI, rfalIsoDepFSxI FSDI, uint8_t PARAM3, uint8_t DID, const uint8_t* HLInfo, uint8_t HLInfoLen, uint32_t fwt, rfalIsoDepAttribRes *attribRes, uint8_t *attribResLen );
 
 
 /*! 

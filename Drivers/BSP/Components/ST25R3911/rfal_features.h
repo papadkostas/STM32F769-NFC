@@ -2,7 +2,7 @@
 /******************************************************************************
   * \attention
   *
-  * <h2><center>&copy; COPYRIGHT 2016 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2020 STMicroelectronics</center></h2>
   *
   * Licensed under ST MYLIBERTY SOFTWARE LICENSE AGREEMENT (the "License");
   * You may not use this file except in compliance with the License.

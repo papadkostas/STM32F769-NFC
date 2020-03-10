@@ -111,7 +111,7 @@
 
 #define RFAL_NFCDEP_BRS_MAINTAIN         0xC0U           /*!< Value signalling that BR is to be maintained (no PSL)          */
 #define RFAL_NFCDEP_BRS_Dx_MASK          0x07U           /*!< Value signalling that BR is to be maintained (no PSL)          */
-#define RFAL_NFCDEP_BRS_DSI_POS          3U              /*!< Value signalling that BR is to be maintained (no PSL)          */
+#define RFAL_NFCDEP_BRS_DSIx_POS          3U             /*!< Value signalling that BR is to be maintained (no PSL)          */
 
 #define RFAL_NFCDEP_WT_DELTA             (16U - RFAL_NFCDEP_WT_DELTA_ADJUST) /*!< NFC-DEP dWRT (adjusted)  Digital 2.0 B.10  */
 #define RFAL_NFCDEP_WT_DELTA_ADJUST      4U              /*!< dWRT value adjustment                                          */
@@ -159,10 +159,10 @@
 #define rfalNfcDepWT2RWT( wt )         ( (uint32_t)1U << (((uint32_t)(wt) & RFAL_NFCDEP_WT_MASK) + 12U) )                 /*!< Converts WT value to RWT (1/fc)               */
 
 /*! Returns the BRS value from the given bit rate */
-#define rfalNfcDepDx2BRS( br )         ( (((uint8_t)(br) & RFAL_NFCDEP_BRS_Dx_MASK) << RFAL_NFCDEP_BRS_DSI_POS) | ((uint8_t)(br) & RFAL_NFCDEP_BRS_Dx_MASK) )
+#define rfalNfcDepDx2BRS( br )         ( (((uint8_t)(br) & RFAL_NFCDEP_BRS_Dx_MASK) << RFAL_NFCDEP_BRS_DSIx_POS) | ((uint8_t)(br) & RFAL_NFCDEP_BRS_Dx_MASK) )
 
 #define rfalNfcDepBRS2DRI( brs )       (uint8_t)( (uint8_t)(brs) & RFAL_NFCDEP_BRS_Dx_MASK )                              /*!< Returns the DRI value from the given BRS byte */
-#define rfalNfcDepBRS2DSI( brs )       (uint8_t)( ((uint8_t)(brs) >> RFAL_NFCDEP_BRS_DSI_POS) & RFAL_NFCDEP_BRS_Dx_MASK ) /*!< Returns the DSI value from the given BRS byte */
+#define rfalNfcDepBRS2DSIx( brs )       (uint8_t)( ((uint8_t)(brs) >> RFAL_NFCDEP_BRS_DSIx_POS) & RFAL_NFCDEP_BRS_Dx_MASK ) /*!< Returns the DSIx value from the given BRS byte */
 
 #define rfalNfcDepPP2LR( PPx )         ( ((uint8_t)(PPx) & RFAL_NFCDEP_PP_LR_MASK ) >> RFAL_NFCDEP_PP_LR_SHIFT)  /*!< Returns the LR value from the given PPx byte  */
 #define rfalNfcDepLR2PP( LRx )         ( ((uint8_t)(LRx) << RFAL_NFCDEP_PP_LR_SHIFT) & RFAL_NFCDEP_PP_LR_MASK)   /*!< Returns the PP byte with the given LRx value  */
@@ -312,7 +312,7 @@ typedef struct {
     uint32_t          dFWT;       /*!< Delta FWT to be used (1/fc)                */
     uint8_t           LR;         /*!< Length Reduction coding the max payload    */
     uint16_t          FS;         /*!< Frame Size                                 */
-    rfalBitRate       DSI;        /*!< Bit Rate coding from Initiator  to Target  */
+    rfalBitRate       DSIx;       /*!< Bit Rate coding from Initiator  to Target  */
     rfalBitRate       DRI;        /*!< Bit Rate coding from Target to Initiator   */
     uint8_t           DID;        /*!< Device ID (RFAL_NFCDEP_DID_NO if no DID)   */
     uint8_t           NAD;        /*!< Node ADdress (RFAL_NFCDEP_NAD_NO if no NAD)*/
