@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "spi.h"
 #include "gpio.h"
 
@@ -28,6 +29,12 @@
 #include "demo.h"
 #include "platform.h"
 #include "st_errno.h"
+#include "stm32f7xx.h"
+#include "stm32f769i_discovery.h"
+#include "lvgl.h"
+#include "sysmon.h"
+#include "../../Middlewares/hal_stm_lvgl/tft/tft.h"
+#include "../../Middlewares/hal_stm_lvgl/touchpad/touchpad.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,6 +62,7 @@ uint8_t globalCommProtectCnt = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -73,7 +81,12 @@ int main(void)
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
-  
+
+  /* Enable I-Cache---------------------------------------------------------*/
+  SCB_EnableICache();
+
+  /* Enable D-Cache---------------------------------------------------------*/
+  SCB_EnableDCache();
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -95,6 +108,10 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
+  lv_init();
+  tft_init();
+  touchpad_init();
+  sysmon_create();
   /* Initialize RFAL */
   if (!demoIni())
     {
@@ -132,16 +149,24 @@ int main(void)
 
   /* USER CODE END 2 */
 
+  /* Init scheduler */
+  osKernelInitialize();  /* Call init function for freertos objects (in freertos.c) */
+  MX_FREERTOS_Init(); 
+  /* Start scheduler */
+  osKernelStart();
+ 
+  /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
     {
-    /* Run Demo Application */
-	demoCycle();
-	/* USER CODE END WHILE */
+	  lv_task_handler();
+	  HAL_Delay(10);
+	  /* Run Demo Application */
+	  demoCycle();
+    /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	//HAL_GPIO_TogglePin(GPIOJ, GPIO_PIN_13);
     }
   /* USER CODE END 3 */
 }
@@ -200,6 +225,27 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+ /**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM7 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM7) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.
