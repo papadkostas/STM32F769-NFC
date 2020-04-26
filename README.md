@@ -1,15 +1,17 @@
-
 # STM32F769 NFC Application
-Development board STM32F769-DISCO
 
-Nucleo board X-NUCLEO-NFC05A1
+Hardware used
+* Development board STM32F769-DISCO
+* X-NUCLEO-NFC05A1*
 
-This is the example code provided by STM32Cube for X-NUCLEO-NFC05A1 board
-ported for the STM32F769-DISCO.
+*In case you don't have the Nucleo board, the project will still run.
 
-# How to contribute
-* Get the latest [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html)
-* Clone the repository and start working !! 
+Additional Software: 
+* LittlevGL
+* FreeRTOS
+* Rfal
+* LwIP
 
 # Known issues
-* After getting back to constant polling mode(after 2 times pressing the user button), the reader stops working.
+* After getting back to constant polling mode(after 2 times pressing the user button), the NFC reader stops working and applcation stops responding.
+* High network delay(ping ~1s)

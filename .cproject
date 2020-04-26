@@ -62,7 +62,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Utilities/CPU/&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2&quot;"/>
 									<listOptionValue builtIn="false" value="../LWIP/App"/>
-									<listOptionValue builtIn="false" value="../LWIP/Target"/>									
+									<listOptionValue builtIn="false" value="../LWIP/Target"/>
 									<listOptionValue builtIn="false" value="../Middlewares/Third_Party/LwIP/src/include/netif/ppp"/>
 									<listOptionValue builtIn="false" value="../Middlewares/Third_Party/LwIP/src/include/compat/stdc"/>
 									<listOptionValue builtIn="false" value="../Middlewares/Third_Party/LwIP/system/arch"/>
@@ -136,14 +136,18 @@
 							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec.1959415482" name="MCU Output Converter Motorola S-rec with symbols" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec.1963113658"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1581731959.855187087" name="heap_useNewlib.c" rcbsApplicability="disable" resourcePath="Core/Src/heap_useNewlib.c" toolsToInvoke="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1013764945.490424278">
+						<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1013764945.490424278" name="MCU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1013764945">
+							<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.413085022" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
+						</tool>
+					</fileInfo>
 					<sourceEntries>
+						<entry excluding="Src/heap_useNewlib.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
+						<entry excluding="STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_conf_template.h|STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_msp_template.c|STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_timebase_tim_template.c|STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_timebase_rtc_wakeup_template.c|STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_timebase_rtc_alarm_template.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="LWIP"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Startup"/>
 						<entry excluding="Fonts" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Utilities"/>
-						<entry excluding="STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_conf_template.h|STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_msp_template.c|STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_timebase_tim_template.c|STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_timebase_rtc_wakeup_template.c|STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_timebase_rtc_alarm_template.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="LWIP"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
