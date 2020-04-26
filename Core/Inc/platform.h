@@ -65,6 +65,7 @@
 #include "spi.h"
 #include "timer.h"
 #include "main.h"
+#include "cmsis_os.h"
 
 
 /*
@@ -138,12 +139,12 @@
 
 #define platformTimerCreate( t )                      timerCalculateTimer(t)                        /*!< Create a timer with the given time (ms)     */
 #define platformTimerIsExpired( timer )               timerIsExpired(timer)                         /*!< Checks if the given timer is expired        */
-#define platformDelay( t )                            HAL_Delay( t )                                /*!< Performs a delay for the given time (ms)    */
+#define platformDelay( t )                            osDelay( t )                                	/*!< Performs a delay for the given time (ms)    */
 
-#define platformGetSysTick()                          HAL_GetTick()                                 /*!< Get System Tick ( 1 tick = 1 ms)            */
+#define platformGetSysTick()                          osKernelGetTickCount()                        /*!< Get System Tick ( 1 tick = 1 ms)            */
 
-#define platformSpiSelect()                           platformGpioClear( ST25R391X_SS_PORT, ST25R391X_SS_PIN ) /*!< SPI SS\CS: Chip|Slave Select                */
-#define platformSpiDeselect()                         platformGpioSet( ST25R391X_SS_PORT, ST25R391X_SS_PIN )   /*!< SPI SS\CS: Chip|Slave Deselect              */
+#define platformSpiSelect()                           platformGpioClear( ST25R391X_SS_PORT, ST25R391X_SS_PIN ) /*!< SPI SS\CS: Chip|Slave Select		*/
+#define platformSpiDeselect()                         platformGpioSet( ST25R391X_SS_PORT, ST25R391X_SS_PIN )   /*!< SPI SS\CS: Chip|Slave Deselect      */
 #define platformSpiTxRx( txBuf, rxBuf, len )          SpiTxRx( (txBuf), (rxBuf), (len) )            /*!< SPI transceive                              */
 
 

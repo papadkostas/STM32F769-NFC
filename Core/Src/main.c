@@ -21,20 +21,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "adc.h"
 #include "spi.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "demo.h"
-#include "platform.h"
-#include "st_errno.h"
-#include "stm32f7xx.h"
-#include "stm32f769i_discovery.h"
-#include "lvgl.h"
-#include "sysmon.h"
-#include "../../Middlewares/hal_stm_lvgl/tft/tft.h"
-#include "../../Middlewares/hal_stm_lvgl/touchpad/touchpad.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -94,6 +87,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+  NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
   /* USER CODE END Init */
 
@@ -101,52 +95,13 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI2_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  lv_init();
-  tft_init();
-  touchpad_init();
-  sysmon_create();
-  /* Initialize RFAL */
-  if (!demoIni())
-    {
-      /*
-       * in case the rfal initialization failed signal it by flashing all LED
-       * and stopping all operations
-       */
-      while (1)
-	{
-	  platformLedToogle(PLATFORM_LED_FIELD_PORT, PLATFORM_LED_FIELD_PIN);
-	  platformLedToogle(PLATFORM_LED_A_PORT, PLATFORM_LED_A_PIN);
-	  platformLedToogle(PLATFORM_LED_B_PORT, PLATFORM_LED_B_PIN);
-	  platformLedToogle(PLATFORM_LED_F_PORT, PLATFORM_LED_F_PIN);
-	  platformLedToogle(PLATFORM_LED_V_PORT, PLATFORM_LED_V_PIN);
-	  platformLedToogle(PLATFORM_LED_AP2P_PORT, PLATFORM_LED_AP2P_PIN);
-	  platformDelay(100);
-	}
-    }
-  else
-    {
-	  platformLedToogle(PLATFORM_LED_FIELD_PORT, PLATFORM_LED_FIELD_PIN);
-	  platformLedToogle(PLATFORM_LED_A_PORT, PLATFORM_LED_A_PIN);
-	  platformLedToogle(PLATFORM_LED_B_PORT, PLATFORM_LED_B_PIN);
-	  platformLedToogle(PLATFORM_LED_F_PORT, PLATFORM_LED_F_PIN);
-	  platformLedToogle(PLATFORM_LED_V_PORT, PLATFORM_LED_V_PIN);
-	  platformLedToogle(PLATFORM_LED_AP2P_PORT, PLATFORM_LED_AP2P_PIN);
-	  platformDelay(500);
-      platformLedOff(PLATFORM_LED_A_PORT, PLATFORM_LED_A_PIN);
-      platformLedOff(PLATFORM_LED_B_PORT, PLATFORM_LED_B_PIN);
-      platformLedOff(PLATFORM_LED_F_PORT, PLATFORM_LED_F_PIN);
-      platformLedOff(PLATFORM_LED_V_PORT, PLATFORM_LED_V_PIN);
-      platformLedOff(PLATFORM_LED_AP2P_PORT, PLATFORM_LED_AP2P_PIN);
-      platformLedOff(PLATFORM_LED_FIELD_PORT, PLATFORM_LED_FIELD_PIN);
-    }
-
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -159,15 +114,11 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-    {
-	  lv_task_handler();
-	  HAL_Delay(10);
-	  /* Run Demo Application */
-	  demoCycle();
+  {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    }
+  }
   /* USER CODE END 3 */
 }
 
@@ -228,7 +179,7 @@ void SystemClock_Config(void)
 
  /**
   * @brief  Period elapsed callback in non blocking mode
-  * @note   This function is called  when TIM7 interrupt took place, inside
+  * @note   This function is called  when TIM6 interrupt took place, inside
   * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
   * a global variable "uwTick" used as application time base.
   * @param  htim : TIM handle
@@ -239,7 +190,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   /* USER CODE BEGIN Callback 0 */
 
   /* USER CODE END Callback 0 */
-  if (htim->Instance == TIM7) {
+  if (htim->Instance == TIM6) {
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */

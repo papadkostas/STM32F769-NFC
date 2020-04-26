@@ -88,7 +88,7 @@ void vApplicationIdleHook(void)
 void vApplicationTickHook (void)
 {
   static int tick = 0;
-  
+  lv_tick_inc(1);
   if(tick ++ > CALCULATION_PERIOD)
   {
     tick = 0;
