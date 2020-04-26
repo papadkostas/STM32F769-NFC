@@ -22,6 +22,7 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "adc.h"
+#include "lwip.h"
 #include "spi.h"
 #include "gpio.h"
 

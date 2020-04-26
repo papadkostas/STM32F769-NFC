@@ -47,12 +47,23 @@
 
 /* Default display refresh period.
  * Can be changed in the display driver (`lv_disp_drv_t`).*/
-#define LV_DISP_DEF_REFR_PERIOD      16      /*[ms]*/
+#define LV_DISP_DEF_REFR_PERIOD      20      /*[ms]*/
 
 /* Dot Per Inch: used to initialize default sizes.
  * E.g. a button with width = LV_DPI / 2 -> half inch wide
  * (Not so important, you can adjust it to modify default sizes and spaces)*/
-#define LV_DPI              100     /*[px]*/
+#define LV_DPI              130     /*[px]*/
+
+/* The the real width of the display changes some default values:
+ * default object sizes, layout of examples, etc.
+ * According to the width of the display (hor. res. / dpi)
+ * the displays fall in 4 categories.
+ * The 4th is extra large which has no upper limit so not listed here
+ * The upper limit of the categories are set below in 0.1 inch unit.
+ */
+#define LV_DISP_SMALL_LIMIT  30
+#define LV_DISP_MEDIUM_LIMIT 50
+#define LV_DISP_LARGE_LIMIT  70
 
 /* Type of coordinates. Should be `int16_t` (or `int32_t` for extreme cases) */
 typedef int16_t lv_coord_t;
@@ -149,10 +160,10 @@ typedef void * lv_anim_user_data_t;
 #endif
 
 /* 1: Use other blend modes than normal (`LV_BLEND_MODE_...`)*/
-#define LV_USE_BLEND_MODES      0
+#define LV_USE_BLEND_MODES      1
 
 /* 1: Use the `opa_scale` style property to set the opacity of an object and its children at once*/
-#define LV_USE_OPA_SCALE        0
+#define LV_USE_OPA_SCALE        1
 
 /* 1: Enable object groups (for keyboard/encoder navigation) */
 #define LV_USE_GROUP            1
@@ -162,8 +173,6 @@ typedef void * lv_group_user_data_t;
 
 /* 1: Enable GPU interface*/
 #define LV_USE_GPU              1
-#define LV_GPU_INCLUDE  "stm32f7xx_hal.h" /*E.g. "stm32f7xx_hal.h"*/
-#define LV_USE_GPU_STM32_DMA2D  1
 
 /* 1: Enable file system (might be required for images */
 #define LV_USE_FILESYSTEM       1
@@ -173,7 +182,7 @@ typedef void * lv_fs_drv_user_data_t;
 #endif
 
 /*1: Add a `user_data` to drivers and objects*/
-#define LV_USE_USER_DATA        1
+#define LV_USE_USER_DATA        0
 
 /*1: Show CPU usage and FPS count in the right bottom corner*/
 #define LV_USE_PERF_MONITOR     1
@@ -248,7 +257,7 @@ typedef void * lv_indev_drv_user_data_t;            /*Type of user data in the i
  *===============*/
 
 /*1: Enable the log module*/
-#define LV_USE_LOG      1
+#define LV_USE_LOG      0
 #if LV_USE_LOG
 /* How important log should be added:
  * LV_LOG_LEVEL_TRACE       A lot of logs to give detailed information
@@ -326,6 +335,14 @@ typedef void * lv_indev_drv_user_data_t;            /*Type of user data in the i
 #define LV_FONT_MONTSERRAT_28    0
 #define LV_FONT_MONTSERRAT_30    0
 #define LV_FONT_MONTSERRAT_32    1
+#define LV_FONT_MONTSERRAT_34    0
+#define LV_FONT_MONTSERRAT_36    0
+#define LV_FONT_MONTSERRAT_38    0
+#define LV_FONT_MONTSERRAT_40    0
+#define LV_FONT_MONTSERRAT_42    0
+#define LV_FONT_MONTSERRAT_44    0
+#define LV_FONT_MONTSERRAT_46    0
+#define LV_FONT_MONTSERRAT_48    0
 
 /* Demonstrate special features */
 #define LV_FONT_MONTSERRAT_12_SUBPX      0
@@ -487,7 +504,7 @@ typedef void * lv_obj_user_data_t;
 /*Chart (dependencies: -)*/
 #define LV_USE_CHART    1
 #if LV_USE_CHART
-#  define LV_CHART_AXIS_TICK_LABEL_MAX_LEN    20
+#  define LV_CHART_AXIS_TICK_LABEL_MAX_LEN    256
 #endif
 
 /*Container (dependencies: -*/

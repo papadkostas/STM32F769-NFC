@@ -90,6 +90,7 @@ const osMutexAttr_t nfc_mutex_attributes = {
 void lv_task_start(void *argument);
 void nfc_task_start(void *argument);
 
+extern void MX_LWIP_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /* Hook prototypes */
@@ -218,6 +219,8 @@ void MX_FREERTOS_Init(void) {
 /* USER CODE END Header_lv_task_start */
 void lv_task_start(void *argument)
 {
+  /* init code for LWIP */
+  MX_LWIP_Init();
   /* USER CODE BEGIN lv_task_start */
   lv_init();
   tft_init();
